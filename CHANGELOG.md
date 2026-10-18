@@ -10,6 +10,21 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 | Fin d'un jalon (groupe d'étapes) / End of a milestone (group of steps) | 0.1.x → 0.2.0, puis/then 0.3.0… |
 | Version complète du cahier des charges, publiée pour le public / Complete specification, public release | 1.0.0 |
 
+## 0.2.1 (étape 6 / step 6)
+
+- Dossiers de données selon la norme de chaque système : réglages dans AppData\Roaming (Windows) ou ~/.config (Linux), gros fichiers dans AppData\Local ou ~/.local/share, plus cache et journaux.
+  *Data folders following each system's standard: settings in AppData\Roaming (Windows) or ~/.config (Linux), large files in AppData\Local or ~/.local/share, plus cache and logs.*
+- Choix d'un dossier personnalisé pour toutes les données (Aide → Dossiers de RuneCast…) : copie, vérification par empreinte SHA-256, puis suppression de l'ancien emplacement seulement si l'utilisateur l'accepte. Retour possible à l'emplacement standard.
+  *Custom folder for all data (Help → RuneCast folders…): copy, SHA-256 verification, then deletion of the old location only if the user agrees. Going back to the standard location is possible.*
+- Mode portable (fichier `portable.txt` à côté de l'application, ou option `--portable`).
+  *Portable mode (`portable.txt` file next to the application, or `--portable` option).*
+- Réglages enregistrés sans risque (écriture atomique, copie .bak, fichier abîmé mis de côté), avec numéro de version du format pour les futures migrations. La fenêtre se rouvre à la même taille et à la même place.
+  *Settings saved safely (atomic write, .bak copy, damaged file set aside), with a format version number for future migrations. The window reopens at the same size and position.*
+- Journal (logs) avec rotation : 1 Mo par fichier, 5 fichiers gardés. Option `--paths` pour afficher les dossiers.
+  *Rotating log: 1 MB per file, 5 files kept. `--paths` option to print the folders.*
+- Nouvelle dépendance : platformdirs (MIT).
+  *New dependency: platformdirs (MIT).*
+
 ## 0.2.0 (étape 5, fin du jalon 1 / step 5, end of milestone 1)
 
 - Tests automatiques sur GitHub (GitHub Actions) à chaque envoi : Windows, Ubuntu et Fedora 44, avec contrôle de la qualité du code.

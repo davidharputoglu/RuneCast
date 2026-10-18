@@ -31,18 +31,25 @@
 FR : Permet de lancer RuneCast depuis un terminal, avec « runecast » ou
      « python -m runecast ».
        - sans option : ouvre la fenêtre de RuneCast ;
-       - --version   : affiche la version et les crédits, sans ouvrir de fenêtre.
+       - --version   : affiche la version et les crédits, sans ouvrir de fenêtre ;
+       - --paths     : affiche les dossiers utilisés, sans ouvrir de fenêtre ;
+       - --portable  : range toutes les données dans le dossier « portable-data »
+                       à côté de l'application (pour tester le mode portable).
 
 EN : Lets you start RuneCast from a terminal, with "runecast" or
      "python -m runecast".
-       - no option : opens the RuneCast window;
-       - --version : prints the version and credits, without opening a window.
+       - no option  : opens the RuneCast window;
+       - --version  : prints the version and credits, without opening a window;
+       - --paths    : prints the folders in use, without opening a window;
+       - --portable : stores all data in the "portable-data" folder next to the
+                      application (to test portable mode).
 """
 
 import argparse
 import sys
 
 from runecast import about
+from runecast.core.paths import MODE_CUSTOM, MODE_NORMAL, MODE_PORTABLE, resolve_paths
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -58,7 +65,39 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="affiche la version et les crédits / show version and credits",
     )
+    # FR : --paths affiche les dossiers utilisés. EN : --paths prints the folders in use.
+    parser.add_argument(
+        "--paths",
+        action="store_true",
+        help="affiche les dossiers de données / show the data folders",
+    )
+    # FR : --portable active le mode portable. EN : --portable enables portable mode.
+    parser.add_argument(
+        "--portable",
+        action="store_true",
+        help="mode portable : données à côté de l'application / portable mode",
+    )
     return parser
+
+
+def paths_text(portable: bool = False) -> str:
+    """FR : texte décrivant les dossiers utilisés. EN : text describing the folders."""
+    paths = resolve_paths(force_portable=portable)
+    modes = {
+        MODE_NORMAL: "normal (emplacement standard / standard location)",
+        MODE_CUSTOM: f"personnalisé / custom ({paths.root})",
+        MODE_PORTABLE: "portable",
+    }
+    lines = [f"Mode : {modes[paths.mode]}"]
+    labels = {
+        "config": "Réglages / Settings",
+        "data": "Données / Data",
+        "cache": "Cache",
+        "logs": "Journaux / Logs",
+    }
+    for name, folder in paths.folders().items():
+        lines.append(f"{labels[name]} : {folder}")
+    return "\n".join(lines)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -73,13 +112,17 @@ def main(argv: list[str] | None = None) -> int:
         print(about.about_text())
         return 0
 
+    if args.paths:
+        print(paths_text(portable=args.portable))
+        return 0
+
     # FR : L'interface n'est chargée qu'ici : « --version » reste ainsi
     #      instantané et fonctionne même sans affichage graphique.
     # EN : The interface is only loaded here, so "--version" stays instant and
     #      works even without a graphical display.
     from runecast.ui.app import run
 
-    return run()
+    return run(portable=args.portable)
 
 
 # FR : Ce bloc s'exécute seulement quand on lance « python -m runecast ».

@@ -28,21 +28,26 @@
 
 """Démarrage de l'interface graphique / Graphical interface start-up.
 
-FR : Prépare l'application Qt (nom, icône, identifiants pour Windows et
-     Linux, thème Turquoise), ouvre la fenêtre principale, puis attend que
+FR : Choisit les dossiers de données, démarre le journal, lit les réglages,
+     prépare l'application Qt (nom, icône, identifiants pour Windows et Linux,
+     thème Turquoise), ouvre la fenêtre principale, puis attend que
      l'utilisateur la ferme.
 
-EN : Prepares the Qt application (name, icon, Windows and Linux identifiers,
-     Turquoise theme), opens the main window, then waits until the user
-     closes it.
+EN : Chooses the data folders, starts the log, reads the settings, prepares
+     the Qt application (name, icon, Windows and Linux identifiers, Turquoise
+     theme), opens the main window, then waits until the user closes it.
 """
 
 import ctypes
+import logging
 import sys
 
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QMessageBox
 
 from runecast import about
+from runecast.core.logs import log_startup, log_uncaught_exceptions, setup_logging
+from runecast.core.paths import resolve_paths
+from runecast.core.settings import load_settings, save_settings
 from runecast.ui.icons import app_icon
 from runecast.ui.main_window import MainWindow
 from runecast.ui.theme import apply_turquoise_theme
@@ -91,13 +96,41 @@ def create_application(argv: list[str] | None = None) -> QApplication:
     return app
 
 
-def run(argv: list[str] | None = None) -> int:
+def run(argv: list[str] | None = None, portable: bool = False) -> int:
     """Lance RuneCast avec sa fenêtre / Start RuneCast with its window.
 
-    FR : Renvoie le code de sortie de Qt (0 = tout va bien).
-    EN : Returns Qt's exit code (0 = all good).
+    FR : « portable=True » correspond à l'option « --portable ». Renvoie le
+         code de sortie de Qt (0 = tout va bien).
+    EN : "portable=True" matches the "--portable" option. Returns Qt's exit
+         code (0 = all good).
     """
+    # FR : 1. Dossiers, journal et réglages. EN : 1. Folders, log and settings.
+    paths = resolve_paths(force_portable=portable)
+    paths.create()
+    setup_logging(paths.log_dir)
+    log_uncaught_exceptions()
+    log_startup(paths)
+    settings = load_settings(paths.settings_file)
+    # FR : on enregistre tout de suite : le fichier existe dès le 1er lancement.
+    # EN : save right away so the file exists from the first launch.
+    save_settings(settings, paths.settings_file)
+
+    # FR : 2. Interface. EN : 2. Interface.
     app = create_application(argv)
-    window = MainWindow()
+    window = MainWindow(paths, settings)
     window.show()
-    return app.exec()
+    if paths.unavailable_custom_root is not None:
+        # FR : le dossier choisi est introuvable (ex. disque débranché) : on prévient.
+        # EN : the chosen folder is missing (e.g. unplugged drive): warn the user.
+        QMessageBox.warning(
+            window,
+            window.tr("Dossier introuvable"),
+            window.tr(
+                "Le dossier choisi pour les données est introuvable :\n{folder}\n\n"
+                "RuneCast utilise l'emplacement standard pour cette fois. "
+                "Rebranche le disque puis relance RuneCast."
+            ).format(folder=paths.unavailable_custom_root),
+        )
+    exit_code = app.exec()
+    logging.getLogger("runecast").info("Fermeture / Exit (code %s)", exit_code)
+    return exit_code

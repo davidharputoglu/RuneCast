@@ -42,6 +42,7 @@ classifiers = [
 # EN : Libraries shipped with RuneCast. They arrive step by step:
 #      PySide6-Essentials (Qt 6, LGPLv3 license) draws the user interface.
 dependencies = [
+    "platformdirs>=4.3",
     "pyside6-essentials>=6.10",
 ]
 

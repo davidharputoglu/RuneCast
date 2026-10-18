@@ -40,8 +40,19 @@ from PySide6.QtWidgets import QApplication, QLabel, QMenu
 
 from runecast import __main__ as cli
 from runecast import about
+from runecast.core.settings import Settings
 from runecast.resources import resource_path
 from runecast.ui import about_dialog, app, icons, main_window, theme
+
+
+def _new_window(qtbot, app_paths) -> main_window.MainWindow:
+    """FR : fenêtre principale avec des dossiers temporaires.
+
+    EN : main window with temporary folders.
+    """
+    window = main_window.MainWindow(app_paths, Settings())
+    qtbot.addWidget(window)
+    return window
 
 
 def _is_connected(action: QAction) -> bool:
@@ -68,21 +79,19 @@ def test_app_icon_has_every_size(qapp: QApplication) -> None:
     assert set(icons.ICON_SIZES) <= available
 
 
-def test_main_window_title_and_icon(qtbot) -> None:
+def test_main_window_title_and_icon(qtbot, custom_paths) -> None:
     """FR : titre avec la version, et icône présente. EN : title and icon."""
-    window = main_window.MainWindow()
-    qtbot.addWidget(window)
+    window = _new_window(qtbot, custom_paths)
     assert window.windowTitle() == f"RuneCast {about.APP_VERSION}"
     assert not window.windowIcon().isNull()
 
 
-def test_welcome_screen_text_is_readable(qtbot) -> None:
+def test_welcome_screen_text_is_readable(qtbot, custom_paths) -> None:
     """FR : aucun code HTML visible par erreur (ex. « &#x27; » au lieu de « ' »).
 
     EN : no HTML code shown by mistake (e.g. "&#x27;" instead of "'").
     """
-    window = main_window.MainWindow()
-    qtbot.addWidget(window)
+    window = _new_window(qtbot, custom_paths)
     for label in window.centralWidget().findChildren(QLabel):
         if label.textFormat() == Qt.TextFormat.PlainText:
             assert "&#" not in label.text() and "&amp;" not in label.text()
@@ -90,13 +99,12 @@ def test_welcome_screen_text_is_readable(qtbot) -> None:
     assert "L'ouverture des jeux" in texts
 
 
-def test_menus_have_no_dummy_entry(qtbot) -> None:
+def test_menus_have_no_dummy_entry(qtbot, custom_paths) -> None:
     """FR : chaque entrée de menu est active et reliée à une fonction.
 
     EN : every menu entry is enabled and wired to a function.
     """
-    window = main_window.MainWindow()
-    qtbot.addWidget(window)
+    window = _new_window(qtbot, custom_paths)
     menus = window.menuBar().findChildren(QMenu)
     assert {menu.objectName() for menu in menus} >= {"fileMenu", "helpMenu"}
     for menu in menus:
@@ -107,24 +115,22 @@ def test_menus_have_no_dummy_entry(qtbot) -> None:
             assert _is_connected(action), action.text()
 
 
-def test_quit_closes_the_window(qtbot) -> None:
+def test_quit_closes_the_window(qtbot, custom_paths) -> None:
     """FR : « Quitter » ferme la fenêtre. EN : "Quit" closes the window."""
-    window = main_window.MainWindow()
-    qtbot.addWidget(window)
+    window = _new_window(qtbot, custom_paths)
     window.show()
     window.quit_action.trigger()
     assert not window.isVisible()
 
 
-def test_about_menu_opens_the_about_window(qtbot, monkeypatch) -> None:
+def test_about_menu_opens_the_about_window(qtbot, monkeypatch, custom_paths) -> None:
     """FR : le menu « À propos » ouvre la bonne fenêtre.
 
     EN : the "About" menu opens the right window.
     """
     opened = []
     monkeypatch.setattr(about_dialog.AboutDialog, "exec", lambda self: opened.append(self) or 0)
-    window = main_window.MainWindow()
-    qtbot.addWidget(window)
+    window = _new_window(qtbot, custom_paths)
     window.about_action.trigger()
     assert len(opened) == 1
     assert isinstance(opened[0], about_dialog.AboutDialog)
@@ -166,6 +172,8 @@ def test_command_line_without_option_opens_the_window(monkeypatch) -> None:
     EN : "runecast" without an option starts the interface.
     """
     calls = []
-    monkeypatch.setattr(app, "run", lambda: calls.append("run") or 0)
+    monkeypatch.setattr(app, "run", lambda **options: calls.append(options) or 0)
     assert cli.main([]) == 0
-    assert calls == ["run"]
+    assert calls == [{"portable": False}]
+    assert cli.main(["--portable"]) == 0
+    assert calls[-1] == {"portable": True}

@@ -79,6 +79,8 @@ cd RuneCast
 uv run pytest            # lance les tests automatiques
 uv run runecast          # ouvre RuneCast
 uv run runecast --version
+uv run runecast --paths  # affiche les dossiers de données
+uv run runecast --portable  # mode portable (données dans portable-data/)
 ```
 
 Sous Linux, `uv run python tools/install_desktop_entry.py` ajoute RuneCast au menu des applications, pour que le dock affiche son icône.
@@ -124,6 +126,8 @@ cd RuneCast
 uv run pytest            # runs the automatic tests
 uv run runecast          # opens RuneCast
 uv run runecast --version
+uv run runecast --paths  # prints the data folders
+uv run runecast --portable  # portable mode (data in portable-data/)
 ```
 
 On Linux, `uv run python tools/install_desktop_entry.py` adds RuneCast to the application menu so the dock shows its icon.

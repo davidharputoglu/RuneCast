@@ -28,15 +28,59 @@
 
 """Réglages communs à tous les tests / Settings shared by all tests.
 
-FR : Les tests des fenêtres s'exécutent « hors écran » : Qt dessine les
-     fenêtres en mémoire, sans les afficher. Les tests ne font donc rien
-     apparaître sur ton bureau, et ils fonctionnent aussi sur les serveurs de
-     GitHub, qui n'ont pas d'écran.
-EN : Window tests run "offscreen": Qt draws the windows in memory without
-     showing them. Tests therefore never pop anything up on your desktop, and
-     they also work on GitHub's servers, which have no screen.
+FR : - Les tests des fenêtres s'exécutent « hors écran » : Qt dessine les
+       fenêtres en mémoire, sans les afficher. Les tests ne font donc rien
+       apparaître sur ton bureau, et ils fonctionnent aussi sur les serveurs
+       de GitHub, qui n'ont pas d'écran.
+     - Les tests n'écrivent JAMAIS dans tes vrais dossiers RuneCast : tout se
+       passe dans des dossiers temporaires, effacés après les tests.
+EN : - Window tests run "offscreen": Qt draws the windows in memory without
+       showing them, so nothing pops up on your desktop, and they also work on
+       GitHub's servers, which have no screen.
+     - Tests NEVER write into your real RuneCast folders: everything happens
+       in temporary folders, deleted after the tests.
 """
 
 import os
+from pathlib import Path
+
+import pytest
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+from runecast.core import paths  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def isolated_location_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """FR : le fichier « emplacement.json » est rangé dans un dossier temporaire.
+
+    EN : the "emplacement.json" file is kept in a temporary folder.
+    """
+    location = tmp_path / "standard-config" / paths.LOCATION_FILE_NAME
+    monkeypatch.setattr(paths, "location_file", lambda: location)
+    return location
+
+
+@pytest.fixture
+def standard_like_paths(tmp_path: Path) -> paths.AppPaths:
+    """FR : dossiers « normaux » fictifs, rangés comme sous Windows (le cache et
+         les journaux DANS le dossier des gros fichiers).
+
+    EN : fake "normal" folders, laid out like on Windows (cache and logs INSIDE
+         the large-files folder).
+    """
+    local = tmp_path / "Local" / "RuneCast"
+    return paths.AppPaths(
+        mode=paths.MODE_NORMAL,
+        config_dir=tmp_path / "standard-config",
+        data_dir=local,
+        cache_dir=local / "Cache",
+        log_dir=local / "Logs",
+    )
+
+
+@pytest.fixture
+def custom_paths(tmp_path: Path) -> paths.AppPaths:
+    """FR : un dossier personnalisé fictif. EN : a fake custom folder."""
+    return paths.single_folder_paths(tmp_path / "mes-donnees", paths.MODE_CUSTOM)

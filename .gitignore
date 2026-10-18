@@ -19,6 +19,9 @@ __pycache__/
 .coverage
 htmlcov/
 
+# --- Données du mode portable pendant les tests (--portable) -
+/portable-data/
+
 # --- Fabrication des exécutables et des paquets -------------
 /build/
 /dist/

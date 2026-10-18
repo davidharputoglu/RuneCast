@@ -226,6 +226,8 @@ Emplacement des données :
 | Configuration, thèmes, glossaires, profils de jeux | `%APPDATA%\RuneCast` | `~/.config/runecast` | `RuneCast-Portable\data\` |
 | Modèles, cache, historique, sauvegardes des jeux (volumineux) | `%LOCALAPPDATA%\RuneCast` | `~/.local/share/runecast` | `RuneCast-Portable\data\` |
 
+**Décision du 18 octobre** : séparation selon la norme (Q11). L'utilisateur peut aussi choisir **un dossier de son choix pour toutes les données** (Aide → Dossiers de RuneCast…). Au changement, RuneCast copie tout, vérifie la copie, puis propose de supprimer l'ancien emplacement, jamais sans son accord.
+
 Le cahier des charges mentionne `~/.config`. Je propose de suivre la norme Linux (XDG), qui range les gros fichiers (modèles de plusieurs centaines de Mo) dans `~/.local/share` (Q11). Les installeurs et les mises à jour ne touchent **jamais** ces dossiers. Chaque fichier de données porte un numéro de version pour pouvoir le migrer sans perte.
 
 **Mode local, tel que tu l'as précisé** : au premier lancement, RuneCast demande si l'on veut traduire avec internet ou en local (modifiable ensuite dans Paramètres). En mode local, **aucune phrase n'est envoyée à un service de traduction** : tout est traduit sur le PC. Internet reste utilisé pour le reste : mises à jour de RuneCast et téléchargement des modèles de traduction. En mode en ligne, RuneCast envoie les phrases au moteur choisi (Yandex, Google…).
@@ -430,6 +432,7 @@ La dernière colonne renvoie aux sections de ta checklist (document 2).
 | Q5 | Mode local | Local = aucune traduction par internet ; les mises à jour et les modèles peuvent utiliser internet |
 | Q9 | GitHub | Dépôt public `davidharputoglu/RuneCast`, dossier principal `C:\ai\RuneCast` |
 | Q10 | Icône | Ton image sans retouche : découpe carrée autour de l'hexagone, puis réduction aux tailles standard |
+| Q11 | Dossiers de données | Séparation selon la norme de chaque système, plus le choix possible d'un dossier unique par l'utilisateur (copie vérifiée, suppression de l'ancien seulement avec accord) |
 
 **Ajustement de ta checklist (section D)** suite à ta réponse Q5 : la case « En mode local : aucune connexion réseau sortante » devient « En mode local : aucune phrase envoyée à un service de traduction ».
 
@@ -437,7 +440,6 @@ La dernière colonne renvoie aux sections de ta checklist (document 2).
 
 | Q | Question (en clair) | Ma proposition | Étape |
 |---|---|---|---|
-| Q11 | Linux : ranger les gros fichiers (modèles, sauvegardes) dans `~/.local/share/runecast` et les réglages dans `~/.config/runecast` ? | Oui | 6 |
 | Q6 | Proposer le modèle NLLB-200 (licence non commerciale) en téléchargement optionnel, pour le kazakh, l'ouzbek et le turkmène en local ? | Oui, avec écran d'acceptation | 15 |
 | Q12 | Quels jeux Ren'Py utiliser pour les tests ? | 2 ou 3 jeux : un ancien, un récent (Doki Doki Literature Club est gratuit sur Steam) | 20 |
 | Q4 | Portugais du Portugal ou du Brésil ? Espagnol d'Espagne ou d'Amérique latine ? | Brésil ; Espagne | 33 |

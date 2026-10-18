@@ -28,26 +28,34 @@
 
 """Fenêtre principale de RuneCast / RuneCast main window.
 
-FR : Première version de la fenêtre principale : titre, icône, menus
-     « Fichier » et « Aide », et un écran d'accueil. Règle du cahier des
-     charges : aucun élément factice. Chaque menu présent fait donc vraiment
-     quelque chose ; les autres menus arriveront avec leurs fonctions.
+FR : Fenêtre principale : titre, icône, menus « Fichier » et « Aide », et un
+     écran d'accueil. Elle se rouvre à la même taille et à la même place
+     qu'à la dernière fermeture. Règle du cahier des charges : aucun élément
+     factice. Chaque menu présent fait donc vraiment quelque chose ; les
+     autres menus arriveront avec leurs fonctions.
 
-EN : First version of the main window: title, icon, "File" and "Help" menus,
-     and a welcome screen. Rule from the specification: no dummy element.
-     Every menu shown therefore really does something; the other menus will
-     come together with their features.
+EN : Main window: title, icon, "File" and "Help" menus, and a welcome screen.
+     It reopens with the same size and position as when it was last closed.
+     Rule from the specification: no dummy element. Every menu shown therefore
+     really does something; the other menus will come together with their
+     features.
 """
 
+import logging
 from html import escape
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction, QKeySequence
+from PySide6.QtCore import QByteArray, Qt
+from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget
 
 from runecast import about
+from runecast.core.paths import AppPaths
+from runecast.core.settings import Settings, load_settings, save_settings
 from runecast.ui.about_dialog import AboutDialog
+from runecast.ui.folders_dialog import FoldersDialog
 from runecast.ui.icons import app_icon
+
+logger = logging.getLogger(__name__)
 
 # FR : Taille de la fenêtre à l'ouverture, et taille minimale (en pixels).
 # EN : Window size when opened, and minimum size (in pixels).
@@ -58,8 +66,11 @@ MINIMUM_SIZE = (800, 500)
 class MainWindow(QMainWindow):
     """Fenêtre principale / Main window."""
 
-    def __init__(self) -> None:
+    def __init__(self, paths: AppPaths, settings: Settings) -> None:
         super().__init__()
+        # FR : dossiers et réglages de RuneCast. EN : RuneCast folders and settings.
+        self.paths = paths
+        self.settings = settings
         self.setObjectName("mainWindow")
         self.setWindowTitle(f"{about.APP_NAME} {about.APP_VERSION}")
         self.setWindowIcon(app_icon())
@@ -69,6 +80,7 @@ class MainWindow(QMainWindow):
         self._create_actions()
         self._create_menus()
         self.setCentralWidget(self._create_welcome_screen())
+        self._restore_geometry()
 
     # ------------------------------------------------------------------
     # FR : Actions (ce que font les menus) / EN : Actions (what menus do)
@@ -79,6 +91,11 @@ class MainWindow(QMainWindow):
         self.quit_action = QAction(self.tr("&Quitter"), self)
         self.quit_action.setShortcut(QKeySequence("Ctrl+Q"))
         self.quit_action.triggered.connect(self.close)
+
+        # FR : Ouvrir la fenêtre « Dossiers de RuneCast ».
+        # EN : Open the "RuneCast folders" window.
+        self.folders_action = QAction(self.tr("&Dossiers de RuneCast…"), self)
+        self.folders_action.triggered.connect(self.show_folders)
 
         # FR : Ouvrir la fenêtre « À propos de RuneCast ».
         # EN : Open the "About RuneCast" window.
@@ -99,6 +116,8 @@ class MainWindow(QMainWindow):
 
         help_menu = self.menuBar().addMenu(self.tr("&Aide"))
         help_menu.setObjectName("helpMenu")
+        help_menu.addAction(self.folders_action)
+        help_menu.addSeparator()
         help_menu.addAction(self.about_action)
         help_menu.addAction(self.about_qt_action)
 
@@ -141,3 +160,48 @@ class MainWindow(QMainWindow):
     def show_about(self) -> None:
         """Ouvre la fenêtre « À propos » / Open the "About" window."""
         AboutDialog(self).exec()
+
+    def show_folders(self) -> None:
+        """Ouvre la fenêtre « Dossiers » / Open the "Folders" window."""
+        dialog = FoldersDialog(self.paths, self)
+        dialog.paths_changed.connect(self.use_paths)
+        dialog.exec()
+
+    def use_paths(self, paths: AppPaths) -> None:
+        """FR : les données ont changé de dossier : on suit le nouveau dossier.
+
+             Les réglages sont relus depuis le nouvel emplacement, pour ne
+             jamais écraser des données déjà présentes là-bas.
+        EN : the data moved to another folder: follow the new folder. Settings
+             are re-read from the new location so that data already there is
+             never overwritten.
+        """
+        self.paths = paths
+        if paths.settings_file.is_file():
+            self.settings = load_settings(paths.settings_file)
+
+    # ------------------------------------------------------------------
+    # FR : Taille et position mémorisées / EN : Remembered size and position
+    # ------------------------------------------------------------------
+    def _restore_geometry(self) -> None:
+        """FR : remet la fenêtre à sa dernière taille et place.
+
+        EN : put the window back to its last size and position.
+        """
+        if not self.settings.window_geometry:
+            return
+        geometry = QByteArray.fromBase64(self.settings.window_geometry.encode("ascii"))
+        if not self.restoreGeometry(geometry):
+            logger.warning("Position de fenêtre illisible / Unreadable window position")
+
+    def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802 (nom imposé par Qt)
+        """FR : à la fermeture, mémorise la taille et la place, puis enregistre.
+
+        EN : on close, remember the size and position, then save.
+        """
+        self.settings.window_geometry = bytes(self.saveGeometry().toBase64()).decode("ascii")
+        try:
+            save_settings(self.settings, self.paths.settings_file)
+        except OSError:
+            logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
+        super().closeEvent(event)
