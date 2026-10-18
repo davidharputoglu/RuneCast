@@ -10,6 +10,15 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 | Fin d'un jalon (groupe d'étapes) / End of a milestone (group of steps) | 0.1.x → 0.2.0, puis/then 0.3.0… |
 | Version complète du cahier des charges, publiée pour le public / Complete specification, public release | 1.0.0 |
 
+## 0.2.0 (étape 5, fin du jalon 1 / step 5, end of milestone 1)
+
+- Tests automatiques sur GitHub (GitHub Actions) à chaque envoi : Windows, Ubuntu et Fedora 44, avec contrôle de la qualité du code.
+  *Automatic tests on GitHub (GitHub Actions) on every push: Windows, Ubuntu and Fedora 44, with code quality checks.*
+- Badge « Tests » sur la page d'accueil du projet.
+  *"Tests" badge on the project home page.*
+- Fin du jalon 1 (démarrage) : la version passe à 0.2.0.
+  *End of milestone 1 (start-up): version moves to 0.2.0.*
+
 ## 0.1.1 (étape 4 / step 4)
 
 - Première fenêtre de RuneCast : titre avec la version, icône, thème Turquoise de base (couleurs du logo, même aspect sous Windows et Linux), écran d'accueil.

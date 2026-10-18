@@ -9,9 +9,12 @@ Légende : ✅ validée · ⏳ test à faire · 🔄 en cours
 | 1 | Poste de travail (Git, uv, Python 3.13) et dépôt GitHub | — | ✅ 18/10/2026 | ⏳ | `3dab253` |
 | 2 | Squelette du projet : LICENSE, README, configuration, premiers tests | 0.1.0.dev0 | ✅ 18/10/2026 | ⏳ | `7d73420` |
 | 3 | Icônes (Windows, Linux, favicon) à partir du logo ; passage en 0.1.0 | 0.1.0 | ✅ 18/10/2026 | ⏳ | `a6d820e` |
-| 4 | Première fenêtre : icône, thème Turquoise, menus, « À propos » | 0.1.1 | 🔄 | ⏳ | — |
+| 4 | Première fenêtre : icône, thème Turquoise, menus, « À propos » | 0.1.1 | ✅ 18/10/2026 | ⏳ | `b581711` |
+| 5 | Tests automatiques sur GitHub (Windows, Ubuntu, Fedora 44) — fin du jalon 1 | 0.2.0 | 🔄 | ⏳ | — |
 
 Les étapes suivantes seront ajoutées au fur et à mesure.
+
+Depuis l'étape 5, GitHub teste aussi automatiquement chaque envoi sous Fedora 44 (sans écran). Les tests manuels ci-dessous restent utiles pour vérifier l'affichage réel : fenêtre, icône dans le dock, menus.
 
 ## Tests Fedora à rattraper
 
@@ -47,4 +50,4 @@ Résultat attendu :
 - **Étape 1** : `uv run python --version` affiche Python 3.13.x.
 - **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
 - **Étape 3** : `xdg-open` ouvre l'icône 256 px, identique à celle de Windows.
-- **Étape 4** : `uv run pytest` se termine par « 51 passed », sans « failed » ; `uv run runecast --version` affiche « RuneCast 0.1.1 » ; `uv run runecast` ouvre la fenêtre turquoise avec ton icône dans le dock ; les menus Fichier → Quitter et Aide → À propos fonctionnent.
+- **Étape 4** : `uv run pytest` se termine par « 51 passed », sans « failed » ; `uv run runecast --version` affiche « RuneCast 0.2.0 » ; `uv run runecast` ouvre la fenêtre turquoise avec ton icône dans le dock ; les menus Fichier → Quitter et Aide → À propos fonctionnent.

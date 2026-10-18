@@ -5,6 +5,10 @@
 <h1 align="center">RuneCast</h1>
 
 <p align="center">
+  <a href="https://github.com/davidharputoglu/RuneCast/actions/workflows/tests.yml"><img src="https://github.com/davidharputoglu/RuneCast/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
+</p>
+
+<p align="center">
   <b>Traduction de jeux vidéo pour Windows et Linux</b><br>
   <i>Video game translation for Windows and Linux</i>
 </p>
@@ -44,6 +48,8 @@ RuneCast est un logiciel libre qui traduit les jeux vidéo, pour que chacun puis
 
 ```
 RuneCast/
+├── .github/
+│   └── workflows/         Tests automatiques sur GitHub (Windows, Ubuntu, Fedora)
 ├── assets/
 │   ├── branding/          Logo de l'application (image d'origine et version carrée)
 │   └── icons/             Icônes Windows (.ico), Linux (PNG) et favicon

@@ -50,4 +50,4 @@ EN : RuneCast main package. For now it holds the version number, the "About"
 #      CHANGELOG.md): each validated step or fix bumps the last number
 #      (0.1.0 → 0.1.1), each completed milestone the middle number (0.2.0),
 #      and 1.0.0 will be the first complete public release.
-__version__ = "0.1.1"
+__version__ = "0.2.0"
