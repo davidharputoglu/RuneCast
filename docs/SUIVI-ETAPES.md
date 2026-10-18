@@ -4,10 +4,11 @@ Ce fichier indique, pour chaque étape du [plan](PLAN-V1.md), sur quelle machine
 
 Légende : ✅ validée · ⏳ test à faire · 🔄 en cours
 
-| Étape | Description | Windows 10 | Fedora 44 | Commit |
-|---|---|---|---|---|
-| 1 | Poste de travail (Git, uv, Python 3.13) et dépôt GitHub | ✅ 18/10/2026 | ⏳ | `3dab253` |
-| 2 | Squelette du projet : LICENSE, README, configuration, premiers tests | 🔄 | ⏳ | — |
+| Étape | Description | Version | Windows 10 | Fedora 44 | Commit |
+|---|---|---|---|---|---|
+| 1 | Poste de travail (Git, uv, Python 3.13) et dépôt GitHub | — | ✅ 18/10/2026 | ⏳ | `3dab253` |
+| 2 | Squelette du projet : LICENSE, README, configuration, premiers tests | 0.1.0.dev0 | ✅ 18/10/2026 | ⏳ | `7d73420` |
+| 3 | Icônes (Windows, Linux, favicon) à partir du logo ; passage en 0.1.0 | 0.1.0 | 🔄 | ⏳ | — |
 
 Les étapes suivantes seront ajoutées au fur et à mesure.
 
@@ -26,6 +27,7 @@ uv --version
 uv run python --version
 uv run pytest
 uv run runecast --version
+xdg-open assets/icons/png/runecast-256.png
 ```
 
 Si le dossier `~/ai/RuneCast` existe déjà, remplace les lignes `mkdir`, `cd ~/ai` et `git clone` par :
@@ -38,4 +40,5 @@ git pull
 Résultat attendu :
 
 - **Étape 1** : `uv run python --version` affiche Python 3.13.x.
-- **Étape 2** : `uv run pytest` se termine en vert par « passed », sans « failed » ; `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
+- **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
+- **Étape 3** : `uv run pytest` se termine par « 31 passed », sans « failed » ; la dernière commande ouvre l'icône 256 px, identique à celle de Windows ; `uv run runecast --version` affiche « RuneCast 0.1.0 ».

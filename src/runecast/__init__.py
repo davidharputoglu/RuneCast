@@ -40,9 +40,13 @@ EN : RuneCast main package. For now it only holds the version number and the
 """
 
 # FR : Numéro de version unique du projet. Il est aussi lu par pyproject.toml,
-#      pour n'être écrit qu'à un seul endroit. « .dev0 » signifie « version en
-#      cours de développement, pas encore publiée ».
+#      pour n'être écrit qu'à un seul endroit. Règle de numérotation (voir
+#      CHANGELOG.md) : chaque étape validée ou correctif augmente le dernier
+#      chiffre (0.1.0 → 0.1.1), chaque fin de jalon le chiffre du milieu
+#      (0.2.0), et 1.0.0 sera la première version complète publiée.
 # EN : Single source of truth for the project version. pyproject.toml reads it
-#      from here so it is written in one place only. ".dev0" means "development
-#      version, not released yet".
-__version__ = "0.1.0.dev0"
+#      from here so it is written in one place only. Numbering rule (see
+#      CHANGELOG.md): each validated step or fix bumps the last number
+#      (0.1.0 → 0.1.1), each completed milestone the middle number (0.2.0),
+#      and 1.0.0 will be the first complete public release.
+__version__ = "0.1.0"

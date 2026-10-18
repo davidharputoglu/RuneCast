@@ -54,12 +54,12 @@ SPDX_LINE = "# SPDX-License-Identifier: GPL-3.0-or-later"
 
 
 def _python_files() -> list[Path]:
-    """FR : liste tous les fichiers .py du code et des tests.
+    """FR : liste tous les fichiers .py du code, des outils et des tests.
 
-    EN : list every .py file of the source code and the tests.
+    EN : list every .py file of the source code, the tools and the tests.
     """
     files: list[Path] = []
-    for folder in ("src", "tests"):
+    for folder in ("src", "tools", "tests"):
         files.extend(sorted((PROJECT_ROOT / folder).rglob("*.py")))
     return files
 

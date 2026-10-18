@@ -53,11 +53,14 @@ Issues = "https://github.com/davidharputoglu/RuneCast/issues"
 runecast = "runecast.__main__:main"
 
 # FR : Outils réservés au développement (jamais livrés aux utilisateurs) :
-#      pytest lance les tests automatiques, ruff contrôle la qualité du code.
+#      pytest lance les tests automatiques, ruff contrôle la qualité du code,
+#      pillow fabrique les icônes à partir du logo (tools/make_icons.py).
 # EN : Development-only tools (never shipped to users): pytest runs the
-#      automatic tests, ruff checks code quality.
+#      automatic tests, ruff checks code quality, pillow builds the icons
+#      from the logo (tools/make_icons.py).
 [dependency-groups]
 dev = [
+    "pillow>=11",
     "pytest>=8.3",
     "ruff>=0.8",
 ]
@@ -79,7 +82,7 @@ addopts = "-v"
 [tool.ruff]
 line-length = 100
 target-version = "py313"
-src = ["src", "tests"]
+src = ["src", "tools", "tests"]
 
 [tool.ruff.lint]
 # FR : E/W = style, F = erreurs, I = ordre des imports, UP = Python moderne,

@@ -45,7 +45,8 @@ RuneCast est un logiciel libre qui traduit les jeux vidéo, pour que chacun puis
 ```
 RuneCast/
 ├── assets/
-│   └── branding/          Logo et images de l'application
+│   ├── branding/          Logo de l'application (image d'origine et version carrée)
+│   └── icons/             Icônes Windows (.ico), Linux (PNG) et favicon
 ├── docs/
 │   ├── PLAN-V1.md         Plan de développement validé
 │   ├── SUIVI-ETAPES.md    Avancement, étape par étape
@@ -53,6 +54,8 @@ RuneCast/
 ├── src/
 │   └── runecast/          Code source de l'application
 ├── tests/                 Tests automatiques
+├── tools/                 Outils de développement (fabrication des icônes…)
+├── CHANGELOG.md           Journal des versions
 ├── LICENSE                Texte officiel de la licence GPLv3
 ├── pyproject.toml         Fiche d'identité du projet Python
 └── README.md              Ce fichier
