@@ -1,0 +1,20 @@
+{
+  "format": 1,
+  "id": "noir",
+  "name": "Noir",
+  "dark": true,
+  "colors": {
+    "window": "#000000",
+    "base": "#000000",
+    "alternate_base": "#0D0D0D",
+    "surface": "#161616",
+    "text": "#F2F2F2",
+    "disabled_text": "#6B6B6B",
+    "placeholder": "#8C8C8C",
+    "highlight": "#1F6F75",
+    "highlighted_text": "#FFFFFF",
+    "accent": "#3CCFC7",
+    "link": "#76E0DC",
+    "border": "#333333"
+  }
+}

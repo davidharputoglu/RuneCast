@@ -51,11 +51,12 @@ from runecast.core.languages import resolve_language
 from runecast.core.logs import log_startup, log_uncaught_exceptions, setup_logging
 from runecast.core.paths import resolve_paths
 from runecast.core.settings import load_settings, save_settings
+from runecast.core.themes import DEFAULT_THEME, builtin_themes, find_theme
 from runecast.ui.fonts import load_fonts
 from runecast.ui.i18n import LanguageManager, keep_left_to_right
 from runecast.ui.icons import app_icon
 from runecast.ui.main_window import MainWindow
-from runecast.ui.theme import apply_turquoise_theme
+from runecast.ui.theme import apply_theme
 
 
 def _set_windows_taskbar_id() -> None:
@@ -98,7 +99,9 @@ def create_application(argv: list[str] | None = None) -> QApplication:
     app.setDesktopFileName(about.APP_ID)
     app.setWindowIcon(app_icon())
     load_fonts(app)
-    apply_turquoise_theme(app)
+    # FR : thème par défaut ; celui choisi par l'utilisateur est appliqué ensuite.
+    # EN : default theme; the one chosen by the user is applied afterwards.
+    apply_theme(app, builtin_themes()[DEFAULT_THEME])
     return app
 
 
@@ -123,6 +126,7 @@ def run(argv: list[str] | None = None, portable: bool = False) -> int:
 
     # FR : 2. Interface. EN : 2. Interface.
     app = create_application(argv)
+    apply_theme(app, find_theme(settings.theme, builtin_themes()))
     languages = LanguageManager(app)
     languages.apply(resolve_language(settings.interface_language, QLocale.system().name()))
     window = MainWindow(paths, settings, languages)

@@ -26,42 +26,27 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program (LICENSE file). If not, see <https://www.gnu.org/licenses/>.
 
-"""Thème Turquoise de base / Basic Turquoise theme.
+"""Application d'un thème à l'écran / Applying a theme on screen.
 
-FR : Version simple du thème par défaut de RuneCast, avec des couleurs prises
-     dans le logo. Le vrai moteur de thèmes (Turquoise, Noir, Sombre, Clair et
-     thèmes personnels enregistrables) arrivera aux étapes 8 et 9 et
-     remplacera ce module.
-     On utilise le style « Fusion » de Qt pour que RuneCast ait exactement le
-     même aspect sous Windows et sous Linux.
+FR : Transforme un thème (runecast/core/themes.py) en palette Qt et en
+     feuille de style, puis l'applique à toute l'application. On utilise le
+     style « Fusion » de Qt pour que RuneCast ait exactement le même aspect
+     sous Windows et sous Linux.
 
-EN : Simple version of the RuneCast default theme, with colours taken from
-     the logo. The real theme engine (Turquoise, Black, Dark, Light and
-     savable custom themes) will come in steps 8 and 9 and replace this module.
-     Qt's "Fusion" style is used so that RuneCast looks exactly the same on
-     Windows and on Linux.
+EN : Turns a theme (runecast/core/themes.py) into a Qt palette and style
+     sheet, then applies it to the whole application. Qt's "Fusion" style is
+     used so that RuneCast looks exactly the same on Windows and on Linux.
 """
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QPalette
 from PySide6.QtWidgets import QApplication
 
-# FR : Couleurs du thème Turquoise (codes hexadécimaux).
-# EN : Turquoise theme colours (hexadecimal codes).
-TURQUOISE = {
-    "window": "#102026",  # FR : fond des fenêtres / EN : window background
-    "base": "#0B171B",  # FR : fond des champs et tableaux / EN : fields and tables
-    "alternate_base": "#14272E",  # FR : lignes alternées / EN : alternate rows
-    "surface": "#1B353C",  # FR : boutons, menus / EN : buttons, menus
-    "text": "#E3F6F5",  # FR : texte principal / EN : main text
-    "disabled_text": "#5E7A80",  # FR : texte désactivé / EN : disabled text
-    "placeholder": "#7FA3A8",  # FR : texte d'exemple / EN : placeholder text
-    "highlight": "#2A7F8A",  # FR : sélection / EN : selection
-    "highlighted_text": "#FFFFFF",  # FR : texte sélectionné / EN : selected text
-    "accent": "#3CCFC7",  # FR : turquoise vif / EN : bright turquoise
-    "link": "#76E0DC",  # FR : liens / EN : links
-    "border": "#2A4A52",  # FR : bordures / EN : borders
-}
+from runecast.core.themes import Theme
+
+# FR : Nom du thème actif, mémorisé sur l'application (utile aux tests).
+# EN : Active theme name, stored on the application (useful for tests).
+THEME_PROPERTY = "runecastTheme"
 
 
 def build_palette(colors: dict[str, str]) -> QPalette:
@@ -114,9 +99,11 @@ def build_stylesheet(colors: dict[str, str]) -> str:
     """
     return f"""
         QMenuBar {{ background: {colors["window"]}; }}
-        QMenuBar::item:selected {{ background: {colors["highlight"]}; }}
+        QMenuBar::item:selected {{ background: {colors["highlight"]};
+            color: {colors["highlighted_text"]}; }}
         QMenu {{ background: {colors["surface"]}; border: 1px solid {colors["border"]}; }}
-        QMenu::item:selected {{ background: {colors["highlight"]}; }}
+        QMenu::item:selected {{ background: {colors["highlight"]};
+            color: {colors["highlighted_text"]}; }}
         QPushButton {{
             background: {colors["surface"]};
             border: 1px solid {colors["border"]};
@@ -124,25 +111,20 @@ def build_stylesheet(colors: dict[str, str]) -> str:
             padding: 6px 16px;
         }}
         QPushButton:hover, QPushButton:default {{ border-color: {colors["accent"]}; }}
-        QPushButton:pressed {{ background: {colors["highlight"]}; }}
+        QPushButton:pressed {{ background: {colors["highlight"]};
+            color: {colors["highlighted_text"]}; }}
     """
 
 
-# FR : Nom du thème, mémorisé sur l'application (utile aux tests et, plus tard,
-#      au moteur de thèmes).
-# EN : Theme name, stored on the application (useful for tests and, later,
-#      for the theme engine).
-THEME_PROPERTY = "runecastTheme"
-
-
-def apply_turquoise_theme(app: QApplication) -> None:
-    """Applique le thème Turquoise à toute l'application / Apply it app-wide."""
+def apply_theme(app: QApplication, theme: Theme) -> None:
+    """Applique un thème à toute l'application / Apply a theme app-wide."""
     app.setStyle("Fusion")
-    app.setPalette(build_palette(TURQUOISE))
-    app.setStyleSheet(build_stylesheet(TURQUOISE))
-    app.setProperty(THEME_PROPERTY, "turquoise")
-    # FR : On signale au système que le thème est sombre : sous Windows, la
-    #      barre de titre des fenêtres devient alors sombre elle aussi.
-    # EN : Tell the system the theme is dark: on Windows, window title bars
-    #      then become dark as well.
-    app.styleHints().setColorScheme(Qt.ColorScheme.Dark)
+    app.setPalette(build_palette(theme.colors))
+    app.setStyleSheet(build_stylesheet(theme.colors))
+    app.setProperty(THEME_PROPERTY, theme.id)
+    # FR : On indique au système si le thème est sombre ou clair : sous Windows,
+    #      la barre de titre des fenêtres suit alors le thème.
+    # EN : Tell the system whether the theme is dark or light: on Windows, the
+    #      window title bars then follow the theme.
+    scheme = Qt.ColorScheme.Dark if theme.dark else Qt.ColorScheme.Light
+    app.styleHints().setColorScheme(scheme)

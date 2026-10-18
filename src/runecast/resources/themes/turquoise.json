@@ -1,0 +1,20 @@
+{
+  "format": 1,
+  "id": "turquoise",
+  "name": "Turquoise",
+  "dark": true,
+  "colors": {
+    "window": "#102026",
+    "base": "#0B171B",
+    "alternate_base": "#14272E",
+    "surface": "#1B353C",
+    "text": "#E3F6F5",
+    "disabled_text": "#5E7A80",
+    "placeholder": "#7FA3A8",
+    "highlight": "#2A7F8A",
+    "highlighted_text": "#FFFFFF",
+    "accent": "#3CCFC7",
+    "link": "#76E0DC",
+    "border": "#2A4A52"
+  }
+}

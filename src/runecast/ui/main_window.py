@@ -28,16 +28,17 @@
 
 """Fenêtre principale de RuneCast / RuneCast main window.
 
-FR : Fenêtre principale : titre, icône, menus « Fichier », « Affichage » et
-     « Aide », et un écran d'accueil. Elle se rouvre à la même taille et à la
-     même place qu'à la dernière fermeture, et se traduit aussitôt quand on
-     change de langue. Règle du cahier des charges : aucun élément factice.
-     Chaque menu présent fait donc vraiment quelque chose ; les autres menus
-     arriveront avec leurs fonctions.
+FR : Fenêtre principale : titre, icône, menus « Fichier », « Affichage »
+     (langue et thème) et « Aide », et un écran d'accueil. Elle se rouvre à
+     la même taille et à la même place qu'à la dernière fermeture, et change
+     aussitôt de langue ou de thème quand on le demande. Règle du cahier des
+     charges : aucun élément factice. Chaque menu présent fait donc vraiment
+     quelque chose ; les autres menus arriveront avec leurs fonctions.
 
-EN : Main window: title, icon, "File", "View" and "Help" menus, and a welcome
-     screen. It reopens with the same size and position as when it was last
-     closed, and translates itself immediately when the language changes.
+EN : Main window: title, icon, "File", "View" (language and theme) and
+     "Help" menus, and a welcome screen. It reopens with the same size and
+     position as when it was last closed, and switches language or theme
+     immediately when asked.
      Rule from the specification: no dummy element. Every menu shown therefore
      really does something; the other menus will come with their features.
 """
@@ -53,10 +54,12 @@ from runecast import about
 from runecast.core.languages import LANGUAGES, SYSTEM_LANGUAGE, resolve_language
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings, load_settings, save_settings
+from runecast.core.themes import Theme, builtin_themes, find_theme
 from runecast.ui.about_dialog import AboutDialog
 from runecast.ui.folders_dialog import FoldersDialog
 from runecast.ui.i18n import LanguageManager
 from runecast.ui.icons import app_icon
+from runecast.ui.theme import apply_theme
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +84,9 @@ class MainWindow(QMainWindow):
         self.paths = paths
         self.settings = settings
         self.languages = languages or LanguageManager(QApplication.instance())
+        # FR : thèmes disponibles (les thèmes personnels arriveront à l'étape 9).
+        # EN : available themes (custom themes will come in step 9).
+        self.themes: dict[str, Theme] = builtin_themes()
         self.setObjectName("mainWindow")
         self.setWindowTitle(f"{about.APP_NAME} {about.APP_VERSION}")
         self.setWindowIcon(app_icon())
@@ -139,6 +145,20 @@ class MainWindow(QMainWindow):
         current = self.settings.interface_language
         self.language_actions.get(current, self.language_actions[SYSTEM_LANGUAGE]).setChecked(True)
 
+        # FR : Choix du thème : une entrée par thème, une seule cochée.
+        # EN : Theme choice: one entry per theme, only one checked.
+        self.theme_group = QActionGroup(self)
+        self.theme_group.setExclusive(True)
+        self.theme_actions: dict[str, QAction] = {}
+        for theme_id in self.themes:
+            action = QAction(self)
+            action.setCheckable(True)
+            action.setData(theme_id)
+            action.triggered.connect(lambda _checked=False, t=theme_id: self.change_theme(t))
+            self.theme_group.addAction(action)
+            self.theme_actions[theme_id] = action
+        self.theme_actions[find_theme(self.settings.theme, self.themes).id].setChecked(True)
+
     def _create_menus(self) -> None:
         self.file_menu = self.menuBar().addMenu("")
         self.file_menu.setObjectName("fileMenu")
@@ -154,6 +174,11 @@ class MainWindow(QMainWindow):
         for code in LANGUAGES:
             self.language_menu.addAction(self.language_actions[code])
         self.view_menu.addMenu(self.language_menu)
+        self.theme_menu = QMenu(self)
+        self.theme_menu.setObjectName("themeMenu")
+        for action in self.theme_actions.values():
+            self.theme_menu.addAction(action)
+        self.view_menu.addMenu(self.theme_menu)
 
         self.help_menu = self.menuBar().addMenu("")
         self.help_menu.setObjectName("helpMenu")
@@ -203,6 +228,9 @@ class MainWindow(QMainWindow):
         self.view_menu.setTitle(self.tr("&Affichage"))
         self.help_menu.setTitle(self.tr("&Aide"))
         self.language_menu.setTitle(self.tr("&Langue de l'interface"))
+        self.theme_menu.setTitle(self.tr("&Thème"))
+        for theme_id, action in self.theme_actions.items():
+            action.setText(self.theme_name(self.themes[theme_id]))
         self.quit_action.setText(self.tr("&Quitter"))
         self.folders_action.setText(self.tr("&Dossiers de RuneCast…"))
         self.about_action.setText(self.tr("À &propos de RuneCast…"))
@@ -230,6 +258,35 @@ class MainWindow(QMainWindow):
         if event.type() == QEvent.Type.LanguageChange:
             self.retranslate()
         super().changeEvent(event)
+
+    def theme_name(self, theme: Theme) -> str:
+        """FR : nom affiché d'un thème, traduit pour les thèmes intégrés.
+
+        EN : display name of a theme, translated for built-in themes.
+        """
+        builtin_names = {
+            "turquoise": self.tr("Turquoise"),
+            "noir": self.tr("Noir"),
+            "sombre": self.tr("Sombre"),
+            "clair": self.tr("Clair"),
+        }
+        if theme.builtin and theme.id in builtin_names:
+            return builtin_names[theme.id]
+        return theme.name
+
+    def change_theme(self, theme_id: str) -> None:
+        """Change le thème / Change the theme.
+
+        FR : Le nouveau thème s'applique tout de suite et le choix est enregistré.
+        EN : The new theme applies immediately and the choice is saved.
+        """
+        theme = find_theme(theme_id, self.themes)
+        self.settings.theme = theme.id
+        apply_theme(QApplication.instance(), theme)
+        try:
+            save_settings(self.settings, self.paths.settings_file)
+        except OSError:
+            logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
 
     def change_language(self, code: str) -> None:
         """Change la langue de l'interface / Change the interface language.

@@ -59,7 +59,7 @@ RuneCast/
 │   └── projet/            Cahier des charges et checklist de vérification
 ├── src/
 │   └── runecast/          Code source de l'application
-│       ├── resources/     Fichiers embarqués (icônes, polices, traductions compilées)
+│       ├── resources/     Fichiers embarqués (icônes, polices, thèmes, traductions compilées)
 │       └── ui/            Interface graphique (fenêtres, thème)
 ├── tests/                 Tests automatiques
 ├── tools/                 Outils de développement (icônes, traductions…)

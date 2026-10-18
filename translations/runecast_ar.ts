@@ -209,6 +209,10 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
         <translation>&amp;لغة الواجهة</translation>
     </message>
     <message>
+        <source>&amp;Thème</source>
+        <translation>&amp;السمة</translation>
+    </message>
+    <message>
         <source>&amp;Quitter</source>
         <translation>&amp;خروج</translation>
     </message>
@@ -239,6 +243,22 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     <message>
         <source>La fenêtre principale est prête. L&apos;ouverture des jeux et la traduction arriveront dans les prochaines étapes.</source>
         <translation>النافذة الرئيسية جاهزة. فتح الألعاب وترجمتها سيأتيان في المراحل القادمة.</translation>
+    </message>
+    <message>
+        <source>Turquoise</source>
+        <translation>فيروزي</translation>
+    </message>
+    <message>
+        <source>Noir</source>
+        <translation>أسود</translation>
+    </message>
+    <message>
+        <source>Sombre</source>
+        <translation>داكن</translation>
+    </message>
+    <message>
+        <source>Clair</source>
+        <translation>فاتح</translation>
     </message>
 </context>
 </TS>

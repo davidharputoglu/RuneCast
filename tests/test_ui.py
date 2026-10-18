@@ -41,6 +41,7 @@ from PySide6.QtWidgets import QApplication, QLabel, QMenu
 from runecast import __main__ as cli
 from runecast import about
 from runecast.core.settings import Settings
+from runecast.core.themes import builtin_themes
 from runecast.resources import resource_path
 from runecast.ui import about_dialog, app, icons, main_window, theme
 
@@ -110,6 +111,7 @@ def test_menus_have_no_dummy_entry(qtbot, custom_paths) -> None:
         "fileMenu",
         "viewMenu",
         "languageMenu",
+        "themeMenu",
         "helpMenu",
     }
     for menu in menus:
@@ -166,10 +168,11 @@ def test_about_window_shows_every_mandatory_mention(qtbot) -> None:
 def test_turquoise_theme_is_applied(qapp: QApplication) -> None:
     """FR : le thème Turquoise est appliqué. EN : Turquoise theme is applied."""
     app.create_application()
+    turquoise = builtin_themes()["turquoise"]
     assert qapp.property(theme.THEME_PROPERTY) == "turquoise"
-    assert theme.TURQUOISE["accent"] in qapp.styleSheet()
+    assert turquoise.colors["accent"] in qapp.styleSheet()
     window_color = qapp.palette().color(QPalette.ColorRole.Window).name()
-    assert window_color.lower() == theme.TURQUOISE["window"].lower()
+    assert window_color.lower() == turquoise.colors["window"].lower()
     assert qapp.desktopFileName() == about.APP_ID
 
 

@@ -209,6 +209,10 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
         <translation>Interface &amp;language</translation>
     </message>
     <message>
+        <source>&amp;Thème</source>
+        <translation>&amp;Theme</translation>
+    </message>
+    <message>
         <source>&amp;Quitter</source>
         <translation>&amp;Quit</translation>
     </message>
@@ -239,6 +243,22 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     <message>
         <source>La fenêtre principale est prête. L&apos;ouverture des jeux et la traduction arriveront dans les prochaines étapes.</source>
         <translation>The main window is ready. Opening games and translating them will come in the next steps.</translation>
+    </message>
+    <message>
+        <source>Turquoise</source>
+        <translation>Turquoise</translation>
+    </message>
+    <message>
+        <source>Noir</source>
+        <translation>Black</translation>
+    </message>
+    <message>
+        <source>Sombre</source>
+        <translation>Dark</translation>
+    </message>
+    <message>
+        <source>Clair</source>
+        <translation>Light</translation>
     </message>
 </context>
 </TS>

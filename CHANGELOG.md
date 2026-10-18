@@ -10,6 +10,15 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 | Fin d'un jalon (groupe d'étapes) / End of a milestone (group of steps) | 0.1.x → 0.2.0, puis/then 0.3.0… |
 | Version complète du cahier des charges, publiée pour le public / Complete specification, public release | 1.0.0 |
 
+## 0.2.3 (étape 8 / step 8)
+
+- 4 thèmes intégrés : Turquoise (par défaut), Noir, Sombre et Clair, au choix dans Affichage → Thème. Le changement est immédiat et retenu au prochain lancement ; la barre de titre de Windows suit le thème (sombre ou claire).
+  *4 built-in themes: Turquoise (default), Black, Dark and Light, chosen from View → Theme. The change is immediate and remembered; the Windows title bar follows the theme (dark or light).*
+- Thèmes décrits dans des fichiers JSON (dossier `resources/themes`), vérifiés au chargement : ce format servira aux thèmes personnels de l'étape 9.
+  *Themes described in JSON files (`resources/themes` folder), checked when loaded: this format will be used by the custom themes of step 9.*
+- Lisibilité garantie par des tests : contraste d'au moins 4,5 (norme d'accessibilité WCAG) pour le texte, les liens et la sélection, dans chaque thème.
+  *Readability guaranteed by tests: contrast of at least 4.5 (WCAG accessibility standard) for text, links and selection, in every theme.*
+
 ## 0.2.2 (étape 7 / step 7)
 
 - Langues de l'interface : français, anglais et arabe, avec changement en direct (Affichage → Langue de l'interface), sans redémarrer. Choix « Langue du système » par défaut ; si la langue du système n'est pas disponible : anglais.

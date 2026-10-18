@@ -1,0 +1,20 @@
+{
+  "format": 1,
+  "id": "clair",
+  "name": "Clair",
+  "dark": false,
+  "colors": {
+    "window": "#F3F6F7",
+    "base": "#FFFFFF",
+    "alternate_base": "#EEF4F5",
+    "surface": "#E2EBED",
+    "text": "#10262B",
+    "disabled_text": "#8A9A9E",
+    "placeholder": "#5F7479",
+    "highlight": "#16807C",
+    "highlighted_text": "#FFFFFF",
+    "accent": "#0F8A85",
+    "link": "#0B6F6B",
+    "border": "#BCCDD1"
+  }
+}

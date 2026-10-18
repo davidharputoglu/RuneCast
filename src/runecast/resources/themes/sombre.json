@@ -1,0 +1,20 @@
+{
+  "format": 1,
+  "id": "sombre",
+  "name": "Sombre",
+  "dark": true,
+  "colors": {
+    "window": "#1E1F22",
+    "base": "#17181A",
+    "alternate_base": "#232428",
+    "surface": "#2B2D31",
+    "text": "#E6E6E6",
+    "disabled_text": "#6E7076",
+    "placeholder": "#8E9097",
+    "highlight": "#2F6F74",
+    "highlighted_text": "#FFFFFF",
+    "accent": "#3CCFC7",
+    "link": "#76E0DC",
+    "border": "#3A3C42"
+  }
+}
