@@ -105,11 +105,18 @@ def test_menus_have_no_dummy_entry(qtbot, custom_paths) -> None:
     EN : every menu entry is enabled and wired to a function.
     """
     window = _new_window(qtbot, custom_paths)
-    menus = window.menuBar().findChildren(QMenu)
-    assert {menu.objectName() for menu in menus} >= {"fileMenu", "helpMenu"}
+    menus = window.findChildren(QMenu)
+    assert {menu.objectName() for menu in menus} >= {
+        "fileMenu",
+        "viewMenu",
+        "languageMenu",
+        "helpMenu",
+    }
     for menu in menus:
         for action in menu.actions():
-            if action.isSeparator():
+            # FR : séparateurs et sous-menus (ex. « Langue ») ne sont pas des commandes.
+            # EN : separators and submenus (e.g. "Language") are not commands.
+            if action.isSeparator() or action.menu() is not None:
                 continue
             assert action.isEnabled(), action.text()
             assert _is_connected(action), action.text()

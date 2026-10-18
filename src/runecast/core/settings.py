@@ -88,8 +88,9 @@ class Settings:
     """
 
     schema_version: int = SCHEMA_VERSION
-    # FR : langue de l'interface (étape 7). EN : interface language (step 7).
-    interface_language: str = "fr"
+    # FR : langue de l'interface ; vide = langue du système (étape 7).
+    # EN : interface language; empty = system language (step 7).
+    interface_language: str = ""
     # FR : thème choisi (étape 8). EN : chosen theme (step 8).
     theme: str = "turquoise"
     # FR : taille et position de la fenêtre principale, mémorisées à la fermeture.

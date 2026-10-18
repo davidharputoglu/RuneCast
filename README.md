@@ -59,10 +59,11 @@ RuneCast/
 │   └── projet/            Cahier des charges et checklist de vérification
 ├── src/
 │   └── runecast/          Code source de l'application
-│       ├── resources/     Fichiers embarqués (icônes…)
+│       ├── resources/     Fichiers embarqués (icônes, polices, traductions compilées)
 │       └── ui/            Interface graphique (fenêtres, thème)
 ├── tests/                 Tests automatiques
-├── tools/                 Outils de développement (fabrication des icônes…)
+├── tools/                 Outils de développement (icônes, traductions…)
+├── translations/          Traductions de l'interface (fichiers .ts)
 ├── CHANGELOG.md           Journal des versions
 ├── LICENSE                Texte officiel de la licence GPLv3
 ├── pyproject.toml         Fiche d'identité du projet Python
@@ -84,6 +85,8 @@ uv run runecast --portable  # mode portable (données dans portable-data/)
 ```
 
 Sous Linux, `uv run python tools/install_desktop_entry.py` ajoute RuneCast au menu des applications, pour que le dock affiche son icône.
+
+Pour mettre à jour les traductions après avoir changé des textes : `uv run python tools/update_translations.py`, puis traduire les nouveaux textes dans `translations/*.ts` (par exemple avec `uv run pyside6-linguist`).
 
 Chaque fichier de code commence par l'en-tête de licence GPLv3 (voir `src/runecast/__init__.py`). Un test vérifie automatiquement que personne ne l'oublie. Les commentaires du code sont rédigés en français et en anglais.
 

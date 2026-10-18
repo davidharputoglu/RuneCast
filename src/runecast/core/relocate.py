@@ -58,6 +58,16 @@ from runecast.core.paths import LOCATION_FILE_NAME, AppPaths
 
 logger = logging.getLogger(__name__)
 
+# FR : Problèmes possibles avec un dossier de destination. Ce sont des codes :
+#      l'interface les transforme en phrases, dans la langue de l'utilisateur.
+# EN : Possible problems with a destination folder. These are codes: the
+#      interface turns them into sentences, in the user's language.
+PROBLEM_SAME = "same"  # FR : déjà utilisé / EN : already in use
+PROBLEM_OVERLAP = "overlap"  # FR : mélangé aux dossiers actuels / EN : overlaps current ones
+PROBLEM_NOT_A_FOLDER = "not_a_folder"  # FR : pas un dossier / EN : not a folder
+PROBLEM_NOT_EMPTY = "not_empty"  # FR : pas vide / EN : not empty
+PROBLEM_NOT_WRITABLE = "not_writable"  # FR : écriture impossible / EN : cannot write
+
 # FR : Ces fichiers ne sont jamais copiés : le fichier d'emplacement reste à sa
 #      place, et les fichiers « .tmp » sont des écritures inachevées.
 # EN : These files are never copied: the location file stays where it is, and
@@ -131,15 +141,15 @@ def has_runecast_data(target: AppPaths) -> bool:
 def check_destination(target: AppPaths, current: AppPaths) -> str | None:
     """Vérifie un dossier de destination / Check a destination folder.
 
-    FR : Renvoie None si tout va bien, sinon un message expliquant le problème.
-    EN : Returns None if all is well, otherwise a message explaining the problem.
+    FR : Renvoie None si tout va bien, sinon un code PROBLEM_… (voir plus haut).
+    EN : Returns None if all is well, otherwise a PROBLEM_… code (see above).
     """
     new_folders = list(target.folders().values())
     old_folders = list(current.folders().values())
 
     # FR : 1. Même emplacement qu'aujourd'hui. EN : 1. Same location as today.
     if [_normalized(f) for f in new_folders] == [_normalized(f) for f in old_folders]:
-        return "RuneCast utilise déjà cet emplacement."
+        return PROBLEM_SAME
 
     # FR : 2. Un dossier ne doit pas se trouver dans un autre (sinon la copie
     #      tournerait en rond). EN : 2. No folder may sit inside another one
@@ -149,29 +159,23 @@ def check_destination(target: AppPaths, current: AppPaths) -> str | None:
             if is_same_or_inside(new_folder, old_folder) or is_same_or_inside(
                 old_folder, new_folder
             ):
-                return (
-                    "Le dossier choisi se mélange avec les dossiers actuels de RuneCast. "
-                    "Choisis un dossier séparé."
-                )
+                return PROBLEM_OVERLAP
 
     # FR : 3. Dossier choisi : vide (ou déjà un dossier RuneCast) et accessible.
     # EN : 3. Chosen folder: empty (or already a RuneCast folder) and writable.
     root = target.root
     if root is not None:
         if root.exists() and not root.is_dir():
-            return "Le chemin choisi n'est pas un dossier."
+            return PROBLEM_NOT_A_FOLDER
         if root.is_dir() and any(root.iterdir()) and not has_runecast_data(target):
-            return (
-                "Le dossier choisi n'est pas vide. Choisis un dossier vide "
-                "(tu peux en créer un nouveau dans la fenêtre de choix)."
-            )
+            return PROBLEM_NOT_EMPTY
         try:
             root.mkdir(parents=True, exist_ok=True)
             probe = root / ".runecast-test-ecriture"
             probe.write_text("ok", encoding="utf-8")
             probe.unlink()
         except OSError:
-            return "RuneCast ne peut pas écrire dans le dossier choisi."
+            return PROBLEM_NOT_WRITABLE
     return None
 
 

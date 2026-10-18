@@ -30,24 +30,29 @@
 
 FR : Choisit les dossiers de données, démarre le journal, lit les réglages,
      prépare l'application Qt (nom, icône, identifiants pour Windows et Linux,
-     thème Turquoise), ouvre la fenêtre principale, puis attend que
-     l'utilisateur la ferme.
+     polices, thème Turquoise, langue), ouvre la fenêtre principale, puis
+     attend que l'utilisateur la ferme.
 
 EN : Chooses the data folders, starts the log, reads the settings, prepares
-     the Qt application (name, icon, Windows and Linux identifiers, Turquoise
-     theme), opens the main window, then waits until the user closes it.
+     the Qt application (name, icon, Windows and Linux identifiers, fonts,
+     Turquoise theme, language), opens the main window, then waits until the
+     user closes it.
 """
 
 import ctypes
 import logging
 import sys
 
+from PySide6.QtCore import QCoreApplication, QLocale
 from PySide6.QtWidgets import QApplication, QMessageBox
 
 from runecast import about
+from runecast.core.languages import resolve_language
 from runecast.core.logs import log_startup, log_uncaught_exceptions, setup_logging
 from runecast.core.paths import resolve_paths
 from runecast.core.settings import load_settings, save_settings
+from runecast.ui.fonts import load_fonts
+from runecast.ui.i18n import LanguageManager, keep_left_to_right
 from runecast.ui.icons import app_icon
 from runecast.ui.main_window import MainWindow
 from runecast.ui.theme import apply_turquoise_theme
@@ -92,6 +97,7 @@ def create_application(argv: list[str] | None = None) -> QApplication:
     #      which lets the dock display the right icon.
     app.setDesktopFileName(about.APP_ID)
     app.setWindowIcon(app_icon())
+    load_fonts(app)
     apply_turquoise_theme(app)
     return app
 
@@ -117,19 +123,22 @@ def run(argv: list[str] | None = None, portable: bool = False) -> int:
 
     # FR : 2. Interface. EN : 2. Interface.
     app = create_application(argv)
-    window = MainWindow(paths, settings)
+    languages = LanguageManager(app)
+    languages.apply(resolve_language(settings.interface_language, QLocale.system().name()))
+    window = MainWindow(paths, settings, languages)
     window.show()
     if paths.unavailable_custom_root is not None:
         # FR : le dossier choisi est introuvable (ex. disque débranché) : on prévient.
         # EN : the chosen folder is missing (e.g. unplugged drive): warn the user.
         QMessageBox.warning(
             window,
-            window.tr("Dossier introuvable"),
-            window.tr(
+            QCoreApplication.translate("App", "Dossier introuvable"),
+            QCoreApplication.translate(
+                "App",
                 "Le dossier choisi pour les données est introuvable :\n{folder}\n\n"
                 "RuneCast utilise l'emplacement standard pour cette fois. "
-                "Rebranche le disque puis relance RuneCast."
-            ).format(folder=paths.unavailable_custom_root),
+                "Rebranche le disque puis relance RuneCast.",
+            ).format(folder=keep_left_to_right(paths.unavailable_custom_root)),
         )
     exit_code = app.exec()
     logging.getLogger("runecast").info("Fermeture / Exit (code %s)", exit_code)

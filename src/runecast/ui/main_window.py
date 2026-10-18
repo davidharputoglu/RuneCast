@@ -28,31 +28,34 @@
 
 """Fenêtre principale de RuneCast / RuneCast main window.
 
-FR : Fenêtre principale : titre, icône, menus « Fichier » et « Aide », et un
-     écran d'accueil. Elle se rouvre à la même taille et à la même place
-     qu'à la dernière fermeture. Règle du cahier des charges : aucun élément
-     factice. Chaque menu présent fait donc vraiment quelque chose ; les
-     autres menus arriveront avec leurs fonctions.
+FR : Fenêtre principale : titre, icône, menus « Fichier », « Affichage » et
+     « Aide », et un écran d'accueil. Elle se rouvre à la même taille et à la
+     même place qu'à la dernière fermeture, et se traduit aussitôt quand on
+     change de langue. Règle du cahier des charges : aucun élément factice.
+     Chaque menu présent fait donc vraiment quelque chose ; les autres menus
+     arriveront avec leurs fonctions.
 
-EN : Main window: title, icon, "File" and "Help" menus, and a welcome screen.
-     It reopens with the same size and position as when it was last closed.
+EN : Main window: title, icon, "File", "View" and "Help" menus, and a welcome
+     screen. It reopens with the same size and position as when it was last
+     closed, and translates itself immediately when the language changes.
      Rule from the specification: no dummy element. Every menu shown therefore
-     really does something; the other menus will come together with their
-     features.
+     really does something; the other menus will come with their features.
 """
 
 import logging
 from html import escape
 
-from PySide6.QtCore import QByteArray, Qt
-from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
-from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget
+from PySide6.QtCore import QByteArray, QEvent, QLocale, Qt
+from PySide6.QtGui import QAction, QActionGroup, QCloseEvent, QKeySequence
+from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QMenu, QVBoxLayout, QWidget
 
 from runecast import about
+from runecast.core.languages import LANGUAGES, SYSTEM_LANGUAGE, resolve_language
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings, load_settings, save_settings
 from runecast.ui.about_dialog import AboutDialog
 from runecast.ui.folders_dialog import FoldersDialog
+from runecast.ui.i18n import LanguageManager
 from runecast.ui.icons import app_icon
 
 logger = logging.getLogger(__name__)
@@ -66,11 +69,18 @@ MINIMUM_SIZE = (800, 500)
 class MainWindow(QMainWindow):
     """Fenêtre principale / Main window."""
 
-    def __init__(self, paths: AppPaths, settings: Settings) -> None:
+    def __init__(
+        self,
+        paths: AppPaths,
+        settings: Settings,
+        languages: LanguageManager | None = None,
+    ) -> None:
         super().__init__()
-        # FR : dossiers et réglages de RuneCast. EN : RuneCast folders and settings.
+        # FR : dossiers, réglages et langues de RuneCast.
+        # EN : RuneCast folders, settings and languages.
         self.paths = paths
         self.settings = settings
+        self.languages = languages or LanguageManager(QApplication.instance())
         self.setObjectName("mainWindow")
         self.setWindowTitle(f"{about.APP_NAME} {about.APP_VERSION}")
         self.setWindowIcon(app_icon())
@@ -80,83 +90,165 @@ class MainWindow(QMainWindow):
         self._create_actions()
         self._create_menus()
         self.setCentralWidget(self._create_welcome_screen())
+        self.retranslate()
         self._restore_geometry()
 
     # ------------------------------------------------------------------
-    # FR : Actions (ce que font les menus) / EN : Actions (what menus do)
+    # FR : Construction (sans texte : les textes sont posés par retranslate)
+    # EN : Building (no text: texts are set by retranslate)
     # ------------------------------------------------------------------
     def _create_actions(self) -> None:
         # FR : Quitter l'application (Ctrl+Q sur Windows comme sur Linux).
         # EN : Quit the application (Ctrl+Q on Windows and Linux alike).
-        self.quit_action = QAction(self.tr("&Quitter"), self)
+        self.quit_action = QAction(self)
         self.quit_action.setShortcut(QKeySequence("Ctrl+Q"))
         self.quit_action.triggered.connect(self.close)
 
         # FR : Ouvrir la fenêtre « Dossiers de RuneCast ».
         # EN : Open the "RuneCast folders" window.
-        self.folders_action = QAction(self.tr("&Dossiers de RuneCast…"), self)
+        self.folders_action = QAction(self)
         self.folders_action.triggered.connect(self.show_folders)
 
         # FR : Ouvrir la fenêtre « À propos de RuneCast ».
         # EN : Open the "About RuneCast" window.
-        self.about_action = QAction(self.tr("À &propos de RuneCast…"), self)
+        self.about_action = QAction(self)
         self.about_action.triggered.connect(self.show_about)
 
         # FR : Fenêtre officielle de Qt : informe l'utilisateur que RuneCast
         #      utilise Qt (licence LGPL), comme la licence de Qt le demande.
         # EN : Official Qt window: tells the user that RuneCast uses Qt (LGPL
         #      license), as the Qt license asks.
-        self.about_qt_action = QAction(self.tr("À propos de &Qt…"), self)
+        self.about_qt_action = QAction(self)
         self.about_qt_action.triggered.connect(QApplication.aboutQt)
 
+        # FR : Choix de la langue : « langue du système », puis une entrée par
+        #      langue disponible, écrite dans sa propre langue. Une seule peut
+        #      être cochée à la fois.
+        # EN : Language choice: "system language", then one entry per available
+        #      language, written in its own language. Only one can be checked.
+        self.language_group = QActionGroup(self)
+        self.language_group.setExclusive(True)
+        self.language_actions: dict[str, QAction] = {}
+        for code in [SYSTEM_LANGUAGE, *LANGUAGES]:
+            action = QAction(self)
+            action.setCheckable(True)
+            action.setData(code)
+            action.triggered.connect(lambda _checked=False, c=code: self.change_language(c))
+            self.language_group.addAction(action)
+            self.language_actions[code] = action
+        current = self.settings.interface_language
+        self.language_actions.get(current, self.language_actions[SYSTEM_LANGUAGE]).setChecked(True)
+
     def _create_menus(self) -> None:
-        file_menu = self.menuBar().addMenu(self.tr("&Fichier"))
-        file_menu.setObjectName("fileMenu")
-        file_menu.addAction(self.quit_action)
+        self.file_menu = self.menuBar().addMenu("")
+        self.file_menu.setObjectName("fileMenu")
+        self.file_menu.addAction(self.quit_action)
 
-        help_menu = self.menuBar().addMenu(self.tr("&Aide"))
-        help_menu.setObjectName("helpMenu")
-        help_menu.addAction(self.folders_action)
-        help_menu.addSeparator()
-        help_menu.addAction(self.about_action)
-        help_menu.addAction(self.about_qt_action)
+        self.view_menu = self.menuBar().addMenu("")
+        self.view_menu.setObjectName("viewMenu")
+        self.language_menu = QMenu(self)
+        self.language_menu.setObjectName("languageMenu")
+        system_action = self.language_actions[SYSTEM_LANGUAGE]
+        self.language_menu.addAction(system_action)
+        self.language_menu.addSeparator()
+        for code in LANGUAGES:
+            self.language_menu.addAction(self.language_actions[code])
+        self.view_menu.addMenu(self.language_menu)
 
-    # ------------------------------------------------------------------
-    # FR : Écran d'accueil / EN : Welcome screen
-    # ------------------------------------------------------------------
+        self.help_menu = self.menuBar().addMenu("")
+        self.help_menu.setObjectName("helpMenu")
+        self.help_menu.addAction(self.folders_action)
+        self.help_menu.addSeparator()
+        self.help_menu.addAction(self.about_action)
+        self.help_menu.addAction(self.about_qt_action)
+
     def _create_welcome_screen(self) -> QWidget:
         logo = QLabel()
         logo.setPixmap(app_icon().pixmap(128, 128))
         logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        title = QLabel(f"<h1>{escape(self.tr('Bienvenue dans RuneCast'))}</h1>")
-        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.welcome_title = QLabel()
+        self.welcome_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # FR : Textes simples (sans mise en forme) : affichés tels quels.
         # EN : Plain texts (no formatting): displayed as they are.
-        version = QLabel(self.tr("Version {version}").format(version=about.APP_VERSION))
-        version.setTextFormat(Qt.TextFormat.PlainText)
-        version.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.welcome_version = QLabel()
+        self.welcome_version.setTextFormat(Qt.TextFormat.PlainText)
+        self.welcome_version.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        message = QLabel(
-            self.tr(
-                "La fenêtre principale est prête. L'ouverture des jeux et "
-                "la traduction arriveront dans les prochaines étapes."
-            )
-        )
-        message.setTextFormat(Qt.TextFormat.PlainText)
-        message.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        message.setWordWrap(True)
+        self.welcome_message = QLabel()
+        self.welcome_message.setTextFormat(Qt.TextFormat.PlainText)
+        self.welcome_message.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.welcome_message.setWordWrap(True)
 
         screen = QWidget()
         screen.setObjectName("welcomeScreen")
         layout = QVBoxLayout(screen)
         layout.addStretch()
-        for widget in (logo, title, version, message):
+        for widget in (logo, self.welcome_title, self.welcome_version, self.welcome_message):
             layout.addWidget(widget)
         layout.addStretch()
         return screen
 
+    # ------------------------------------------------------------------
+    # FR : Textes affichés (dans la langue choisie)
+    # EN : Displayed texts (in the chosen language)
+    # ------------------------------------------------------------------
+    def retranslate(self) -> None:
+        """FR : (re)pose tous les textes dans la langue actuelle.
+
+        EN : (re)set every text in the current language.
+        """
+        self.file_menu.setTitle(self.tr("&Fichier"))
+        self.view_menu.setTitle(self.tr("&Affichage"))
+        self.help_menu.setTitle(self.tr("&Aide"))
+        self.language_menu.setTitle(self.tr("&Langue de l'interface"))
+        self.quit_action.setText(self.tr("&Quitter"))
+        self.folders_action.setText(self.tr("&Dossiers de RuneCast…"))
+        self.about_action.setText(self.tr("À &propos de RuneCast…"))
+        self.about_qt_action.setText(self.tr("À propos de &Qt…"))
+        self.language_actions[SYSTEM_LANGUAGE].setText(self.tr("Langue du système"))
+        for code, language in LANGUAGES.items():
+            # FR : chaque langue garde son propre nom (« English », « العربية »…).
+            # EN : each language keeps its own name ("English", "العربية"…).
+            self.language_actions[code].setText(language.native_name)
+
+        # FR : le texte est traduit à part, puis mis en forme (titre).
+        # EN : the text is translated separately, then formatted (title).
+        title = self.tr("Bienvenue dans RuneCast")
+        self.welcome_title.setText(f"<h1>{escape(title)}</h1>")
+        self.welcome_version.setText(self.tr("Version {version}").format(version=about.APP_VERSION))
+        self.welcome_message.setText(
+            self.tr(
+                "La fenêtre principale est prête. L'ouverture des jeux et "
+                "la traduction arriveront dans les prochaines étapes."
+            )
+        )
+
+    def changeEvent(self, event: QEvent) -> None:  # noqa: N802 (nom imposé par Qt)
+        """FR : Qt prévient ici quand la langue change. EN : Qt signals language changes here."""
+        if event.type() == QEvent.Type.LanguageChange:
+            self.retranslate()
+        super().changeEvent(event)
+
+    def change_language(self, code: str) -> None:
+        """Change la langue de l'interface / Change the interface language.
+
+        FR : « code » vide = suivre la langue du système. Le choix est
+             enregistré aussitôt.
+        EN : empty "code" = follow the system language. The choice is saved
+             right away.
+        """
+        self.settings.interface_language = code
+        self.languages.apply(resolve_language(code, QLocale.system().name()))
+        try:
+            save_settings(self.settings, self.paths.settings_file)
+        except OSError:
+            logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
+
+    # ------------------------------------------------------------------
+    # FR : Fenêtres secondaires / EN : Secondary windows
+    # ------------------------------------------------------------------
     def show_about(self) -> None:
         """Ouvre la fenêtre « À propos » / Open the "About" window."""
         AboutDialog(self).exec()

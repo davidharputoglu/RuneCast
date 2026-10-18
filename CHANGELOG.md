@@ -10,6 +10,17 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 | Fin d'un jalon (groupe d'étapes) / End of a milestone (group of steps) | 0.1.x → 0.2.0, puis/then 0.3.0… |
 | Version complète du cahier des charges, publiée pour le public / Complete specification, public release | 1.0.0 |
 
+## 0.2.2 (étape 7 / step 7)
+
+- Langues de l'interface : français, anglais et arabe, avec changement en direct (Affichage → Langue de l'interface), sans redémarrer. Choix « Langue du système » par défaut ; si la langue du système n'est pas disponible : anglais.
+  *Interface languages: French, English and Arabic, switched live (View → Interface language), without restarting. "System language" by default; if the system language is not available: English.*
+- Arabe : toute l'interface passe de droite à gauche ; chemins et adresses restent lisibles dans les phrases arabes.
+  *Arabic: the whole interface switches to right-to-left; paths and addresses stay readable inside Arabic sentences.*
+- Polices embarquées Noto Sans et Noto Sans Arabic (licence OFL) : toutes les lettres turciques, cyrilliques, arabes et ouïghoures s'affichent, identiques sous Windows et Linux.
+  *Bundled Noto Sans and Noto Sans Arabic fonts (OFL license): all Turkic, Cyrillic, Arabic and Uyghur letters display, identical on Windows and Linux.*
+- Traductions au format Qt (.ts / .qm) avec l'outil `tools/update_translations.py` ; les tests vérifient que chaque texte est traduit dans chaque langue.
+  *Qt-format translations (.ts / .qm) with the `tools/update_translations.py` tool; tests check that every text is translated in every language.*
+
 ## 0.2.1 (étape 6 / step 6)
 
 - Dossiers de données selon la norme de chaque système : réglages dans AppData\Roaming (Windows) ou ~/.config (Linux), gros fichiers dans AppData\Local ou ~/.local/share, plus cache et journaux.

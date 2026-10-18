@@ -68,6 +68,7 @@ from runecast.core.paths import (
     system_paths,
     write_custom_root,
 )
+from runecast.ui.i18n import keep_left_to_right
 
 logger = logging.getLogger(__name__)
 
@@ -161,7 +162,9 @@ class FoldersDialog(QDialog):
         if self.paths.portable:
             text = self.tr("Mode portable : toutes les données restent à côté de l'application.")
         elif self.paths.mode == MODE_CUSTOM:
-            text = self.tr("Dossier choisi : {folder}").format(folder=self.paths.root)
+            text = self.tr("Dossier choisi : {folder}").format(
+                folder=keep_left_to_right(self.paths.root)
+            )
         else:
             text = self.tr("Emplacement standard du système.")
         self.mode_label.setText(text)
@@ -185,6 +188,25 @@ class FoldersDialog(QDialog):
         """FR : retour à l'emplacement standard. EN : back to the standard location."""
         self.move_data(system_paths())
 
+    def problem_text(self, problem: str) -> str:
+        """FR : phrase expliquant un problème de dossier. EN : sentence for a folder problem."""
+        texts = {
+            relocate.PROBLEM_SAME: self.tr("RuneCast utilise déjà cet emplacement."),
+            relocate.PROBLEM_OVERLAP: self.tr(
+                "Le dossier choisi se mélange avec les dossiers actuels de RuneCast. "
+                "Choisis un dossier séparé."
+            ),
+            relocate.PROBLEM_NOT_A_FOLDER: self.tr("Le chemin choisi n'est pas un dossier."),
+            relocate.PROBLEM_NOT_EMPTY: self.tr(
+                "Le dossier choisi n'est pas vide. Choisis un dossier vide "
+                "(tu peux en créer un nouveau dans la fenêtre de choix)."
+            ),
+            relocate.PROBLEM_NOT_WRITABLE: self.tr(
+                "RuneCast ne peut pas écrire dans le dossier choisi."
+            ),
+        }
+        return texts[problem]
+
     def move_data(self, target: AppPaths) -> bool:
         """Déplace les données vers « target » / Move the data to "target".
 
@@ -193,7 +215,7 @@ class FoldersDialog(QDialog):
         """
         problem = relocate.check_destination(target, self.paths)
         if problem:
-            QMessageBox.warning(self, self.tr("Dossier impossible"), problem)
+            QMessageBox.warning(self, self.tr("Dossier impossible"), self.problem_text(problem))
             return False
 
         # FR : Le dossier contient déjà des données RuneCast : on propose de
@@ -241,7 +263,7 @@ class FoldersDialog(QDialog):
             ).format(
                 count=len(plan.files),
                 size=relocate.human_size(plan.total_bytes),
-                folder=destination,
+                folder=keep_left_to_right(destination),
             ),
         )
         if answer != QMessageBox.StandardButton.Yes:

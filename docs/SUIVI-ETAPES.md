@@ -11,7 +11,8 @@ Légende : ✅ validée · ⏳ test à faire · 🔄 en cours
 | 3 | Icônes (Windows, Linux, favicon) à partir du logo ; passage en 0.1.0 | 0.1.0 | ✅ 18/10/2026 | ⏳ | `a6d820e` |
 | 4 | Première fenêtre : icône, thème Turquoise, menus, « À propos » | 0.1.1 | ✅ 18/10/2026 | ⏳ | `b581711` |
 | 5 | Tests automatiques sur GitHub (Windows, Ubuntu, Fedora 44) — fin du jalon 1 | 0.2.0 | ✅ 18/10/2026 | ✅ GitHub (sans écran) | `e906322` |
-| 6 | Dossiers de données, dossier personnalisé, mode portable, réglages, journal | 0.2.1 | 🔄 | ⏳ | — |
+| 6 | Dossiers de données, dossier personnalisé, mode portable, réglages, journal | 0.2.1 | ✅ 18/10/2026 | ⏳ | `10f6316` |
+| 7 | Langues de l'interface (FR, EN, AR en RTL), polices Noto | 0.2.2 | 🔄 | ⏳ | — |
 
 Les étapes suivantes seront ajoutées au fur et à mesure.
 
@@ -52,5 +53,6 @@ Résultat attendu :
 - **Étape 1** : `uv run python --version` affiche Python 3.13.x.
 - **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
 - **Étape 3** : `xdg-open` ouvre l'icône 256 px, identique à celle de Windows.
-- **Étape 6** : `uv run pytest` se termine par « 96 passed », sans « failed » ; `uv run runecast --paths` affiche `~/.config/runecast`, `~/.local/share/runecast`, `~/.cache/runecast` et `~/.local/state/runecast/log` ; Aide → Dossiers de RuneCast… montre les mêmes dossiers.
+- **Étape 7** : `uv run pytest` se termine par « 119 passed », sans « failed » ; Affichage → Langue de l'interface → English puis العربية : l'interface change aussitôt, et passe de droite à gauche en arabe.
+- **Étape 6** : `uv run runecast --paths` affiche `~/.config/runecast`, `~/.local/share/runecast`, `~/.cache/runecast` et `~/.local/state/runecast/log` ; Aide → Dossiers de RuneCast… montre les mêmes dossiers.
 - **Étape 4** : `uv run runecast --version` affiche la version en cours ; `uv run runecast` ouvre la fenêtre turquoise avec ton icône dans le dock ; les menus Fichier → Quitter et Aide → À propos fonctionnent.

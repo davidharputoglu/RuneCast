@@ -40,7 +40,7 @@ def test_missing_file_gives_defaults(tmp_path: Path) -> None:
     """FR : premier lancement : réglages par défaut. EN : first launch: defaults."""
     settings = load_settings(tmp_path / "settings.json")
     assert settings.theme == "turquoise"
-    assert settings.interface_language == "fr"
+    assert settings.interface_language == ""  # FR : langue du système / EN : system language
     assert settings.schema_version == SCHEMA_VERSION
 
 
