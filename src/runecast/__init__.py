@@ -42,12 +42,13 @@ EN : RuneCast main package. For now it holds the version number, the "About"
 
 # FR : Numéro de version unique du projet. Il est aussi lu par pyproject.toml,
 #      pour n'être écrit qu'à un seul endroit. Règle de numérotation (voir
-#      CHANGELOG.md) : chaque étape validée ou correctif augmente le dernier
-#      chiffre (0.1.0 → 0.1.1), chaque fin de jalon le chiffre du milieu
-#      (0.2.0), et 1.0.0 sera la première version complète publiée.
+#      CHANGELOG.md) : les deux premiers chiffres (aujourd'hui « 0.1 ») sont
+#      décidés par l'auteur, HARPUTOGLU David, et seulement par lui ; le
+#      dernier chiffre augmente à chaque étape validée ou correctif
+#      (0.1.0 → 0.1.1 → 0.1.2…).
 # EN : Single source of truth for the project version. pyproject.toml reads it
 #      from here so it is written in one place only. Numbering rule (see
-#      CHANGELOG.md): each validated step or fix bumps the last number
-#      (0.1.0 → 0.1.1), each completed milestone the middle number (0.2.0),
-#      and 1.0.0 will be the first complete public release.
-__version__ = "0.2.3"
+#      CHANGELOG.md): the first two numbers (currently "0.1") are decided by
+#      the author, HARPUTOGLU David, and by him only; the last number goes up
+#      with each validated step or fix (0.1.0 → 0.1.1 → 0.1.2…).
+__version__ = "0.1.5"
