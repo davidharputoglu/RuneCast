@@ -12,6 +12,19 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.6 (étape 9 / step 9)
+
+- Éditeur de thèmes personnels (Affichage → Thème → Gérer les thèmes…) : dupliquer un thème, changer ses 12 couleurs (sélecteur de couleurs ou code #RRGGBB), son nom et le caractère sombre ou clair, avec un aperçu en direct.
+  *Custom theme editor (View → Theme → Manage themes…): duplicate a theme, change its 12 colours (colour picker or #RRGGBB code), its name and the dark/light flag, with a live preview.*
+- Avertissement de lisibilité : si un texte devient difficile à lire (contraste inférieur à 4,5:1, norme WCAG), l'éditeur l'indique.
+  *Readability warning: when a text becomes hard to read (contrast below 4.5:1, WCAG standard), the editor says so.*
+- Enregistrer, utiliser, supprimer (après confirmation), importer et exporter un thème (fichier .json). Les thèmes personnels sont rangés dans le dossier `themes` des réglages, voyagent avec les données si on les déplace, et sont toujours là après un redémarrage. Les thèmes intégrés ne sont jamais modifiés.
+  *Save, use, delete (after confirmation), import and export a theme (.json file). Custom themes are stored in the `themes` folder of the settings, travel with the data when it is moved, and are still there after a restart. Built-in themes are never modified.*
+- Un fichier de thème abîmé est ignoré (et noté dans le journal), sans être supprimé et sans empêcher RuneCast de démarrer. Un export ne remplace jamais un fichier existant sans accord.
+  *A damaged theme file is skipped (and logged), without being deleted and without preventing RuneCast from starting. An export never replaces an existing file without consent.*
+- Correctif : les cases à cocher sont maintenant bien visibles dans tous les thèmes (leur contour disparaissait sur le thème Noir).
+  *Fix: check boxes are now clearly visible in every theme (their outline disappeared on the Black theme).*
+
 ## 0.1.5 (étape 8 / step 8)
 
 - 4 thèmes intégrés : Turquoise (par défaut), Noir, Sombre et Clair, au choix dans Affichage → Thème. Le changement est immédiat et retenu au prochain lancement ; la barre de titre de Windows suit le thème (sombre ou claire).

@@ -36,12 +36,13 @@ EN : Checks the 4 built-in themes (complete, readable per the WCAG standard),
      View menu.
 """
 
+import gc
 import json
 from pathlib import Path
 
 import pytest
 from PySide6.QtGui import QPalette
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QCheckBox
 
 from runecast.core import themes
 from runecast.core.settings import Settings
@@ -173,3 +174,28 @@ def test_theme_menu_names_are_translated(qtbot, custom_paths) -> None:
     names = [window.theme_actions[t].text() for t in themes.BUILTIN_THEME_IDS]
     assert names == ["Turquoise", "Noir", "Sombre", "Clair"]
     assert window.theme_actions["turquoise"].isChecked()
+
+
+@pytest.mark.parametrize("theme_id", themes.BUILTIN_THEME_IDS)
+def test_check_boxes_are_visible(qtbot, qapp, back_to_turquoise, theme_id: str) -> None:
+    """FR : le contour d'une case à cocher vide se voit bien sur chaque thème
+         (avec Fusion seul, il disparaissait sur le thème Noir).
+    EN : the outline of an empty check box is clearly visible on every theme
+         (with Fusion alone, it disappeared on the Black theme).
+    """
+    theme = BUILTIN[theme_id]
+    apply_theme(qapp, theme)
+    # FR : le style doit rester en vie même après un nettoyage de la mémoire.
+    # EN : the style must stay alive even after a memory clean-up.
+    gc.collect()
+    box = QCheckBox()  # FR : sans texte : on ne mesure que la case / EN : no text: box only
+    qtbot.addWidget(box)
+    box.show()
+    image = box.grab().toImage()
+    background = theme.colors["window"]
+    best = max(
+        themes.contrast_ratio(image.pixelColor(x, y).name(), background)
+        for x in range(image.width())
+        for y in range(image.height())
+    )
+    assert best >= 3.0, (theme_id, round(best, 2))

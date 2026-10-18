@@ -245,6 +245,10 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
         <translation>The main window is ready. Opening games and translating them will come in the next steps.</translation>
     </message>
     <message>
+        <source>&amp;Gérer les thèmes…</source>
+        <translation>&amp;Manage themes…</translation>
+    </message>
+    <message>
         <source>Turquoise</source>
         <translation>Turquoise</translation>
     </message>
@@ -259,6 +263,243 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     <message>
         <source>Clair</source>
         <translation>Light</translation>
+    </message>
+</context>
+<context>
+    <name>ThemeEditorDialog</name>
+    <message>
+        <source>Thèmes personnels</source>
+        <translation>Custom themes</translation>
+    </message>
+    <message>
+        <source>Dupliquer</source>
+        <translation>Duplicate</translation>
+    </message>
+    <message>
+        <source>Importer…</source>
+        <translation>Import…</translation>
+    </message>
+    <message>
+        <source>Exporter…</source>
+        <translation>Export…</translation>
+    </message>
+    <message>
+        <source>Supprimer</source>
+        <translation>Delete</translation>
+    </message>
+    <message>
+        <source>Thème :</source>
+        <translation>Theme:</translation>
+    </message>
+    <message>
+        <source>Les thèmes intégrés ne peuvent pas être modifiés. Clique sur « Dupliquer » pour créer ta propre version.</source>
+        <translation>Built-in themes cannot be changed. Click “Duplicate” to create your own version.</translation>
+    </message>
+    <message>
+        <source>Thème sombre</source>
+        <translation>Dark theme</translation>
+    </message>
+    <message>
+        <source>Nom :</source>
+        <translation>Name:</translation>
+    </message>
+    <message>
+        <source>Choisir une couleur</source>
+        <translation>Choose a color</translation>
+    </message>
+    <message>
+        <source>Aperçu</source>
+        <translation>Preview</translation>
+    </message>
+    <message>
+        <source>Enregistrer</source>
+        <translation>Save</translation>
+    </message>
+    <message>
+        <source>Utiliser ce thème</source>
+        <translation>Use this theme</translation>
+    </message>
+    <message>
+        <source>Fermer</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>Exemple de texte</source>
+        <translation>Sample text</translation>
+    </message>
+    <message>
+        <source>Champ de saisie</source>
+        <translation>Input field</translation>
+    </message>
+    <message>
+        <source>Bouton</source>
+        <translation>Button</translation>
+    </message>
+    <message>
+        <source>Élément sélectionné</source>
+        <translation>Selected item</translation>
+    </message>
+    <message>
+        <source>Autre élément</source>
+        <translation>Other item</translation>
+    </message>
+    <message>
+        <source>Un lien</source>
+        <translation>A link</translation>
+    </message>
+    <message>
+        <source>Case cochée</source>
+        <translation>Checked box</translation>
+    </message>
+    <message>
+        <source>Texte désactivé</source>
+        <translation>Disabled text</translation>
+    </message>
+    <message>
+        <source>Fond des fenêtres</source>
+        <translation>Window background</translation>
+    </message>
+    <message>
+        <source>Fond des champs et tableaux</source>
+        <translation>Fields and tables background</translation>
+    </message>
+    <message>
+        <source>Lignes alternées</source>
+        <translation>Alternate rows</translation>
+    </message>
+    <message>
+        <source>Boutons et menus</source>
+        <translation>Buttons and menus</translation>
+    </message>
+    <message>
+        <source>Texte</source>
+        <translation>Text</translation>
+    </message>
+    <message>
+        <source>Texte d&apos;exemple (champs vides)</source>
+        <translation>Placeholder text (empty fields)</translation>
+    </message>
+    <message>
+        <source>Sélection</source>
+        <translation>Selection</translation>
+    </message>
+    <message>
+        <source>Texte sélectionné</source>
+        <translation>Selected text</translation>
+    </message>
+    <message>
+        <source>Couleur vive (survol, bordures)</source>
+        <translation>Accent (hover, borders)</translation>
+    </message>
+    <message>
+        <source>Liens</source>
+        <translation>Links</translation>
+    </message>
+    <message>
+        <source>Bordures</source>
+        <translation>Borders</translation>
+    </message>
+    <message>
+        <source>Turquoise</source>
+        <translation>Turquoise</translation>
+    </message>
+    <message>
+        <source>Noir</source>
+        <translation>Black</translation>
+    </message>
+    <message>
+        <source>Sombre</source>
+        <translation>Dark</translation>
+    </message>
+    <message>
+        <source>Clair</source>
+        <translation>Light</translation>
+    </message>
+    <message>
+        <source>{name} (intégré)</source>
+        <translation>{name} (built-in)</translation>
+    </message>
+    <message>
+        <source>Lisibilité : bonne</source>
+        <translation>Readability: good</translation>
+    </message>
+    <message>
+        <source>Attention : « {first} » sur « {second} » est peu lisible (contraste {ratio}, au moins {minimum} conseillé).</source>
+        <translation>Warning: “{first}” on “{second}” is hard to read (contrast {ratio}, at least {minimum} recommended).</translation>
+    </message>
+    <message>
+        <source>{name} (copie)</source>
+        <translation>{name} (copy)</translation>
+    </message>
+    <message>
+        <source>Nom manquant</source>
+        <translation>Missing name</translation>
+    </message>
+    <message>
+        <source>Donne un nom au thème.</source>
+        <translation>Give the theme a name.</translation>
+    </message>
+    <message>
+        <source>Enregistrement impossible</source>
+        <translation>Cannot save</translation>
+    </message>
+    <message>
+        <source>Supprimer le thème ?</source>
+        <translation>Delete the theme?</translation>
+    </message>
+    <message>
+        <source>Le thème « {name} » sera supprimé définitivement. Continuer ?</source>
+        <translation>The theme “{name}” will be deleted permanently. Continue?</translation>
+    </message>
+    <message>
+        <source>Importer un thème</source>
+        <translation>Import a theme</translation>
+    </message>
+    <message>
+        <source>Thèmes RuneCast (*.json)</source>
+        <translation>RuneCast themes (*.json)</translation>
+    </message>
+    <message>
+        <source>Import impossible</source>
+        <translation>Cannot import</translation>
+    </message>
+    <message>
+        <source>Ce fichier n&apos;est pas un thème RuneCast valide :
+{details}</source>
+        <translation>This file is not a valid RuneCast theme:
+{details}</translation>
+    </message>
+    <message>
+        <source>Thème importé</source>
+        <translation>Theme imported</translation>
+    </message>
+    <message>
+        <source>Le thème « {name} » a été ajouté.</source>
+        <translation>The theme “{name}” has been added.</translation>
+    </message>
+    <message>
+        <source>Exporter le thème</source>
+        <translation>Export the theme</translation>
+    </message>
+    <message>
+        <source>Export impossible</source>
+        <translation>Cannot export</translation>
+    </message>
+    <message>
+        <source>Remplacer le fichier ?</source>
+        <translation>Replace the file?</translation>
+    </message>
+    <message>
+        <source>Le fichier « {file} » existe déjà. Le remplacer ?</source>
+        <translation>The file “{file}” already exists. Replace it?</translation>
+    </message>
+    <message>
+        <source>Modifications non enregistrées</source>
+        <translation>Unsaved changes</translation>
+    </message>
+    <message>
+        <source>Le thème « {name} » a été modifié. Enregistrer les modifications ?</source>
+        <translation>The theme “{name}” has been changed. Save the changes?</translation>
     </message>
 </context>
 </TS>

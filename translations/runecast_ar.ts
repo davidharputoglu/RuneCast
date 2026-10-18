@@ -245,6 +245,10 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
         <translation>النافذة الرئيسية جاهزة. فتح الألعاب وترجمتها سيأتيان في المراحل القادمة.</translation>
     </message>
     <message>
+        <source>&amp;Gérer les thèmes…</source>
+        <translation>&amp;إدارة السمات…</translation>
+    </message>
+    <message>
         <source>Turquoise</source>
         <translation>فيروزي</translation>
     </message>
@@ -259,6 +263,243 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     <message>
         <source>Clair</source>
         <translation>فاتح</translation>
+    </message>
+</context>
+<context>
+    <name>ThemeEditorDialog</name>
+    <message>
+        <source>Thèmes personnels</source>
+        <translation>السمات المخصصة</translation>
+    </message>
+    <message>
+        <source>Dupliquer</source>
+        <translation>نسخ</translation>
+    </message>
+    <message>
+        <source>Importer…</source>
+        <translation>استيراد…</translation>
+    </message>
+    <message>
+        <source>Exporter…</source>
+        <translation>تصدير…</translation>
+    </message>
+    <message>
+        <source>Supprimer</source>
+        <translation>حذف</translation>
+    </message>
+    <message>
+        <source>Thème :</source>
+        <translation>السمة:</translation>
+    </message>
+    <message>
+        <source>Les thèmes intégrés ne peuvent pas être modifiés. Clique sur « Dupliquer » pour créer ta propre version.</source>
+        <translation>لا يمكن تعديل السمات المدمجة. انقر على «نسخ» لإنشاء نسختك الخاصة.</translation>
+    </message>
+    <message>
+        <source>Thème sombre</source>
+        <translation>سمة داكنة</translation>
+    </message>
+    <message>
+        <source>Nom :</source>
+        <translation>الاسم:</translation>
+    </message>
+    <message>
+        <source>Choisir une couleur</source>
+        <translation>اختر لونًا</translation>
+    </message>
+    <message>
+        <source>Aperçu</source>
+        <translation>معاينة</translation>
+    </message>
+    <message>
+        <source>Enregistrer</source>
+        <translation>حفظ</translation>
+    </message>
+    <message>
+        <source>Utiliser ce thème</source>
+        <translation>استخدام هذه السمة</translation>
+    </message>
+    <message>
+        <source>Fermer</source>
+        <translation>إغلاق</translation>
+    </message>
+    <message>
+        <source>Exemple de texte</source>
+        <translation>نص تجريبي</translation>
+    </message>
+    <message>
+        <source>Champ de saisie</source>
+        <translation>حقل إدخال</translation>
+    </message>
+    <message>
+        <source>Bouton</source>
+        <translation>زر</translation>
+    </message>
+    <message>
+        <source>Élément sélectionné</source>
+        <translation>عنصر محدَّد</translation>
+    </message>
+    <message>
+        <source>Autre élément</source>
+        <translation>عنصر آخر</translation>
+    </message>
+    <message>
+        <source>Un lien</source>
+        <translation>رابط</translation>
+    </message>
+    <message>
+        <source>Case cochée</source>
+        <translation>مربع محدَّد</translation>
+    </message>
+    <message>
+        <source>Texte désactivé</source>
+        <translation>النص المعطَّل</translation>
+    </message>
+    <message>
+        <source>Fond des fenêtres</source>
+        <translation>خلفية النوافذ</translation>
+    </message>
+    <message>
+        <source>Fond des champs et tableaux</source>
+        <translation>خلفية الحقول والجداول</translation>
+    </message>
+    <message>
+        <source>Lignes alternées</source>
+        <translation>الصفوف المتناوبة</translation>
+    </message>
+    <message>
+        <source>Boutons et menus</source>
+        <translation>الأزرار والقوائم</translation>
+    </message>
+    <message>
+        <source>Texte</source>
+        <translation>النص</translation>
+    </message>
+    <message>
+        <source>Texte d&apos;exemple (champs vides)</source>
+        <translation>النص التوضيحي (الحقول الفارغة)</translation>
+    </message>
+    <message>
+        <source>Sélection</source>
+        <translation>التحديد</translation>
+    </message>
+    <message>
+        <source>Texte sélectionné</source>
+        <translation>النص المحدَّد</translation>
+    </message>
+    <message>
+        <source>Couleur vive (survol, bordures)</source>
+        <translation>لون التمييز (التمرير، الحدود)</translation>
+    </message>
+    <message>
+        <source>Liens</source>
+        <translation>الروابط</translation>
+    </message>
+    <message>
+        <source>Bordures</source>
+        <translation>الحدود</translation>
+    </message>
+    <message>
+        <source>Turquoise</source>
+        <translation>فيروزي</translation>
+    </message>
+    <message>
+        <source>Noir</source>
+        <translation>أسود</translation>
+    </message>
+    <message>
+        <source>Sombre</source>
+        <translation>داكن</translation>
+    </message>
+    <message>
+        <source>Clair</source>
+        <translation>فاتح</translation>
+    </message>
+    <message>
+        <source>{name} (intégré)</source>
+        <translation>{name} (مدمجة)</translation>
+    </message>
+    <message>
+        <source>Lisibilité : bonne</source>
+        <translation>سهولة القراءة: جيدة</translation>
+    </message>
+    <message>
+        <source>Attention : « {first} » sur « {second} » est peu lisible (contraste {ratio}, au moins {minimum} conseillé).</source>
+        <translation>تنبيه: «{first}» على «{second}» صعب القراءة (التباين {ratio}، ويُنصح بـ {minimum} على الأقل).</translation>
+    </message>
+    <message>
+        <source>{name} (copie)</source>
+        <translation>{name} (نسخة)</translation>
+    </message>
+    <message>
+        <source>Nom manquant</source>
+        <translation>الاسم مفقود</translation>
+    </message>
+    <message>
+        <source>Donne un nom au thème.</source>
+        <translation>أعطِ السمة اسمًا.</translation>
+    </message>
+    <message>
+        <source>Enregistrement impossible</source>
+        <translation>تعذّر الحفظ</translation>
+    </message>
+    <message>
+        <source>Supprimer le thème ?</source>
+        <translation>حذف السمة؟</translation>
+    </message>
+    <message>
+        <source>Le thème « {name} » sera supprimé définitivement. Continuer ?</source>
+        <translation>ستُحذف السمة «{name}» نهائيًا. هل تريد المتابعة؟</translation>
+    </message>
+    <message>
+        <source>Importer un thème</source>
+        <translation>استيراد سمة</translation>
+    </message>
+    <message>
+        <source>Thèmes RuneCast (*.json)</source>
+        <translation>سمات RuneCast (*.json)</translation>
+    </message>
+    <message>
+        <source>Import impossible</source>
+        <translation>تعذّر الاستيراد</translation>
+    </message>
+    <message>
+        <source>Ce fichier n&apos;est pas un thème RuneCast valide :
+{details}</source>
+        <translation>هذا الملف ليس سمة RuneCast صالحة:
+{details}</translation>
+    </message>
+    <message>
+        <source>Thème importé</source>
+        <translation>تم استيراد السمة</translation>
+    </message>
+    <message>
+        <source>Le thème « {name} » a été ajouté.</source>
+        <translation>تمت إضافة السمة «{name}».</translation>
+    </message>
+    <message>
+        <source>Exporter le thème</source>
+        <translation>تصدير السمة</translation>
+    </message>
+    <message>
+        <source>Export impossible</source>
+        <translation>تعذّر التصدير</translation>
+    </message>
+    <message>
+        <source>Remplacer le fichier ?</source>
+        <translation>استبدال الملف؟</translation>
+    </message>
+    <message>
+        <source>Le fichier « {file} » existe déjà. Le remplacer ?</source>
+        <translation>الملف «{file}» موجود بالفعل. هل تريد استبداله؟</translation>
+    </message>
+    <message>
+        <source>Modifications non enregistrées</source>
+        <translation>تغييرات غير محفوظة</translation>
+    </message>
+    <message>
+        <source>Le thème « {name} » a été modifié. Enregistrer les modifications ?</source>
+        <translation>تم تعديل السمة «{name}». هل تريد حفظ التغييرات؟</translation>
     </message>
 </context>
 </TS>

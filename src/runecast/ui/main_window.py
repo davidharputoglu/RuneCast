@@ -54,12 +54,13 @@ from runecast import about
 from runecast.core.languages import LANGUAGES, SYSTEM_LANGUAGE, resolve_language
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings, load_settings, save_settings
-from runecast.core.themes import Theme, builtin_themes, find_theme
+from runecast.core.themes import DEFAULT_THEME, Theme, all_themes, find_theme
 from runecast.ui.about_dialog import AboutDialog
 from runecast.ui.folders_dialog import FoldersDialog
 from runecast.ui.i18n import LanguageManager
 from runecast.ui.icons import app_icon
 from runecast.ui.theme import apply_theme
+from runecast.ui.theme_editor import ThemeEditorDialog
 
 logger = logging.getLogger(__name__)
 
@@ -84,9 +85,9 @@ class MainWindow(QMainWindow):
         self.paths = paths
         self.settings = settings
         self.languages = languages or LanguageManager(QApplication.instance())
-        # FR : thèmes disponibles (les thèmes personnels arriveront à l'étape 9).
-        # EN : available themes (custom themes will come in step 9).
-        self.themes: dict[str, Theme] = builtin_themes()
+        # FR : thèmes disponibles : les 4 intégrés puis les thèmes personnels.
+        # EN : available themes: the 4 built-in ones then the custom themes.
+        self.themes: dict[str, Theme] = all_themes(paths.config_dir)
         self.setObjectName("mainWindow")
         self.setWindowTitle(f"{about.APP_NAME} {about.APP_VERSION}")
         self.setWindowIcon(app_icon())
@@ -145,19 +146,20 @@ class MainWindow(QMainWindow):
         current = self.settings.interface_language
         self.language_actions.get(current, self.language_actions[SYSTEM_LANGUAGE]).setChecked(True)
 
-        # FR : Choix du thème : une entrée par thème, une seule cochée.
-        # EN : Theme choice: one entry per theme, only one checked.
+        # FR : Choix du thème : une entrée par thème, une seule cochée. Les
+        #      entrées sont (re)créées par _rebuild_theme_menu, car la liste
+        #      change quand on crée, importe ou supprime un thème personnel.
+        # EN : Theme choice: one entry per theme, only one checked. Entries are
+        #      (re)created by _rebuild_theme_menu, because the list changes
+        #      when a custom theme is created, imported or deleted.
         self.theme_group = QActionGroup(self)
         self.theme_group.setExclusive(True)
         self.theme_actions: dict[str, QAction] = {}
-        for theme_id in self.themes:
-            action = QAction(self)
-            action.setCheckable(True)
-            action.setData(theme_id)
-            action.triggered.connect(lambda _checked=False, t=theme_id: self.change_theme(t))
-            self.theme_group.addAction(action)
-            self.theme_actions[theme_id] = action
-        self.theme_actions[find_theme(self.settings.theme, self.themes).id].setChecked(True)
+
+        # FR : Ouvrir l'éditeur de thèmes personnels.
+        # EN : Open the custom theme editor.
+        self.manage_themes_action = QAction(self)
+        self.manage_themes_action.triggered.connect(self.show_theme_editor)
 
     def _create_menus(self) -> None:
         self.file_menu = self.menuBar().addMenu("")
@@ -176,8 +178,7 @@ class MainWindow(QMainWindow):
         self.view_menu.addMenu(self.language_menu)
         self.theme_menu = QMenu(self)
         self.theme_menu.setObjectName("themeMenu")
-        for action in self.theme_actions.values():
-            self.theme_menu.addAction(action)
+        self._rebuild_theme_menu()
         self.view_menu.addMenu(self.theme_menu)
 
         self.help_menu = self.menuBar().addMenu("")
@@ -186,6 +187,35 @@ class MainWindow(QMainWindow):
         self.help_menu.addSeparator()
         self.help_menu.addAction(self.about_action)
         self.help_menu.addAction(self.about_qt_action)
+
+    def _rebuild_theme_menu(self) -> None:
+        """(Re)construit le menu Thème / (Re)build the Theme menu.
+
+        FR : Thèmes intégrés, puis thèmes personnels, puis « Gérer les thèmes… ».
+        EN : Built-in themes, then custom themes, then "Manage themes…".
+        """
+        for action in self.theme_actions.values():
+            self.theme_group.removeAction(action)
+            action.deleteLater()
+        self.theme_actions = {}
+        self.theme_menu.clear()
+        builtin = [theme for theme in self.themes.values() if theme.builtin]
+        custom = [theme for theme in self.themes.values() if not theme.builtin]
+        for group in (builtin, custom):
+            if group and self.theme_actions:
+                self.theme_menu.addSeparator()
+            for theme in group:
+                action = QAction(self)
+                action.setCheckable(True)
+                action.setData(theme.id)
+                action.triggered.connect(lambda _checked=False, t=theme.id: self.change_theme(t))
+                self.theme_group.addAction(action)
+                self.theme_menu.addAction(action)
+                self.theme_actions[theme.id] = action
+        self.theme_menu.addSeparator()
+        self.theme_menu.addAction(self.manage_themes_action)
+        self.theme_actions[find_theme(self.settings.theme, self.themes).id].setChecked(True)
+        self._retranslate_theme_menu()
 
     def _create_welcome_screen(self) -> QWidget:
         logo = QLabel()
@@ -229,8 +259,7 @@ class MainWindow(QMainWindow):
         self.help_menu.setTitle(self.tr("&Aide"))
         self.language_menu.setTitle(self.tr("&Langue de l'interface"))
         self.theme_menu.setTitle(self.tr("&Thème"))
-        for theme_id, action in self.theme_actions.items():
-            action.setText(self.theme_name(self.themes[theme_id]))
+        self._retranslate_theme_menu()
         self.quit_action.setText(self.tr("&Quitter"))
         self.folders_action.setText(self.tr("&Dossiers de RuneCast…"))
         self.about_action.setText(self.tr("À &propos de RuneCast…"))
@@ -252,6 +281,12 @@ class MainWindow(QMainWindow):
                 "la traduction arriveront dans les prochaines étapes."
             )
         )
+
+    def _retranslate_theme_menu(self) -> None:
+        """FR : textes du menu Thème. EN : texts of the Theme menu."""
+        for theme_id, action in self.theme_actions.items():
+            action.setText(self.theme_name(self.themes[theme_id]))
+        self.manage_themes_action.setText(self.tr("&Gérer les thèmes…"))
 
     def changeEvent(self, event: QEvent) -> None:  # noqa: N802 (nom imposé par Qt)
         """FR : Qt prévient ici quand la langue change. EN : Qt signals language changes here."""
@@ -288,6 +323,24 @@ class MainWindow(QMainWindow):
         except OSError:
             logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
 
+    def reload_themes(self) -> None:
+        """Relit les thèmes / Re-read the themes.
+
+        FR : Appelé quand un thème personnel a été créé, modifié, importé ou
+             supprimé. Si le thème actif a été modifié, ses nouvelles couleurs
+             s'appliquent aussitôt ; s'il a été supprimé, on revient au thème
+             Turquoise.
+        EN : Called when a custom theme was created, changed, imported or
+             deleted. If the active theme was changed, its new colours apply
+             at once; if it was deleted, the Turquoise theme comes back.
+        """
+        self.themes = all_themes(self.paths.config_dir)
+        if self.settings.theme in self.themes:
+            apply_theme(QApplication.instance(), self.themes[self.settings.theme])
+        else:
+            self.change_theme(DEFAULT_THEME)
+        self._rebuild_theme_menu()
+
     def change_language(self, code: str) -> None:
         """Change la langue de l'interface / Change the interface language.
 
@@ -316,6 +369,18 @@ class MainWindow(QMainWindow):
         dialog.paths_changed.connect(self.use_paths)
         dialog.exec()
 
+    def show_theme_editor(self) -> None:
+        """Ouvre l'éditeur de thèmes / Open the theme editor."""
+        dialog = ThemeEditorDialog(self.paths.config_dir, self.settings.theme, self)
+        dialog.themes_changed.connect(self.reload_themes)
+        dialog.theme_chosen.connect(self._use_chosen_theme)
+        dialog.exec()
+
+    def _use_chosen_theme(self, theme_id: str) -> None:
+        """FR : « Utiliser ce thème » dans l'éditeur. EN : "Use this theme" in the editor."""
+        self.change_theme(theme_id)
+        self.theme_actions[theme_id].setChecked(True)
+
     def use_paths(self, paths: AppPaths) -> None:
         """FR : les données ont changé de dossier : on suit le nouveau dossier.
 
@@ -328,6 +393,9 @@ class MainWindow(QMainWindow):
         self.paths = paths
         if paths.settings_file.is_file():
             self.settings = load_settings(paths.settings_file)
+        # FR : les thèmes personnels sont rangés avec les réglages.
+        # EN : custom themes are stored with the settings.
+        self.reload_themes()
 
     # ------------------------------------------------------------------
     # FR : Taille et position mémorisées / EN : Remembered size and position

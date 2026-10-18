@@ -51,4 +51,4 @@ EN : RuneCast main package. For now it holds the version number, the "About"
 #      CHANGELOG.md): the first two numbers (currently "0.1") are decided by
 #      the author, HARPUTOGLU David, and by him only; the last number goes up
 #      with each validated step or fix (0.1.0 → 0.1.1 → 0.1.2…).
-__version__ = "0.1.5"
+__version__ = "0.1.6"

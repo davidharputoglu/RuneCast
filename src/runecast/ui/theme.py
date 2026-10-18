@@ -31,16 +31,28 @@
 FR : Transforme un thème (runecast/core/themes.py) en palette Qt et en
      feuille de style, puis l'applique à toute l'application. On utilise le
      style « Fusion » de Qt pour que RuneCast ait exactement le même aspect
-     sous Windows et sous Linux.
+     sous Windows et sous Linux. Il est complété par RuneCastStyle, qui
+     dessine les cases à cocher et les boutons ronds avec les couleurs du
+     thème (avec Fusion seul, leur contour disparaît sur un fond noir).
 
 EN : Turns a theme (runecast/core/themes.py) into a Qt palette and style
      sheet, then applies it to the whole application. Qt's "Fusion" style is
-     used so that RuneCast looks exactly the same on Windows and on Linux.
+     used so that RuneCast looks exactly the same on Windows and on Linux. It
+     is completed by RuneCastStyle, which draws check boxes and radio buttons
+     with the theme colours (with Fusion alone, their outline disappears on a
+     black background).
 """
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor, QPalette
-from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtGui import QColor, QPainter, QPainterPath, QPalette, QPen
+from PySide6.QtWidgets import (
+    QApplication,
+    QProxyStyle,
+    QStyle,
+    QStyleFactory,
+    QStyleOption,
+    QWidget,
+)
 
 from runecast.core.themes import Theme
 
@@ -74,6 +86,7 @@ def build_palette(colors: dict[str, str]) -> QPalette:
         QPalette.ColorRole.Link: colors["link"],
         QPalette.ColorRole.LinkVisited: colors["link"],
         QPalette.ColorRole.BrightText: colors["accent"],
+        QPalette.ColorRole.Accent: colors["accent"],
     }
     for role, value in roles.items():
         palette.setColor(role, QColor(value))
@@ -116,9 +129,90 @@ def build_stylesheet(colors: dict[str, str]) -> str:
     """
 
 
+class RuneCastStyle(QProxyStyle):
+    """Style Fusion + cases à cocher lisibles / Fusion style + readable check boxes.
+
+    FR : Tout est dessiné par Fusion, sauf les cases à cocher et les boutons
+         ronds : leur contour prend la couleur vive du thème, et une case
+         cochée est remplie avec la couleur de sélection.
+    EN : Everything is drawn by Fusion, except check boxes and radio buttons:
+         their outline takes the theme's accent colour, and a checked box is
+         filled with the selection colour.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(QStyleFactory.create("Fusion"))
+
+    def drawPrimitive(  # noqa: N802 (nom imposé par Qt / name required by Qt)
+        self,
+        element: QStyle.PrimitiveElement,
+        option: QStyleOption,
+        painter: QPainter,
+        widget: QWidget | None = None,
+    ) -> None:
+        if element == QStyle.PrimitiveElement.PE_IndicatorCheckBox:
+            self._draw_indicator(option, painter, round_shape=False)
+        elif element == QStyle.PrimitiveElement.PE_IndicatorRadioButton:
+            self._draw_indicator(option, painter, round_shape=True)
+        else:
+            super().drawPrimitive(element, option, painter, widget)
+
+    @staticmethod
+    def _draw_indicator(option: QStyleOption, painter: QPainter, round_shape: bool) -> None:
+        """FR : dessine une case (carrée ou ronde). EN : draw a box (square or round)."""
+        palette = option.palette
+        state = option.state
+        enabled = bool(state & QStyle.StateFlag.State_Enabled)
+        checked = bool(state & QStyle.StateFlag.State_On)
+        partly = bool(state & QStyle.StateFlag.State_NoChange)  # FR : 3e état / EN : 3rd state
+        disabled_color = palette.color(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text)
+        outline = palette.color(QPalette.ColorRole.Accent) if enabled else disabled_color
+        filled = enabled and (checked or partly)
+        fill = palette.color(QPalette.ColorRole.Highlight if filled else QPalette.ColorRole.Base)
+        mark = palette.color(QPalette.ColorRole.HighlightedText) if enabled else disabled_color
+        hovered = enabled and bool(state & QStyle.StateFlag.State_MouseOver)
+
+        rect = QRectF(option.rect).adjusted(1.5, 1.5, -1.5, -1.5)
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        painter.setPen(QPen(outline, 2.0 if hovered else 1.2))
+        painter.setBrush(fill)
+        if round_shape:
+            painter.drawEllipse(rect)
+        else:
+            painter.drawRoundedRect(rect, 3, 3)
+
+        painter.setPen(
+            QPen(
+                mark,
+                max(1.6, rect.width() / 7),
+                Qt.PenStyle.SolidLine,
+                Qt.PenCapStyle.RoundCap,
+                Qt.PenJoinStyle.RoundJoin,
+            )
+        )
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        w, h, x, y = rect.width(), rect.height(), rect.x(), rect.y()
+        if round_shape and checked:
+            # FR : point central / EN : centre dot
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(mark)
+            painter.drawEllipse(rect.center(), w / 4, h / 4)
+        elif checked:
+            # FR : coche « ✓ » / EN : "✓" tick
+            tick = QPainterPath(QPointF(x + w * 0.24, y + h * 0.52))
+            tick.lineTo(QPointF(x + w * 0.43, y + h * 0.71))
+            tick.lineTo(QPointF(x + w * 0.77, y + h * 0.30))
+            painter.drawPath(tick)
+        elif partly:
+            # FR : trait « – » (case à moitié cochée) / EN : "–" dash (partly checked)
+            painter.drawLine(QPointF(x + w * 0.27, y + h / 2), QPointF(x + w * 0.73, y + h / 2))
+        painter.restore()
+
+
 def apply_theme(app: QApplication, theme: Theme) -> None:
     """Applique un thème à toute l'application / Apply a theme app-wide."""
-    app.setStyle("Fusion")
+    app.setStyle(RuneCastStyle())
     app.setPalette(build_palette(theme.colors))
     app.setStyleSheet(build_stylesheet(theme.colors))
     app.setProperty(THEME_PROPERTY, theme.id)

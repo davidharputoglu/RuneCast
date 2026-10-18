@@ -14,6 +14,7 @@ Légende : ✅ validée · ⏳ test à faire · 🔄 en cours
 | 6 | Dossiers de données, dossier personnalisé, mode portable, réglages, journal | 0.1.3 | ✅ 18/10/2026 | ⏳ | `10f6316` |
 | 7 | Langues de l'interface (FR, EN, AR en RTL), polices Noto | 0.1.4 | ✅ 18/10/2026 | ⏳ | `a5bbca3` |
 | 8 | 4 thèmes intégrés (Turquoise, Noir, Sombre, Clair) | 0.1.5 | ✅ 18/10/2026 | ⏳ | `2535bba` |
+| 9 | Éditeur de thèmes personnels (créer, enregistrer, importer, exporter, supprimer) ; cases à cocher lisibles | 0.1.6 | 🔄 à tester | ⏳ | — |
 
 Numéros de version : les deux premiers chiffres (« 0.1 ») sont décidés par David ; le dernier augmente à chaque étape validée ou correctif. Les étapes 5 à 8 avaient été numérotées 0.2.x par erreur et ont été corrigées (voir CHANGELOG.md).
 
@@ -56,7 +57,8 @@ Résultat attendu :
 - **Étape 1** : `uv run python --version` affiche Python 3.13.x.
 - **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
 - **Étape 3** : `xdg-open` ouvre l'icône 256 px, identique à celle de Windows.
-- **Étape 8** : `uv run pytest` se termine par « 140 passed », sans « failed » ; Affichage → Thème → Noir, Sombre, Clair puis Turquoise : les couleurs changent aussitôt.
+- **Étape 9** : `uv run pytest` se termine par « 182 passed », sans « failed » ; Affichage → Thème → Gérer les thèmes… → Dupliquer, changer une couleur, Enregistrer, Utiliser ce thème ; après avoir fermé et relancé `uv run runecast`, le thème personnel est toujours appliqué.
+- **Étape 8** : Affichage → Thème → Noir, Sombre, Clair puis Turquoise : les couleurs changent aussitôt. Affichage → Thème → Noir, Sombre, Clair puis Turquoise : les couleurs changent aussitôt.
 - **Étape 7** : Affichage → Langue de l'interface → English puis العربية : l'interface change aussitôt, et passe de droite à gauche en arabe.
 - **Étape 6** : `uv run runecast --paths` affiche `~/.config/runecast`, `~/.local/share/runecast`, `~/.cache/runecast` et `~/.local/state/runecast/log` ; Aide → Dossiers de RuneCast… montre les mêmes dossiers.
 - **Étape 4** : `uv run runecast --version` affiche la version en cours ; `uv run runecast` ouvre la fenêtre turquoise avec ton icône dans le dock ; les menus Fichier → Quitter et Aide → À propos fonctionnent.
