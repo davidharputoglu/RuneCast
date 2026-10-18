@@ -1,0 +1,27 @@
+# ============================================================
+# RuneCast : règles Git pour les fins de ligne et les binaires.
+# ============================================================
+
+# Windows et Linux ne terminent pas les lignes de la même façon
+# (CRLF contre LF). Pour que les deux PC voient exactement les
+# mêmes fichiers, tout fichier texte est stocké avec des fins de
+# ligne Linux (LF), y compris sous Windows.
+* text=auto eol=lf
+
+# Exceptions : ces scripts Windows exigent des fins de ligne CRLF.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
+
+# Fichiers binaires : Git ne doit jamais toucher à leur contenu.
+*.png   binary
+*.ico   binary
+*.jpg   binary
+*.jpeg  binary
+*.svg   text
+*.ttf   binary
+*.otf   binary
+*.zip   binary
+*.qm    binary
+*.rpa   binary
+*.rpyc  binary

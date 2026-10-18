@@ -1,0 +1,38 @@
+# ============================================================
+# RuneCast : fichiers et dossiers que Git doit IGNORER.
+# Tout ce qui est listé ici n'est jamais envoyé sur GitHub.
+# ============================================================
+
+# --- Copies de jeux pour les tests --------------------------
+# Les jeux appartiennent à leurs auteurs (droits d'auteur) et
+# pèsent souvent plusieurs Go : on ne les publie jamais.
+/jeux-test/
+
+# --- Python : fichiers générés automatiquement --------------
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# --- Fabrication des exécutables et des paquets -------------
+/build/
+/dist/
+
+# --- Éditeurs de code et fichiers système -------------------
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+*~
+*.swp
+
+# --- Secrets : ne jamais publier de clés ou de mots de passe -
+.env
+*.key
+*.pem

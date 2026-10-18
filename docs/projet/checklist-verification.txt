@@ -1,0 +1,163 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOCUMENT 2 — CHECKLIST COMPLÈTE DE VÉRIFICATION
+(À garder pour toi. Ne jamais valider une étape sans l'avoir testée.)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MES MACHINES DE RÉFÉRENCE :
+- PC Windows 10 (64 bits)
+- PC Fedora 44
+
+MODE D'EMPLOI
+- À chaque étape livrée par Claude AI : teste TOI-MÊME sur tes DEUX
+  machines (Windows 10 ET Fedora 44) avant de répondre « OK étape X ».
+- Coche chaque case concernée par l'étape.
+- Teste toujours sur une COPIE d'un jeu Ren'Py, jamais sur ton seul
+  exemplaire.
+- En cas de doute sur une case : demande à Claude AI une commande de
+  vérification précise avant de valider.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. RÈGLES GÉNÉRALES (à vérifier à CHAQUE étape)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] J'ai testé moi-même sur Windows 10 ET Fedora 44 avant de valider
+[ ] Claude m'a fourni les commandes de test pour les DEUX machines
+[ ] Un commit git est créé à chaque étape validée
+[ ] Les nouvelles dépendances sont listées et expliquées
+[ ] Le code reçu est commenté et sous en-tête GPLv3
+[ ] Aucune suppression/écrasement de fichier sans sauvegarde auto
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. PHASE 0 — DÉMARRAGE ET PLAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Avis argumenté fourni sur les 7 points de la section 13
+[ ] Liste des dépendances fournie (Windows 10, Fedora 44, autres
+    distributions Linux)
+[ ] Plan de développement écrit, numéroté, validé par moi
+[ ] Dépôt GitHub créé avec fichier LICENSE GPLv3
+[ ] Structure des dossiers claire et documentée (README)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+C. PHASE 1 — CŒUR REN'PY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Extraction .rpa fonctionne sur un vrai jeu Ren'Py de ma Fedora 44
+[ ] Extraction .rpa fonctionne aussi sur un jeu installé sous
+    Windows 10
+[ ] Analyse .rpy détecte dialogues ET menus/interface
+[ ] Balises Ren'Py ({b}, {i}, [player]…) intactes après traduction
+[ ] Sauvegarde automatique des fichiers originaux avant modification
+[ ] Fonction de restauration des originaux testée et fonctionnelle
+[ ] Mode « patch séparé » fonctionne
+[ ] Les 3 modes de travail (éditeur+preview / auto / édition après)
+    fonctionnent
+[ ] Le jeu traduit se lance et affiche bien les textes traduits
+    (testé sur les 2 machines)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+D. PHASE 2 — TRADUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Mode en ligne Yandex fonctionne (test réel)
+[ ] Autres moteurs optionnels fonctionnent (au moins 1 testé)
+[ ] Repli automatique vers le local quand internet est coupé
+    (tester en coupant le Wi-Fi)
+[ ] Mode 100 % local fonctionne sans aucune connexion
+[ ] En mode local : aucune connexion réseau sortante (vérifier au
+    moniteur réseau)
+[ ] Cache : une phrase identique n'est pas retraduite (vérifiable au
+    temps ou au log)
+[ ] Glossaire : un terme imposé apparaît identique partout dans le jeu
+[ ] Variables et balises jamais traduites par accident
+[ ] Stable sur 8 Go RAM : pas de crash, pas de gel (moniteur système)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+E. PHASE 3 — INTERFACE, THÈMES, LANGUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Thème turquoise appliqué par défaut au premier lancement
+[ ] Assistant de premier lancement (choix en ligne/local) présent
+[ ] Les 4 thèmes prédéfinis fonctionnent (Turquoise, Noir, Sombre,
+    Clair)
+[ ] Thème personnalisable : créé, sauvegardé, rechargé après
+    redémarrage
+[ ] Toutes les langues d'interface basculent correctement
+[ ] Arabe : interface RTL correcte, aucun texte tronqué ou inversé
+[ ] Aucun bouton/menu factice : chaque élément a une fonction réelle
+[ ] Pages Disclaimer, À propos, Licence, Crédits présentes dans
+    TOUTES les langues de l'interface
+[ ] Crédits « HARPUTOGLU David, aidé par l'IA » + kasparof57@gmail.com
+    visibles dans À propos
+[ ] Interface identique et correcte sur Windows 10 et Fedora 44
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+F. PHASE 4 — EMPAQUETAGE ET INSTALLATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Windows 10 : Setup.exe s'installe et se lance
+[ ] Windows 10 : version portable fonctionne sans installation
+[ ] Fedora 44 : .rpm s'installe via dnf et se lance
+[ ] Debian/Ubuntu/Mint : .deb s'installe via apt et se lance (test
+    machine virtuelle acceptable)
+[ ] AppImage se lance sur Fedora 44 + au moins 1 autre distribution
+[ ] install.sh sur Mint → propose .deb / .AppImage / source
+[ ] install.sh sur Fedora 44 → propose .rpm / .AppImage / source
+[ ] install.sh sur distribution inconnue → propose .AppImage / source
+[ ] install.sh détecte l'architecture (x86_64 / ARM)
+[ ] install.sh détecte et propose d'installer les dépendances
+    manquantes (ex. libfuse2)
+[ ] Code source : procédure documentée fonctionnelle sur Windows 10
+    et Fedora 44
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+G. PHASE 5 — MISES À JOUR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Windows 10 : mise à jour en arrière-plan testée (fausse version
+    1.0 → 1.1)
+[ ] AppImage / portable : mise à jour en arrière-plan testée
+[ ] Fedora 44 : .rpm se met à jour via le dépôt système configuré
+    (dnf upgrade), comme Firefox ou Chrome
+[ ] .deb : mise à jour via apt upgrade (test machine virtuelle
+    acceptable)
+[ ] Dépôt signé GPG vérifié (pas d'avertissement de sécurité)
+[ ] Après mise à jour : thèmes, glossaires et profils de jeux intacts
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+H. PHASE 6 — QUALITÉ FINALE AVANT PUBLICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Aucun message d'erreur au démarrage (console propre) sur les
+    2 machines
+[ ] Consommation RAM raisonnable sur machine 8 Go
+[ ] README complet : installation, utilisation, contribution
+[ ] GPLv3 présente dans tous les fichiers sources
+[ ] Test final complet : jeu Ren'Py traduit de bout en bout sans
+    erreur, sur Windows 10 ET Fedora 44
+[ ] Export/import des configs, glossaires et profils testé
+[ ] Restauration des fichiers originaux testée une dernière fois
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+I. SIGNAUX D'ALERTE — NE PAS VALIDER L'ÉTAPE SI :
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[!] Claude livre du code sans commandes de test pour mes 2 machines
+[!] Claude enchaîne 2 étapes sans attendre ta validation
+[!] Une dépendance nouvelle apparaît sans explication
+[!] Un fichier de jeu est modifié sans sauvegarde préalable
+[!] Le code ne se lance pas chez toi tel quel
+[!] Claude « devine » un point ambigu au lieu de te questionner
+[!] Une fonctionnalité du cahier des charges disparaît sans raison
+[!] Un test n'est fourni que pour une seule de tes deux machines
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+J. MODÈLE DE MESSAGE DE VALIDATION D'ÉTAPE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+À envoyer à Claude AI quand tout est coché :
+
+« OK étape X, testée sur Windows 10 et Fedora 44. Points de
+vérification contrôlés : [lister les cases cochées]. Problèmes
+rencontrés : [aucun / lister]. Tu peux passer à l'étape X+1. »
+
+À envoyer si quelque chose échoue :
+
+« Étape X non validée. Machine concernée : [Windows 10 / Fedora 44 /
+les deux]. Case(s) échouée(s) : [lister]. Message d'erreur exact :
+[coller]. Corrige uniquement ce point et redonne-moi le fichier
+complet corrigé + les commandes de retest pour les 2 machines. »
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIN DU DOCUMENT 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

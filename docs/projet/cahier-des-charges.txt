@@ -1,0 +1,240 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOCUMENT 1 — MESSAGE COMPLET À ENVOYER À CLAUDE AI
+(Copier tout ce bloc, tel quel, dans une nouvelle conversation)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Bonjour Claude.
+
+Je te confie le développement complet de mon application « RuneCast »,
+un logiciel libre (GPLv3) de traduction de jeux vidéo pour Windows et
+Linux. Je ne suis pas développeur professionnel : tu devras donc
+m'expliquer simplement chaque action à effectuer (commandes à taper,
+fichiers à créer, où cliquer).
+
+TON RÔLE : développeur senior full-stack et architecte logiciel.
+Tu travailles avec moi étape par étape, et je suis ton seul donneur
+d'ordre.
+
+MON ENVIRONNEMENT DE DÉVELOPPEMENT ET DE TEST :
+- Un PC sous Windows 10 (64 bits).
+- Un PC sous Fedora 44.
+Ces deux machines sont mes machines de référence : chaque étape doit
+être testable sur les DEUX.
+L'application doit en outre fonctionner sur des machines modestes :
+8 Go de RAM, sans GPU dédié.
+
+RÈGLES DE TRAVAIL ABSOLUES QUE TU DOIS RESPECTER :
+
+1. Lis l'intégralité du cahier des charges ci-dessous avant de
+   répondre quoi que ce soit.
+2. PREMIER LIVRABLE ATTENDU : aucun code. Tu me fournis d'abord :
+   - ton avis technique argumenté sur chacun des 7 points de la
+     section 13 ;
+   - un plan de développement découpé en étapes numérotées, courtes
+     et vérifiables ;
+   - la liste complète des dépendances que ton choix technologique
+     impliquera (Windows 10, Fedora 44, et par distribution Linux).
+3. Ensuite, tu développes UNE SEULE étape à la fois. À la fin de
+   chaque étape, tu me fournis :
+   - le code complet des fichiers créés ou modifiés ;
+   - les commandes exactes pour tester sur MES DEUX machines
+     (Windows 10 et Fedora 44) ;
+   - la liste des points de vérification que je dois contrôler ;
+   - puis tu ATTENDS ma validation explicite (« OK étape X ») avant
+     de passer à la suivante.
+4. Si un point du cahier des charges est ambigu, incomplet ou
+   techniquement impossible, TU NE DEVINES PAS : tu me poses la
+   question avant de coder.
+5. Tout code doit être : propre, commenté, sous en-tête GPLv3, et
+   conçu pour fonctionner sur Windows 10/11 et Linux (Fedora +
+   Debian/Ubuntu/Mint) avec seulement 8 Go de RAM et sans GPU.
+6. Interdiction absolue de supprimer ou écraser un fichier de jeu
+   sans sauvegarde automatique préalable des fichiers originaux.
+7. À chaque étape, tu m'indiques les nouvelles dépendances ajoutées
+   et leur utilité.
+8. Tu gardes en mémoire que l'architecture doit rester extensible
+   (OCR/overlay en phase 2, plugins en phase 3, online en phase 4).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CAHIER DES CHARGES COMPLET — RUNECAST v1.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Auteur du projet : HARPUTOGLU David (aidé par l'IA)
+Contact : kasparof57@gmail.com
+Licence : GPLv3
+Hébergement du code : GitHub
+Machines de développement et de test : Windows 10 (64 bits) +
+Fedora 44.
+
+1. PRÉSENTATION DU PROJET
+RuneCast est une application desktop cross-platform (Windows + Linux)
+qui traduit les jeux vidéo pour permettre aux joueurs de lire et
+comprendre leurs jeux.
+- Phase 1 (cette version) : jeux locaux/solo, priorité absolue aux
+  jeux Ren'Py.
+- Phases ultérieures (hors périmètre v1) : autres moteurs, OCR/overlay,
+  puis éventuellement jeux en ligne.
+- Mention obligatoire dans l'application : « Créé par HARPUTOGLU
+  David, aidé par l'IA » + email kasparof57@gmail.com.
+
+2. IDENTITÉ VISUELLE
+- Logo / icône / favicon : rune turcique ancienne (style Orkhon)
+  formant la lettre « R », aspect cristallin, couleur TURQUOISE
+  dominante, cadre hexagonal.
+- Couleur principale de l'interface : turquoise.
+
+3. INTERFACE UTILISATEUR
+- Interface ergonomique, intuitive et professionnelle.
+- Vrais menus et vrais paramètres (aucun élément factice).
+- Thèmes : Turquoise (PAR DÉFAUT), Noir, Sombre, Clair, + thème
+  personnalisable et enregistrable (création, sauvegarde et
+  rechargement de thèmes personnels).
+- Langues de l'interface : langues turciques (turc, azéri, ouzbek,
+  kazakh, turkmène, kirghiz — liste exacte à confirmer), arabe,
+  français, anglais, espagnol, portugais, italien.
+- Support RTL obligatoire pour l'arabe (interface de droite à gauche).
+- Distinction importante : langue de l'interface ≠ langues de
+  traduction des jeux. L'utilisateur peut traduire un jeu vers toute
+  langue supportée par le moteur, même si ce n'est pas une langue de
+  l'interface.
+- Pages légales traduites dans TOUTES les langues de l'interface :
+  Avertissement (disclaimer), À propos, Licence, Crédits.
+
+4. TRADUCTION
+- Assistant de premier lancement : choix mode en ligne ou mode 100 %
+  local. Modifiable à tout moment dans les paramètres.
+- Mode en ligne : Yandex Translate PAR DÉFAUT ; autres moteurs
+  disponibles en option dans les paramètres (DeepL, LibreTranslate,
+  Google, etc.) ; repli automatique vers le mode local si la
+  connexion est perdue.
+- Mode local : modèles de traduction installés sur le PC, aucune
+  connexion internet requise.
+- Matériel cible : PC modeste, 8 Go RAM, CPU uniquement (pas de GPU
+  exigé) → modèles légers et quantifiés obligatoires.
+- Glossaires dès la v1 : tableau éditable dans l'application,
+  sauvegardé PAR JEU, termes imposés (noms de personnages, lieux,
+  objets) appliqués partout, protection automatique des variables et
+  balises ({nom}, [variable], %s, balises Ren'Py {b}, {i}, etc.).
+- Cache de traduction (ne pas retraduire une phrase identique) et
+  historique des traductions.
+
+5. PÉRIMÈTRE PHASE 1 : JEUX REN'PY
+- Traduire TOUT : dialogues, menus, interface du jeu (boutons,
+  options), descriptions.
+- Trois modes de travail AU CHOIX de l'utilisateur :
+  1) Éditeur intégré avec prévisualisation avant application ;
+  2) Traduction entièrement automatique ;
+  3) Édition a posteriori des fichiers déjà traduits.
+- Deux modes de sortie AU CHOIX de l'utilisateur :
+  1) Modification directe des fichiers du jeu, avec sauvegarde
+     automatique des fichiers originaux avant toute modification et
+     fonction de restauration ;
+  2) Génération d'un patch de traduction séparé.
+- Technique Ren'Py : extraction des archives .rpa, analyse des
+  scripts .rpy, protection des balises/variables Ren'Py, réinjection
+  des traductions.
+
+6. ARCHITECTURE ÉVOLUTIVE (hors v1 mais à prévoir)
+- Phase 2 : OCR + affichage par overlay sur le jeu ET fenêtre
+  flottante, au choix de l'utilisateur.
+- Phase 3 : système de plugins pour d'autres moteurs (Unity, RPG
+  Maker, etc.).
+- Phase 4 (lointaine) : jeux en ligne (chat uniquement au début),
+  si techniquement et légalement possible.
+- L'architecture v1 doit permettre ces extensions sans réécriture
+  complète.
+
+7. DISTRIBUTION ET INSTALLATION
+- Windows : RuneCast-Setup.exe (installateur) + RuneCast-Portable.exe
+  (portable), testés sur Windows 10.
+- Linux : .deb (Debian et dérivés), .rpm (Fedora et dérivés, testé sur
+  Fedora 44), .AppImage (portable universel), code source complet.
+- Script install.sh intelligent : détecte la distribution (via
+  /etc/os-release) et l'architecture, puis propose les formats
+  adaptés :
+  * Linux Mint / Ubuntu / Debian → choix : .deb, .AppImage, source ;
+  * Fedora / Mageia / openSUSE → choix : .rpm, .AppImage, source ;
+  * Distribution inconnue → choix : .AppImage, source.
+- Le script détecte aussi les dépendances manquantes (ex. libfuse2
+  pour AppImage) et propose de les installer.
+- Le script propose d'ajouter le dépôt officiel RuneCast (apt/dnf,
+  signé GPG) pour les mises à jour système.
+
+8. MISES À JOUR
+- Source des mises à jour : GitHub Releases.
+- .deb / .rpm : mises à jour via le gestionnaire de paquets du
+  système (terminal ou logiciel graphique), comme Firefox ou Chrome,
+  grâce au dépôt officiel RuneCast ajouté à l'installation.
+- Windows / AppImage / portable : mise à jour automatique intégrée à
+  l'application, téléchargement EN ARRIÈRE-PLAN, installation
+  silencieuse (ou simple confirmation si droits administrateur
+  nécessaires).
+- Aucune perte de données utilisateur après mise à jour (thèmes,
+  glossaires, profils conservés).
+
+9. TECHNOLOGIE — AVIS DE CLAUDE AI DEMANDÉ
+- Recommandation : Python pour la v1 (écosystème Ren'Py en Python :
+  unrpa etc. ; bibliothèques OCR/traduction en Python ; développement
+  plus rapide ; packaging : PyInstaller/Briefcase pour Windows,
+  fpm/nfpm pour .deb/.rpm, outils AppImage).
+- Claude AI doit donner son avis argumenté au démarrage et confirmer
+  ou proposer une alternative (ex. Tauri + Rust). Le présent cahier
+  des charges s'adapte si une alternative est justifiée techniquement.
+- Traduction locale : modèles légers type Argos Translate ou NLLB-200
+  distillé quantifié (ONNX/CTranslate2), compatibles 8 Go RAM,
+  téléchargés au premier usage ou embarqués (choix à documenter).
+- Traduction en ligne : accès Yandex (API officielle ou bibliothèque
+  type deep-translator) + moteurs alternatifs configurables.
+
+10. DONNÉES ET CONFIGURATION
+- Stockage des données utilisateur (config, thèmes, glossaires,
+  profils de jeux) dans le dossier utilisateur système (AppData sous
+  Windows, ~/.config sous Linux), avec option portable (à côté de
+  l'exécutable).
+- Export/import des configurations, glossaires et profils de jeux.
+- Sauvegarde automatique des fichiers originaux du jeu avant toute
+  modification, avec fonction de restauration.
+
+11. LÉGAL ET ÉTHIQUE
+- Licence GPLv3 : fichier LICENSE à la racine, en-têtes dans les
+  sources, mention dans l'interface (page À propos).
+- Disclaimer : l'utilisateur est responsable du respect des
+  conditions d'utilisation des jeux ; les jeux en ligne multijoueurs
+  sont hors périmètre de la v1 ; avertissement sur les anti-cheat
+  prévu pour les phases ultérieures.
+- Page À propos : crédits « HARPUTOGLU David, aidé par l'IA », email
+  kasparof57@gmail.com, version, licence.
+
+12. FEUILLE DE ROUTE
+- v1 : Ren'Py + traduction hybride (Yandex/local) + glossaires +
+  thèmes + interface multilingue + installateurs + mises à jour.
+- v2 : OCR + overlay/fenêtre flottante pour autres jeux.
+- v3 : plugins multi-moteurs.
+- v4+ : online (chat d'abord), si possible.
+
+13. QUESTIONS À TRANCHER PAR CLAUDE AI AU DÉMARRAGE
+1) Confirmer Python vs alternative pour la v1 (avis argumenté).
+2) Choisir le modèle de traduction local léger adapté à 8 Go RAM.
+3) Choisir la méthode d'accès à Yandex (API officielle vs
+   bibliothèque) et gérer les moteurs alternatifs.
+4) Choisir le framework d'interface (ex. PySide6/Qt) compatible :
+   thèmes personnalisables, multilingue, RTL arabe.
+5) Concevoir le dépôt apt/dnf signé GPG pour les mises à jour système.
+6) Concevoir le module d'extraction/traduction Ren'Py (.rpa/.rpy).
+7) Définir la liste exacte des langues turciques de l'interface.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIN DU CAHIER DES CHARGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TA PREMIÈRE RÉPONSE ATTENDUE : ton avis argumenté sur chacun des 7
+points de la section 13, la liste complète des dépendances par
+plateforme (Windows 10, Fedora 44, autres distributions), puis ton
+plan de développement en étapes numérotées.
+AUCUN CODE avant ma validation du plan.
+
+Merci.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIN DU DOCUMENT 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
