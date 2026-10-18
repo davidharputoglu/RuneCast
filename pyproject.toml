@@ -1,0 +1,89 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# RuneCast — Copyright (C) 2026 HARPUTOGLU David (aidé par l'IA / assisted by AI)
+#
+# FR : Fiche d'identité du projet Python : nom, version, licence, dépendances
+#      et réglages des outils (tests, contrôle du code). uv lit ce fichier.
+# EN : Python project manifest: name, version, license, dependencies and tool
+#      settings (tests, code checks). uv reads this file.
+
+# FR : Outil utilisé pour « fabriquer » le paquet Python RuneCast.
+# EN : Tool used to "build" the RuneCast Python package.
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "runecast"
+# FR : La version est lue dans src/runecast/__init__.py (un seul endroit).
+# EN : The version is read from src/runecast/__init__.py (one single place).
+dynamic = ["version"]
+description = "Traduction de jeux vidéo (Ren'Py d'abord) pour Windows et Linux / Video game translation (Ren'Py first) for Windows and Linux"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+authors = [{ name = "HARPUTOGLU David", email = "kasparof57@gmail.com" }]
+# FR : RuneCast est développé et testé avec Python 3.13.
+# EN : RuneCast is developed and tested with Python 3.13.
+requires-python = ">=3.13"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: French",
+    "Natural Language :: English",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Localization",
+]
+# FR : Aucune bibliothèque nécessaire pour l'instant ; elles arriveront
+#      étape par étape (PySide6 à l'étape 4, etc.).
+# EN : No library needed yet; they will arrive step by step
+#      (PySide6 in step 4, etc.).
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/davidharputoglu/RuneCast"
+Issues = "https://github.com/davidharputoglu/RuneCast/issues"
+
+# FR : Crée la commande « runecast » utilisable dans le terminal.
+# EN : Creates the "runecast" command usable in the terminal.
+[project.scripts]
+runecast = "runecast.__main__:main"
+
+# FR : Outils réservés au développement (jamais livrés aux utilisateurs) :
+#      pytest lance les tests automatiques, ruff contrôle la qualité du code.
+# EN : Development-only tools (never shipped to users): pytest runs the
+#      automatic tests, ruff checks code quality.
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.8",
+]
+
+[tool.hatch.version]
+path = "src/runecast/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/runecast"]
+
+# FR : Réglages des tests : ils se trouvent dans le dossier « tests ».
+# EN : Test settings: tests live in the "tests" folder.
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
+# FR : Réglages du contrôle de qualité du code.
+# EN : Code quality check settings.
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+# FR : E/W = style, F = erreurs, I = ordre des imports, UP = Python moderne,
+#      B = pièges courants.
+# EN : E/W = style, F = errors, I = import order, UP = modern Python,
+#      B = common pitfalls.
+select = ["E", "W", "F", "I", "UP", "B"]
