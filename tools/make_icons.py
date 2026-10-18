@@ -34,7 +34,8 @@ FR : Ce script part de l'image fournie par l'auteur
        2. il découpe un carré centré sur cet hexagone (une icône doit être
           carrée, alors que l'image d'origine est en largeur) ;
        3. il réduit ce carré aux tailles standard de Windows, de Linux et du
-          web (favicon).
+          web (favicon), et range une copie des petites tailles dans le
+          paquet RuneCast (src/runecast/resources/icons) pour l'application.
      L'image d'origine n'est jamais modifiée. Si le logo change un jour, il
      suffit de remplacer l'image source et de relancer ce script.
 
@@ -44,7 +45,8 @@ EN : This script starts from the image provided by the author
        2. it cuts a square centred on that hexagon (an icon must be square,
           while the original image is wide);
        3. it scales that square down to the standard Windows, Linux and web
-          (favicon) sizes.
+          (favicon) sizes, and stores a copy of the small sizes inside the
+          RuneCast package (src/runecast/resources/icons) for the application.
      The original image is never modified. If the logo changes one day, just
      replace the source image and run this script again.
 
@@ -62,6 +64,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE_IMAGE = ROOT / "assets" / "branding" / "runecast-logo-source.png"
 BRANDING_DIR = ROOT / "assets" / "branding"
 ICONS_DIR = ROOT / "assets" / "icons"
+RUNTIME_ICONS_DIR = ROOT / "src" / "runecast" / "resources" / "icons"
 
 # FR : Tailles (en pixels) attendues par Linux pour les icônes d'application.
 # EN : Sizes (in pixels) expected by Linux for application icons.
@@ -74,6 +77,12 @@ WINDOWS_ICO_SIZES = (16, 20, 24, 32, 40, 48, 64, 128, 256)
 # FR : Tailles du favicon (petite icône des onglets de navigateur).
 # EN : Favicon sizes (small icon shown in browser tabs).
 FAVICON_SIZES = (16, 32, 48)
+
+# FR : Tailles embarquées dans l'application elle-même (barre de titre,
+#      barre des tâches, dock, fenêtre « À propos »).
+# EN : Sizes bundled inside the application itself (title bar, taskbar,
+#      dock, "About" window).
+RUNTIME_SIZES = (16, 24, 32, 48, 64, 128, 256)
 
 # FR : Un pixel fait partie du logo si son vert ET son bleu dépassent ce seuil
 #      (sur 255). Le fond de l'image est très sombre, le logo turquoise est clair.
@@ -182,7 +191,8 @@ def build_all(source: Path = SOURCE_IMAGE, root: Path = ROOT) -> list[Path]:
     branding_dir = root / "assets" / "branding"
     icons_dir = root / "assets" / "icons"
     png_dir = icons_dir / "png"
-    for folder in (branding_dir, png_dir):
+    runtime_dir = root / RUNTIME_ICONS_DIR.relative_to(ROOT)
+    for folder in (branding_dir, png_dir, runtime_dir):
         folder.mkdir(parents=True, exist_ok=True)
 
     square = make_square_logo(source)
@@ -210,6 +220,13 @@ def build_all(source: Path = SOURCE_IMAGE, root: Path = ROOT) -> list[Path]:
     favicon_path = icons_dir / "favicon.ico"
     save_ico(square, favicon_path, FAVICON_SIZES)
     written.append(favicon_path)
+
+    # FR : 4. Les icônes embarquées dans l'application.
+    # EN : 4. The icons bundled inside the application.
+    for size in RUNTIME_SIZES:
+        runtime_path = runtime_dir / f"runecast-{size}.png"
+        resize(square, size).save(runtime_path)
+        written.append(runtime_path)
 
     return written
 

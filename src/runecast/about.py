@@ -74,6 +74,22 @@ LICENSE_NAME = "GNU General Public License v3.0 or later"
 # EN : Address of the source code on GitHub.
 REPOSITORY_URL = "https://github.com/davidharputoglu/RuneCast"
 
+# FR : Adresse du texte officiel de la licence.
+# EN : Address of the official license text.
+LICENSE_URL = "https://www.gnu.org/licenses/gpl-3.0.html"
+
+# FR : Identifiant unique de l'application pour Linux (nom du fichier .desktop,
+#      reconnu par le dock de GNOME/KDE sous Wayland pour afficher l'icône).
+# EN : Unique application identifier for Linux (.desktop file name, used by the
+#      GNOME/KDE dock under Wayland to display the icon).
+APP_ID = "io.github.davidharputoglu.RuneCast"
+
+# FR : Identifiant pour la barre des tâches de Windows : sans lui, Windows
+#      afficherait l'icône de Python au lieu de celle de RuneCast.
+# EN : Identifier for the Windows taskbar: without it, Windows would show the
+#      Python icon instead of the RuneCast one.
+WINDOWS_APP_USER_MODEL_ID = "davidharputoglu.RuneCast"
+
 
 def about_text() -> str:
     """Construit le texte « À propos » / Build the "About" text.

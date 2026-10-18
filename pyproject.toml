@@ -37,11 +37,13 @@ classifiers = [
     "Topic :: Games/Entertainment",
     "Topic :: Software Development :: Localization",
 ]
-# FR : Aucune bibliothèque nécessaire pour l'instant ; elles arriveront
-#      étape par étape (PySide6 à l'étape 4, etc.).
-# EN : No library needed yet; they will arrive step by step
-#      (PySide6 in step 4, etc.).
-dependencies = []
+# FR : Bibliothèques livrées avec RuneCast. Elles arrivent étape par étape :
+#      PySide6-Essentials (Qt 6, licence LGPLv3) dessine l'interface.
+# EN : Libraries shipped with RuneCast. They arrive step by step:
+#      PySide6-Essentials (Qt 6, LGPLv3 license) draws the user interface.
+dependencies = [
+    "pyside6-essentials>=6.10",
+]
 
 [project.urls]
 Homepage = "https://github.com/davidharputoglu/RuneCast"
@@ -53,15 +55,17 @@ Issues = "https://github.com/davidharputoglu/RuneCast/issues"
 runecast = "runecast.__main__:main"
 
 # FR : Outils réservés au développement (jamais livrés aux utilisateurs) :
-#      pytest lance les tests automatiques, ruff contrôle la qualité du code,
-#      pillow fabrique les icônes à partir du logo (tools/make_icons.py).
+#      pytest lance les tests automatiques (pytest-qt teste les fenêtres),
+#      ruff contrôle la qualité du code, pillow fabrique les icônes à partir
+#      du logo (tools/make_icons.py).
 # EN : Development-only tools (never shipped to users): pytest runs the
-#      automatic tests, ruff checks code quality, pillow builds the icons
-#      from the logo (tools/make_icons.py).
+#      automatic tests (pytest-qt tests the windows), ruff checks code
+#      quality, pillow builds the icons from the logo (tools/make_icons.py).
 [dependency-groups]
 dev = [
     "pillow>=11",
     "pytest>=8.3",
+    "pytest-qt>=4.4",
     "ruff>=0.8",
 ]
 

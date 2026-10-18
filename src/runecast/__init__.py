@@ -28,15 +28,16 @@
 
 """RuneCast : traduction de jeux vidéo / video game translation.
 
-FR : Paquet principal de RuneCast. Pour l'instant, il ne contient que le
-     numéro de version et les informations « À propos ». Les autres parties
-     (cœur, moteurs de traduction, formats de jeux, interface) seront ajoutées
-     étape par étape, comme prévu dans docs/PLAN-V1.md.
+FR : Paquet principal de RuneCast. Il contient pour l'instant le numéro de
+     version, les informations « À propos », les ressources (icônes) et
+     l'interface (dossier « ui »). Les autres parties (cœur, moteurs de
+     traduction, formats de jeux) seront ajoutées étape par étape, comme
+     prévu dans docs/PLAN-V1.md.
 
-EN : RuneCast main package. For now it only holds the version number and the
-     "About" information. The other parts (core, translation engines, game
-     formats, user interface) will be added step by step, as planned in
-     docs/PLAN-V1.md.
+EN : RuneCast main package. For now it holds the version number, the "About"
+     information, the resources (icons) and the user interface ("ui" folder).
+     The other parts (core, translation engines, game formats) will be added
+     step by step, as planned in docs/PLAN-V1.md.
 """
 
 # FR : Numéro de version unique du projet. Il est aussi lu par pyproject.toml,
@@ -49,4 +50,4 @@ EN : RuneCast main package. For now it only holds the version number and the
 #      CHANGELOG.md): each validated step or fix bumps the last number
 #      (0.1.0 → 0.1.1), each completed milestone the middle number (0.2.0),
 #      and 1.0.0 will be the first complete public release.
-__version__ = "0.1.0"
+__version__ = "0.1.1"

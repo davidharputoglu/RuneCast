@@ -53,6 +53,8 @@ RuneCast/
 │   └── projet/            Cahier des charges et checklist de vérification
 ├── src/
 │   └── runecast/          Code source de l'application
+│       ├── resources/     Fichiers embarqués (icônes…)
+│       └── ui/            Interface graphique (fenêtres, thème)
 ├── tests/                 Tests automatiques
 ├── tools/                 Outils de développement (fabrication des icônes…)
 ├── CHANGELOG.md           Journal des versions
@@ -69,8 +71,11 @@ Il faut [Git](https://git-scm.com/) et [uv](https://docs.astral.sh/uv/). Sur Fed
 git clone https://github.com/davidharputoglu/RuneCast.git
 cd RuneCast
 uv run pytest            # lance les tests automatiques
+uv run runecast          # ouvre RuneCast
 uv run runecast --version
 ```
+
+Sous Linux, `uv run python tools/install_desktop_entry.py` ajoute RuneCast au menu des applications, pour que le dock affiche son icône.
 
 Chaque fichier de code commence par l'en-tête de licence GPLv3 (voir `src/runecast/__init__.py`). Un test vérifie automatiquement que personne ne l'oublie. Les commentaires du code sont rédigés en français et en anglais.
 
@@ -111,8 +116,11 @@ You need [Git](https://git-scm.com/) and [uv](https://docs.astral.sh/uv/). On Fe
 git clone https://github.com/davidharputoglu/RuneCast.git
 cd RuneCast
 uv run pytest            # runs the automatic tests
+uv run runecast          # opens RuneCast
 uv run runecast --version
 ```
+
+On Linux, `uv run python tools/install_desktop_entry.py` adds RuneCast to the application menu so the dock shows its icon.
 
 Every source file starts with the GPLv3 license header (see `src/runecast/__init__.py`), and a test makes sure nobody forgets it. Code comments are written in both French and English.
 

@@ -10,6 +10,19 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 | Fin d'un jalon (groupe d'étapes) / End of a milestone (group of steps) | 0.1.x → 0.2.0, puis/then 0.3.0… |
 | Version complète du cahier des charges, publiée pour le public / Complete specification, public release | 1.0.0 |
 
+## 0.1.1 (étape 4 / step 4)
+
+- Première fenêtre de RuneCast : titre avec la version, icône, thème Turquoise de base (couleurs du logo, même aspect sous Windows et Linux), écran d'accueil.
+  *First RuneCast window: title with version, icon, basic Turquoise theme (logo colours, same look on Windows and Linux), welcome screen.*
+- Menus réels : Fichier → Quitter (Ctrl+Q) ; Aide → À propos de RuneCast, À propos de Qt.
+  *Real menus: File → Quit (Ctrl+Q); Help → About RuneCast, About Qt.*
+- Fenêtre « À propos » : logo, version, « Créé par HARPUTOGLU David, aidé par l'IA », contact, licence GPLv3 ou ultérieure, lien vers le code source.
+  *"About" window: logo, version, credits, contact, GPLv3-or-later license, link to the source code.*
+- Bonne icône dans la barre des tâches Windows ; outil `tools/install_desktop_entry.py` pour l'icône du dock sous Linux (Wayland).
+  *Correct icon in the Windows taskbar; `tools/install_desktop_entry.py` tool for the dock icon on Linux (Wayland).*
+- Nouvelle dépendance : PySide6-Essentials (Qt 6, LGPLv3). Outil de test : pytest-qt.
+  *New dependency: PySide6-Essentials (Qt 6, LGPLv3). Test tool: pytest-qt.*
+
 ## 0.1.0 (étape 3 / step 3)
 
 - Icônes de l'application, fabriquées à partir du logo d'origine sans retouche : `.ico` pour Windows (16 à 256 px), PNG pour Linux (16 à 512 px), favicon (16, 32, 48 px), logo carré en pleine résolution.

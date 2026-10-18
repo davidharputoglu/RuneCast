@@ -29,12 +29,14 @@
 """Point d'entrée en ligne de commande / Command-line entry point.
 
 FR : Permet de lancer RuneCast depuis un terminal, avec « runecast » ou
-     « python -m runecast ». Pour l'instant, seule l'option --version existe ;
-     la fenêtre de l'application arrivera à l'étape 4.
+     « python -m runecast ».
+       - sans option : ouvre la fenêtre de RuneCast ;
+       - --version   : affiche la version et les crédits, sans ouvrir de fenêtre.
 
 EN : Lets you start RuneCast from a terminal, with "runecast" or
-     "python -m runecast". For now only the --version option exists; the
-     application window will come in step 4.
+     "python -m runecast".
+       - no option : opens the RuneCast window;
+       - --version : prints the version and credits, without opening a window.
 """
 
 import argparse
@@ -47,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Décrit les options acceptées / Describe the accepted options."""
     parser = argparse.ArgumentParser(
         prog="runecast",
-        description=("RuneCast : traduction de jeux vidéo / video game translation"),
+        description="RuneCast : traduction de jeux vidéo / video game translation",
     )
     # FR : --version affiche la version et les mentions « À propos ».
     # EN : --version prints the version and the "About" mentions.
@@ -67,17 +69,17 @@ def main(argv: list[str] | None = None) -> int:
     """
     args = build_parser().parse_args(argv)
 
-    # FR : Dans tous les cas, on affiche les informations « À propos ».
-    # EN : In every case, the "About" information is printed.
-    print(about.about_text())
+    if args.version:
+        print(about.about_text())
+        return 0
 
-    if not args.version:
-        # FR : Sans option, on prévient que l'interface n'existe pas encore.
-        # EN : Without an option, we explain that the interface does not exist yet.
-        print()
-        print("L'interface graphique arrivera à l'étape 4.")
-        print("The graphical interface will come in step 4.")
-    return 0
+    # FR : L'interface n'est chargée qu'ici : « --version » reste ainsi
+    #      instantané et fonctionne même sans affichage graphique.
+    # EN : The interface is only loaded here, so "--version" stays instant and
+    #      works even without a graphical display.
+    from runecast.ui.app import run
+
+    return run()
 
 
 # FR : Ce bloc s'exécute seulement quand on lance « python -m runecast ».
