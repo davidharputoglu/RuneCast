@@ -102,6 +102,12 @@ class Settings:
     # FR : journal détaillé, utile pour signaler un problème (étape 10).
     # EN : detailed log, useful to report a problem (step 10).
     detailed_log: bool = False
+    # FR : traduction locale : cœurs utilisés (0 = automatique) et largeur de
+    #      recherche (1 rapide, 2 équilibré, 4 précis) (étape 14).
+    # EN : local translation: cores used (0 = automatic) and search width
+    #      (1 fast, 2 balanced, 4 accurate) (step 14).
+    local_threads: int = 0
+    local_beam_size: int = 2
     # FR : réglages inconnus (écrits par une version plus récente) : conservés tels quels.
     # EN : unknown settings (written by a newer version): kept as they are.
     extra: dict[str, Any] = field(default_factory=dict)

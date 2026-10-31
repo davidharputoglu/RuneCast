@@ -23,6 +23,7 @@ on:
       - "src/runecast/resources/models/**"
       - "src/runecast/engines/argos.py"
       - "src/runecast/engines/models.py"
+      - "src/runecast/engines/benchmark.py"
       - "tools/model_catalog.py"
       - ".github/workflows/models.yml"
   workflow_dispatch:
@@ -50,6 +51,9 @@ jobs:
 
       - name: Installer RuneCast / Install RuneCast
         run: uv sync --locked
+
+      - name: Banc d'essai (vitesse et mémoire) / Benchmark (speed and memory)
+        run: uv run python tools/model_catalog.py benchmark en fr
 
       - name: Télécharger et essayer chaque modèle / Download and try every model
         run: uv run python tools/model_catalog.py check --workers 4

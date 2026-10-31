@@ -57,6 +57,7 @@ dependencies = [
     "ctranslate2>=4.6",
     "httpx>=0.28",
     "platformdirs>=4.3",
+    "psutil>=6",
     "pyside6-essentials>=6.10",
     "sentencepiece>=0.2",
 ]

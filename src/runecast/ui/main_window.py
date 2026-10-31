@@ -417,6 +417,8 @@ class MainWindow(QMainWindow):
         EN : Only what changed is applied, then everything is saved.
         """
         self.settings.remember_window = new.remember_window
+        self.settings.local_threads = new.local_threads
+        self.settings.local_beam_size = new.local_beam_size
         if new.detailed_log != self.settings.detailed_log:
             self.settings.detailed_log = new.detailed_log
             set_detailed_log(new.detailed_log)

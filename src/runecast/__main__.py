@@ -36,7 +36,10 @@ FR : Permet de lancer RuneCast depuis un terminal, avec « runecast » ou
        - --portable  : range toutes les données dans le dossier « portable-data »
                        à côté de l'application (pour tester le mode portable) ;
        - --protect « texte » : montre comment une réplique est protégée avant
-                       d'être envoyée à un moteur de traduction (étape 11).
+                       d'être envoyée à un moteur de traduction (étape 11) ;
+       - --benchmark [de vers] : mesure la vitesse et la mémoire de la
+                       traduction locale sur ce PC, et conseille les meilleurs
+                       réglages (étape 14). Exemple : --benchmark en fr
 
 EN : Lets you start RuneCast from a terminal, with "runecast" or
      "python -m runecast".
@@ -46,7 +49,10 @@ EN : Lets you start RuneCast from a terminal, with "runecast" or
        - --portable : stores all data in the "portable-data" folder next to the
                       application (to test portable mode);
        - --protect "text" : shows how a line is protected before being sent to
-                      a translation engine (step 11).
+                      a translation engine (step 11);
+       - --benchmark [from to] : measures local translation speed and memory
+                      on this PC, and recommends the best settings (step 14).
+                      Example: --benchmark en fr
 """
 
 import argparse
@@ -89,7 +95,100 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="TEXTE",
         help="montre la protection des balises d'une réplique / show tag protection",
     )
+    # FR : --benchmark mesure la traduction locale. EN : --benchmark measures local translation.
+    parser.add_argument(
+        "--benchmark",
+        nargs="*",
+        metavar="LANGUE",
+        help="mesure la vitesse de la traduction locale / measure local translation speed "
+        "(ex. --benchmark en fr)",
+    )
     return parser
+
+
+def benchmark_text(languages: list[str], portable: bool = False) -> str:
+    """Banc d'essai de la traduction locale (étape 14) / Local translation benchmark.
+
+    FR : Utilise les modèles déjà installés (Paramètres → Modèles de
+         traduction). Le résultat est aussi enregistré dans le dossier du
+         journal (banc-essai-DATE.json), pour pouvoir me le transmettre.
+    EN : Uses the models already installed. The result is also saved in the
+         log folder (banc-essai-DATE.json), so it can be sent to me.
+    """
+    import json
+    from datetime import datetime
+
+    from runecast.engines.argos import LocalEngine
+    from runecast.engines.benchmark import (
+        memory_growth,
+        physical_cores,
+        recommend,
+        run_benchmark,
+    )
+    from runecast.engines.models import ModelStore, models_folder
+
+    paths = resolve_paths(force_portable=portable)
+    store = ModelStore(models_folder(paths.data_dir), paths.cache_dir / "downloads")
+    installed = sorted(store.installed())
+    if not installed:
+        return (
+            "Aucun modèle installé. Installe d'abord un modèle : Paramètres → Modèles de "
+            "traduction.\nNo model installed. First install one: Settings → Translation models."
+        )
+    if len(languages) == 2:
+        source, target = languages
+    else:
+        source, target = ("en", "fr") if ("en", "fr") in installed else installed[0]
+    probe = LocalEngine(store.packages)
+    if not probe.supports(source, target):
+        return f"Aucun modèle pour / No model for {source} → {target}"
+
+    print(f"Banc d'essai / Benchmark: {source} → {target}, {physical_cores()} cœurs / cores")
+
+    def progress(done: int, total: int) -> None:
+        print(f"  essai / trial {done}/{total}", flush=True)
+
+    results = run_benchmark(
+        lambda threads, beam: LocalEngine(store.packages, threads=threads, beam_size=beam),
+        source,
+        target,
+        progress=progress,
+    )
+    best = recommend(results)
+    engine = LocalEngine(store.packages, threads=best.threads, beam_size=best.beam_size)
+    growth = memory_growth(engine, source, target)
+    advice = recommend(results, growth)
+    lines = ["", "Cœurs  Largeur  Phrases/s  Mémoire (Mo) / Cores  Width  Sentences/s  Memory (MB)"]
+    for result in results:
+        lines.append(
+            f"{result.threads:>5}  {result.beam_size:>7}  {result.sentences_per_second:>9.1f}"
+            f"  {result.memory_mb:>12.0f}"
+        )
+    lines += [
+        "",
+        f"Conseillé / Recommended: {advice.threads} cœur(s) / core(s), "
+        f"largeur / width {advice.beam_size}",
+        f"Mémoire stable / Memory stable: {'oui / yes' if advice.memory_stable else 'NON / NO'} "
+        f"({advice.memory_growth_mb:+.0f} Mo / MB en 3 tours / over 3 rounds)",
+        "Pour appliquer / To apply: Paramètres → Modèles de traduction → Performance",
+    ]
+    report = paths.log_dir / f"banc-essai-{datetime.now():%Y%m%d-%H%M%S}.json"
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.write_text(
+        json.dumps(
+            {
+                "source": source,
+                "target": target,
+                "physical_cores": physical_cores(),
+                "results": [result.as_dict() for result in results],
+                "recommended": advice.__dict__,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    lines.append(f"Rapport / Report: {report}")
+    return "\n".join(lines)
 
 
 def protect_text(text: str) -> str:
@@ -148,6 +247,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.paths:
         print(paths_text(portable=args.portable))
+        return 0
+
+    if args.benchmark is not None:
+        print(benchmark_text(args.benchmark, portable=args.portable))
         return 0
 
     if args.protect is not None:

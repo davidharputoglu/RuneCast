@@ -463,6 +463,38 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
         <translation>Translate</translation>
     </message>
     <message>
+        <source>Performance</source>
+        <translation>Performance</translation>
+    </message>
+    <message>
+        <source>Cœurs utilisés :</source>
+        <translation>Cores used:</translation>
+    </message>
+    <message>
+        <source>Traduction :</source>
+        <translation>Translation:</translation>
+    </message>
+    <message>
+        <source>Mesurer la vitesse…</source>
+        <translation>Measure the speed…</translation>
+    </message>
+    <message>
+        <source>Automatique ({count})</source>
+        <translation>Automatic ({count})</translation>
+    </message>
+    <message>
+        <source>Rapide</source>
+        <translation>Fast</translation>
+    </message>
+    <message>
+        <source>Équilibrée (conseillée)</source>
+        <translation>Balanced (recommended)</translation>
+    </message>
+    <message>
+        <source>Précise (plus lente)</source>
+        <translation>Accurate (slower)</translation>
+    </message>
+    <message>
         <source>Installé</source>
         <translation>Installed</translation>
     </message>
@@ -537,6 +569,32 @@ Copy it to the other PC, then: Settings → Translation models → Import files�
     <message>
         <source>Traduction en cours…</source>
         <translation>Translating…</translation>
+    </message>
+    <message>
+        <source>Mesure de la vitesse…</source>
+        <translation>Measuring the speed…</translation>
+    </message>
+    <message>
+        <source>stable</source>
+        <translation>stable</translation>
+    </message>
+    <message>
+        <source>à surveiller</source>
+        <translation>to watch</translation>
+    </message>
+    <message>
+        <source>Mesure de la vitesse</source>
+        <translation>Speed measure</translation>
+    </message>
+    <message>
+        <source>Réglages conseillés pour ce PC : {threads} cœur(s), traduction « {quality} ».
+Vitesse : {speed} phrases par seconde. Mémoire : {memory} ({stable}).
+
+Ils sont sélectionnés : clique sur « OK » ou « Appliquer » pour les garder.</source>
+        <translation>Recommended settings for this PC: {threads} core(s), “{quality}” translation.
+Speed: {speed} sentences per second. Memory: {memory} ({stable}).
+
+They are selected: click “OK” or “Apply” to keep them.</translation>
     </message>
 </context>
 <context>

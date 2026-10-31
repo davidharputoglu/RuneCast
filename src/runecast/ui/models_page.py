@@ -39,7 +39,11 @@ FR : Page des Paramètres qui gère les modèles de traduction locale (sans
          fichier du modèle dans un dossier (clé USB…), « Importer des
          fichiers… » l'installe sur un PC sans internet ;
        - « Essayer » : traduit une phrase avec les modèles installés, pour
-         vérifier que tout marche, même Wi-Fi coupé.
+         vérifier que tout marche, même Wi-Fi coupé ;
+       - « Performance » : cœurs du processeur utilisés et largeur de
+         recherche (rapide, équilibré, précis), avec un bouton « Mesurer la
+         vitesse… » qui essaie chaque réglage sur ce PC et choisit le meilleur
+         (étape 14).
      Les travaux longs tournent en arrière-plan : la fenêtre ne se fige pas.
 
 EN : Settings page managing the local (offline) translation models: list of
@@ -49,14 +53,16 @@ EN : Settings page managing the local (offline) translation models: list of
      "Delete"; offline pack: "Download for another PC…" saves the model file
      into a folder (USB stick…), "Import files…" installs it on a PC without
      internet; "Try": translates a sentence with the installed models, to
-     check everything works, even with Wi-Fi off. Long jobs run in the
-     background: the window never freezes.
+     check everything works, even with Wi-Fi off; "Performance": processor
+     cores used and search width (fast, balanced, accurate), with a "Measure
+     the speed…" button that tries each setting on this PC and picks the best
+     (step 14). Long jobs run in the background: the window never freezes.
 """
 
 import logging
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QLocale, Qt
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QComboBox,
@@ -76,7 +82,8 @@ from PySide6.QtWidgets import (
 
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings
-from runecast.engines.argos import PIVOT_LANGUAGE, LocalEngine
+from runecast.engines.argos import PIVOT_LANGUAGE, LocalEngine, default_threads
+from runecast.engines.benchmark import memory_growth, physical_cores, recommend, run_benchmark
 from runecast.engines.models import (
     ARCHIVE_SUFFIX,
     CatalogEntry,
@@ -180,6 +187,24 @@ class ModelsPage(SettingsPage):
         try_layout.addLayout(try_row)
         try_layout.addWidget(self.try_result)
 
+        self.performance_box = QGroupBox()
+        self.threads_label = QLabel()
+        self.threads_combo = QComboBox()
+        self.threads_combo.setObjectName("threadsCombo")
+        self.beam_label = QLabel()
+        self.beam_combo = QComboBox()
+        self.beam_combo.setObjectName("beamCombo")
+        self.measure_button = QPushButton()
+        self.measure_button.clicked.connect(self.measure_speed)
+        performance_row = QHBoxLayout(self.performance_box)
+        performance_row.addWidget(self.threads_label)
+        performance_row.addWidget(self.threads_combo)
+        performance_row.addSpacing(12)
+        performance_row.addWidget(self.beam_label)
+        performance_row.addWidget(self.beam_combo)
+        performance_row.addStretch()
+        performance_row.addWidget(self.measure_button)
+
         layout = QVBoxLayout(self)
         layout.addWidget(self.explanation)
         layout.addWidget(self.search_edit)
@@ -187,6 +212,7 @@ class ModelsPage(SettingsPage):
         layout.addLayout(buttons)
         layout.addLayout(progress_row)
         layout.addWidget(self.try_box)
+        layout.addWidget(self.performance_box)
         self.retranslate()
 
     # ------------------------------------------------------------------
@@ -215,6 +241,22 @@ class ModelsPage(SettingsPage):
         self.try_box.setTitle(self.tr("Essayer"))
         self.try_text.setPlaceholderText(self.tr("Phrase à traduire"))
         self.try_button.setText(self.tr("Traduire"))
+        self.performance_box.setTitle(self.tr("Performance"))
+        self.threads_label.setText(self.tr("Cœurs utilisés :"))
+        self.beam_label.setText(self.tr("Traduction :"))
+        self.measure_button.setText(self.tr("Mesurer la vitesse…"))
+        threads, beam = self.threads_combo.currentData(), self.beam_combo.currentData()
+        self.threads_combo.clear()
+        self.threads_combo.addItem(
+            self.tr("Automatique ({count})").format(count=default_threads()), 0
+        )
+        for count in range(1, physical_cores() + 1):
+            self.threads_combo.addItem(str(count), count)
+        self.beam_combo.clear()
+        self.beam_combo.addItem(self.tr("Rapide"), 1)
+        self.beam_combo.addItem(self.tr("Équilibrée (conseillée)"), 2)
+        self.beam_combo.addItem(self.tr("Précise (plus lente)"), 4)
+        self._select_performance(threads if threads is not None else 0, beam or 2)
         self.refresh()
 
     @staticmethod
@@ -300,6 +342,7 @@ class ModelsPage(SettingsPage):
         self.export_button.setEnabled(entry is not None and not busy)
         self.import_button.setEnabled(not busy)
         self.try_button.setEnabled(not busy and self.try_from.count() > 0)
+        self.measure_button.setEnabled(not busy and bool(self.models.installed()))
 
     def _fill_try_languages(self, installed) -> None:
         """FR : langues des modèles installés, pour « Essayer ». EN : languages for "Try"."""
@@ -498,6 +541,79 @@ class ModelsPage(SettingsPage):
             self.try_result.setText,
         )
 
+    def _select_performance(self, threads: int, beam: int) -> None:
+        """FR : affiche des réglages de performance. EN : show performance settings."""
+        index = self.threads_combo.findData(threads)
+        self.threads_combo.setCurrentIndex(max(index, 0))
+        index = self.beam_combo.findData(beam)
+        self.beam_combo.setCurrentIndex(index if index >= 0 else self.beam_combo.findData(2))
+
+    def benchmark_pair(self) -> tuple[str, str] | None:
+        """FR : sens de traduction utilisé pour la mesure (anglais → français si
+             possible, sinon le premier modèle installé).
+        EN : direction used for the measure (English → French if possible,
+             otherwise the first installed model).
+        """
+        installed = sorted(self.models.installed())
+        if not installed:
+            return None
+        return ("en", "fr") if ("en", "fr") in installed else installed[0]
+
+    def measure_speed(self) -> None:
+        """FR : banc d'essai en arrière-plan, puis réglages conseillés choisis.
+
+        EN : background benchmark, then recommended settings selected.
+        """
+        pair = self.benchmark_pair()
+        if pair is None:
+            return
+        source, target = pair
+        packages = self.models.packages
+
+        def work(progress, cancelled):
+            results = run_benchmark(
+                lambda threads, beam: LocalEngine(packages, threads=threads, beam_size=beam),
+                source,
+                target,
+                progress=progress,
+                should_cancel=cancelled,
+            )
+            if cancelled() or not results:
+                return None
+            best = recommend(results)
+            engine = LocalEngine(packages, threads=best.threads, beam_size=best.beam_size)
+            growth = memory_growth(engine, source, target, rounds=2)
+            return results, recommend(results, growth)
+
+        self._start(work, self.tr("Mesure de la vitesse…"), self._show_measure)
+
+    def _show_measure(self, outcome) -> None:
+        """FR : affiche le résultat de la mesure. EN : show the measure's result."""
+        if outcome is None:
+            return
+        results, advice = outcome
+        chosen = next(
+            r for r in results if (r.threads, r.beam_size) == (advice.threads, advice.beam_size)
+        )
+        self._select_performance(advice.threads, advice.beam_size)
+        stable = self.tr("stable") if advice.memory_stable else self.tr("à surveiller")
+        QMessageBox.information(
+            self,
+            self.tr("Mesure de la vitesse"),
+            self.tr(
+                "Réglages conseillés pour ce PC : {threads} cœur(s), traduction "
+                "« {quality} ».\nVitesse : {speed} phrases par seconde. Mémoire : "
+                "{memory} ({stable}).\n\nIls sont sélectionnés : clique sur « OK » "
+                "ou « Appliquer » pour les garder."
+            ).format(
+                threads=advice.threads,
+                quality=self.beam_combo.currentText(),
+                speed=QLocale().toString(chosen.sentences_per_second, "f", 1),
+                memory=format_size(int(chosen.memory_mb * 1024 * 1024)),
+                stable=stable,
+            ),
+        )
+
     # ------------------------------------------------------------------
     # FR : Réglages / EN : Settings
     # ------------------------------------------------------------------
@@ -510,7 +626,12 @@ class ModelsPage(SettingsPage):
         self.refresh()
 
     def load(self, settings: Settings) -> None:
+        self._select_performance(settings.local_threads, settings.local_beam_size)
+        self.engine.configure(settings.local_threads or None, settings.local_beam_size)
         self.refresh()
 
     def store(self, settings: Settings) -> None:
-        """FR : aucun réglage sur cette page. EN : no setting on this page."""
+        """FR : réglages de performance. EN : performance settings."""
+        settings.local_threads = self.threads_combo.currentData()
+        settings.local_beam_size = self.beam_combo.currentData()
+        self.engine.configure(settings.local_threads or None, settings.local_beam_size)

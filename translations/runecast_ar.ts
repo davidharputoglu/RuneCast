@@ -463,6 +463,38 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
         <translation>ترجمة</translation>
     </message>
     <message>
+        <source>Performance</source>
+        <translation>الأداء</translation>
+    </message>
+    <message>
+        <source>Cœurs utilisés :</source>
+        <translation>الأنوية المستخدمة:</translation>
+    </message>
+    <message>
+        <source>Traduction :</source>
+        <translation>الترجمة:</translation>
+    </message>
+    <message>
+        <source>Mesurer la vitesse…</source>
+        <translation>قياس السرعة…</translation>
+    </message>
+    <message>
+        <source>Automatique ({count})</source>
+        <translation>تلقائي ({count})</translation>
+    </message>
+    <message>
+        <source>Rapide</source>
+        <translation>سريعة</translation>
+    </message>
+    <message>
+        <source>Équilibrée (conseillée)</source>
+        <translation>متوازنة (موصى بها)</translation>
+    </message>
+    <message>
+        <source>Précise (plus lente)</source>
+        <translation>دقيقة (أبطأ)</translation>
+    </message>
+    <message>
         <source>Installé</source>
         <translation>مثبَّت</translation>
     </message>
@@ -537,6 +569,32 @@ Copie-le sur l&apos;autre PC, puis : Paramètres → Modèles de traduction → 
     <message>
         <source>Traduction en cours…</source>
         <translation>جارٍ الترجمة…</translation>
+    </message>
+    <message>
+        <source>Mesure de la vitesse…</source>
+        <translation>جارٍ قياس السرعة…</translation>
+    </message>
+    <message>
+        <source>stable</source>
+        <translation>مستقرة</translation>
+    </message>
+    <message>
+        <source>à surveiller</source>
+        <translation>تحتاج إلى مراقبة</translation>
+    </message>
+    <message>
+        <source>Mesure de la vitesse</source>
+        <translation>قياس السرعة</translation>
+    </message>
+    <message>
+        <source>Réglages conseillés pour ce PC : {threads} cœur(s), traduction « {quality} ».
+Vitesse : {speed} phrases par seconde. Mémoire : {memory} ({stable}).
+
+Ils sont sélectionnés : clique sur « OK » ou « Appliquer » pour les garder.</source>
+        <translation>الإعدادات الموصى بها لهذا الحاسوب: {threads} نواة، ترجمة «{quality}».
+السرعة: {speed} جملة في الثانية. الذاكرة: {memory} ({stable}).
+
+لقد حُدِّدت: انقر على «حسنًا» أو «تطبيق» للاحتفاظ بها.</translation>
     </message>
 </context>
 <context>

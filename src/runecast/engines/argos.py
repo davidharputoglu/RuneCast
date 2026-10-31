@@ -322,3 +322,14 @@ class LocalEngine(Engine):
         """FR : libère la mémoire des modèles chargés. EN : free the loaded models' memory."""
         with self._lock:
             self._loaded.clear()
+
+    def configure(self, threads: int | None, beam_size: int) -> None:
+        """FR : change les réglages (cœurs, largeur de recherche) ; les modèles
+             chargés sont libérés pour être rechargés avec ces réglages.
+        EN : change the settings (cores, search width); loaded models are
+             freed to be reloaded with these settings.
+        """
+        new_threads = threads or default_threads()
+        if (new_threads, beam_size) != (self.threads, self.beam_size):
+            self.unload()
+            self.threads, self.beam_size = new_threads, beam_size

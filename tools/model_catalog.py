@@ -40,7 +40,10 @@ FR : Tient à jour src/runecast/resources/models/argos-catalog.json, la liste
            automatiquement par GitHub (fichier .github/workflows/models.yml) :
            le résultat est publié sous forme de « notices » GitHub ;
        uv run python tools/model_catalog.py apply resultats.json
-           ajoute les tailles et empreintes vérifiées au catalogue.
+           ajoute les tailles et empreintes vérifiées au catalogue ;
+       uv run python tools/model_catalog.py benchmark en fr
+           télécharge un modèle et lance le banc d'essai de l'étape 14
+           (vitesse et mémoire) ; résultat publié en « notice » GitHub.
 
 EN : Keeps src/runecast/resources/models/argos-catalog.json up to date, the
      list of Argos models RuneCast offers for download. "build" reads the
@@ -188,6 +191,33 @@ def apply(results_file: Path) -> None:
     write_catalog(catalog)
 
 
+def benchmark(source: str, target: str) -> None:
+    """FR : banc d'essai sur la machine de GitHub. EN : benchmark on GitHub's machine."""
+    from runecast.engines.argos import LocalEngine
+    from runecast.engines.benchmark import memory_growth, physical_cores, recommend, run_benchmark
+    from runecast.engines.models import ModelStore, load_catalog
+
+    entry = next(e for e in load_catalog() if (e.from_code, e.to_code) == (source, target))
+    with tempfile.TemporaryDirectory() as temporary:
+        store = ModelStore(Path(temporary) / "installed", Path(temporary) / "downloads")
+        store.download_and_install(entry)
+        results = run_benchmark(
+            lambda threads, beam: LocalEngine(store.packages, threads=threads, beam_size=beam),
+            source,
+            target,
+        )
+        best = recommend(results)
+        engine = LocalEngine(store.packages, threads=best.threads, beam_size=best.beam_size)
+        growth = memory_growth(engine, source, target)
+    report = {
+        "pair": f"{source}-{target}",
+        "physical_cores": physical_cores(),
+        "results": [result.as_dict() for result in results],
+        "recommended": recommend(results, growth).__dict__,
+    }
+    print(f"::notice title=benchmark::{json.dumps(report)}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     commands = parser.add_subparsers(dest="command", required=True)
@@ -198,11 +228,16 @@ def main(argv: list[str] | None = None) -> int:
     check_parser.add_argument("--output", type=Path)
     apply_parser = commands.add_parser("apply")
     apply_parser.add_argument("results", type=Path)
+    benchmark_parser = commands.add_parser("benchmark")
+    benchmark_parser.add_argument("source")
+    benchmark_parser.add_argument("target")
     args = parser.parse_args(argv)
     if args.command == "build":
         build()
     elif args.command == "check":
         return check(args.limit, args.workers, args.output)
+    elif args.command == "benchmark":
+        benchmark(args.source, args.target)
     else:
         apply(args.results)
     return 0
