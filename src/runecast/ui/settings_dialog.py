@@ -75,6 +75,7 @@ from runecast.ui.engines_page import OnlineEnginesPage
 from runecast.ui.i18n import format_size, keep_left_to_right
 from runecast.ui.models_page import ModelsPage
 from runecast.ui.settings_base import SettingsPage
+from runecast.ui.translation_page import TranslationPage
 
 
 class GeneralPage(SettingsPage):
@@ -402,8 +403,10 @@ class SettingsDialog(QDialog):
         self.cache_page = CachePage(paths)
         self.models_page = ModelsPage(paths)
         self.engines_page = OnlineEnginesPage(paths)
+        self.translation_page = TranslationPage(paths)
         self.pages: list[SettingsPage] = [
             self.general_page,
+            self.translation_page,
             self.engines_page,
             self.models_page,
             self.cache_page,

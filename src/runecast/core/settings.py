@@ -130,6 +130,11 @@ class Settings:
     )
     engines_enabled: list[str] = field(default_factory=lambda: ["yandex_free", "google_free"])
     engine_options: dict[str, dict[str, str]] = field(default_factory=dict)
+    # FR : « online » (moteurs en ligne, avec repli vers le local) ou « local »
+    #      (aucune phrase envoyée sur internet) (étape 17).
+    # EN : "online" (online engines, falling back to local) or "local" (no
+    #      sentence sent over the internet) (step 17).
+    translation_mode: str = "online"
     # FR : réglages inconnus (écrits par une version plus récente) : conservés tels quels.
     # EN : unknown settings (written by a newer version): kept as they are.
     extra: dict[str, Any] = field(default_factory=dict)

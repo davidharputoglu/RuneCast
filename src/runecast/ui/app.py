@@ -57,6 +57,8 @@ from runecast.core.logs import (
 from runecast.core.paths import resolve_paths
 from runecast.core.settings import load_settings, save_settings
 from runecast.core.themes import DEFAULT_THEME, all_themes, builtin_themes, find_theme
+from runecast.engines.chain import MODE_LOCAL
+from runecast.engines.online import allow_online_translation
 from runecast.ui.fonts import load_fonts
 from runecast.ui.i18n import LanguageManager, keep_left_to_right
 from runecast.ui.icons import app_icon
@@ -126,6 +128,9 @@ def run(argv: list[str] | None = None, portable: bool = False) -> int:
     log_startup(paths)
     settings = load_settings(paths.settings_file)
     set_detailed_log(settings.detailed_log)
+    # FR : mode local : aucune connexion vers un service de traduction (étape 17).
+    # EN : local mode: no connection to a translation service (step 17).
+    allow_online_translation(settings.translation_mode != MODE_LOCAL)
     # FR : on enregistre tout de suite : le fichier existe dès le 1er lancement.
     # EN : save right away so the file exists from the first launch.
     save_settings(settings, paths.settings_file)

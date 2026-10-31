@@ -133,8 +133,9 @@ def test_settings_action_opens_the_window(window, monkeypatch) -> None:
     window.settings_action.trigger()
     assert len(opened) == 1
     assert opened[0].windowTitle() == "Paramètres"
-    assert [opened[0].page_list.item(i).text() for i in range(6)] == [
+    assert [opened[0].page_list.item(i).text() for i in range(7)] == [
         "Général",
+        "Traduction",
         "Moteurs en ligne",
         "Modèles de traduction",
         "Cache des traductions",

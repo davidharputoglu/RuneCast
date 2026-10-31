@@ -69,6 +69,8 @@ from runecast.core.logs import set_detailed_log
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings, load_settings, save_settings
 from runecast.core.themes import DEFAULT_THEME, Theme, all_themes, find_theme
+from runecast.engines.chain import MODE_LOCAL
+from runecast.engines.online import allow_online_translation
 from runecast.ui.about_dialog import AboutDialog
 from runecast.ui.folders_dialog import FoldersDialog, open_folder
 from runecast.ui.i18n import LanguageManager, keep_left_to_right
@@ -423,6 +425,9 @@ class MainWindow(QMainWindow):
         self.settings.engine_order = new.engine_order
         self.settings.engines_enabled = new.engines_enabled
         self.settings.engine_options = new.engine_options
+        if new.translation_mode != self.settings.translation_mode:
+            self.settings.translation_mode = new.translation_mode
+            allow_online_translation(new.translation_mode != MODE_LOCAL)
         if new.detailed_log != self.settings.detailed_log:
             self.settings.detailed_log = new.detailed_log
             set_detailed_log(new.detailed_log)
@@ -521,6 +526,7 @@ class MainWindow(QMainWindow):
         dialog.cache_page.show_paths(self.paths)
         dialog.models_page.show_paths(self.paths)
         dialog.engines_page.show_paths(self.paths)
+        dialog.translation_page.show_paths(self.paths)
         dialog.load(self.settings)
 
     def show_theme_editor(self, parent: QWidget | None = None) -> None:

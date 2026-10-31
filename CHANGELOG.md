@@ -12,6 +12,17 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.14 (étape 17 / step 17)
+
+- Chaîne de traduction (`engines/chain.py`) : protection des balises, cache, moteurs en ligne cochés dans l'ordre, puis modèles Argos, puis NLLB-200. Une ligne qui perd une balise est marquée « à vérifier » et n'entre pas dans le cache.
+  *Translation chain: tag protection, cache, checked online engines in order, then Argos models, then NLLB-200. A line losing a tag is marked "to check" and does not enter the cache.*
+- Repli automatique : un moteur qui ne répond plus (internet coupé, limite atteinte, clé refusée, service en panne) est mis de côté pour la suite du travail et le suivant prend le relais. Le travail avance par paquets de 20 lignes : un Wi-Fi coupé en pleine traduction ne fait perdre aucune ligne.
+  *Automatic fallback: an engine that stops answering is set aside for the rest of the job and the next one takes over. Work goes in chunks of 20 lines: a Wi-Fi cut mid-translation loses no line.*
+- Mode 100 % local : les moteurs en ligne ne sont même pas créés, et un verrou bloque toute connexion vers un service de traduction (les mises à jour et le téléchargement des modèles restent possibles).
+  *100 % local mode: online engines are not even created, and a lock blocks any connection to a translation service (updates and model downloads remain possible).*
+- Paramètres → Traduction : choix du mode, ordre réellement utilisé, et essai de la chaîne (une phrase par ligne) montrant le moteur de chaque ligne et les relais.
+  *Settings → Translation: mode choice, order really used, and chain test (one sentence per line) showing each line's engine and the hand-overs.*
+
 ## 0.1.13 (étape 16 / step 16)
 
 - Moteurs de traduction en ligne, tous avec le même contrat que le moteur local : Yandex gratuit (méthode du widget de LocoAI, non officielle), Yandex Cloud (clé officielle, passe avant le gratuit), Google gratuit (non officiel), DeepL (clé Free « :fx » ou Pro), Google Cloud, Microsoft Translator et LibreTranslate (serveur au choix).

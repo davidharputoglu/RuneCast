@@ -1000,6 +1000,105 @@ Ils sont sélectionnés : clique sur « OK » ou « Appliquer » pour les garder
     </message>
 </context>
 <context>
+    <name>TranslationPage</name>
+    <message>
+        <source>Traduction</source>
+        <translation>الترجمة</translation>
+    </message>
+    <message>
+        <source>Mode de traduction</source>
+        <translation>وضع الترجمة</translation>
+    </message>
+    <message>
+        <source>En ligne : moteurs en ligne, avec repli automatique vers le local</source>
+        <translation>عبر الإنترنت: محركات عبر الإنترنت، مع رجوع تلقائي إلى الترجمة المحلية</translation>
+    </message>
+    <message>
+        <source>100 % local : aucune phrase n&apos;est envoyée sur internet</source>
+        <translation>محلي 100 %: لا تُرسَل أي جملة عبر الإنترنت</translation>
+    </message>
+    <message>
+        <source>En mode local, internet ne sert plus qu&apos;aux mises à jour de RuneCast et au téléchargement des modèles. Installe d&apos;abord les modèles de tes langues (page « Modèles de traduction »).</source>
+        <translation>في الوضع المحلي، لا يُستخدم الإنترنت إلا لتحديثات RuneCast وتنزيل النماذج. ثبّت أولًا نماذج لغاتك (صفحة «نماذج الترجمة»).</translation>
+    </message>
+    <message>
+        <source>Essai (une phrase par ligne)</source>
+        <translation>تجربة (جملة واحدة في كل سطر)</translation>
+    </message>
+    <message>
+        <source>Exemple</source>
+        <translation>مثال</translation>
+    </message>
+    <message>
+        <source>Traduire</source>
+        <translation>ترجمة</translation>
+    </message>
+    <message>
+        <source>Arrêter</source>
+        <translation>إيقاف</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>الأصل</translation>
+    </message>
+    <message>
+        <source>Moteur</source>
+        <translation>المحرك</translation>
+    </message>
+    <message>
+        <source>Local (Argos)</source>
+        <translation>محلي (Argos)</translation>
+    </message>
+    <message>
+        <source>Local (NLLB-200)</source>
+        <translation>محلي (NLLB-200)</translation>
+    </message>
+    <message>
+        <source>Cache</source>
+        <translation>الذاكرة المؤقتة</translation>
+    </message>
+    <message>
+        <source>Ordre utilisé : {order}</source>
+        <translation>الترتيب المستخدم: {order}</translation>
+    </message>
+    <message>
+        <source>Traduction en cours…</source>
+        <translation>جارٍ الترجمة…</translation>
+    </message>
+    <message>
+        <source>Échec : {reason}</source>
+        <translation>فشل: {reason}</translation>
+    </message>
+    <message>
+        <source>À vérifier : {text}</source>
+        <translation>للمراجعة: {text}</translation>
+    </message>
+    <message>
+        <source>{count} ligne(s) traduite(s) — {details}</source>
+        <translation>عدد الأسطر المترجمة: {count} — {details}</translation>
+    </message>
+    <message>
+        <source>pas de connexion à internet</source>
+        <translation>لا يوجد اتصال بالإنترنت</translation>
+    </message>
+    <message>
+        <source>clé absente ou refusée</source>
+        <translation>المفتاح مفقود أو مرفوض</translation>
+    </message>
+    <message>
+        <source>limite atteinte</source>
+        <translation>تم بلوغ الحد</translation>
+    </message>
+    <message>
+        <source>service en panne</source>
+        <translation>الخدمة معطّلة</translation>
+    </message>
+    <message>
+        <source>{engine} mis de côté ({reason}) : relais pris par le suivant.</source>
+        <translation>تم استبعاد {engine} ({reason}): وتولّى المحرك التالي المهمة.</translation>
+    </message>
+</context>
+<context>
     <name>WindowPage</name>
     <message>
         <source>Fenêtre</source>

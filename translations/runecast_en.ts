@@ -1000,6 +1000,105 @@ They are selected: click “OK” or “Apply” to keep them.</translation>
     </message>
 </context>
 <context>
+    <name>TranslationPage</name>
+    <message>
+        <source>Traduction</source>
+        <translation>Translation</translation>
+    </message>
+    <message>
+        <source>Mode de traduction</source>
+        <translation>Translation mode</translation>
+    </message>
+    <message>
+        <source>En ligne : moteurs en ligne, avec repli automatique vers le local</source>
+        <translation>Online: online engines, with automatic fallback to local</translation>
+    </message>
+    <message>
+        <source>100 % local : aucune phrase n&apos;est envoyée sur internet</source>
+        <translation>100 % local: no sentence is sent over the internet</translation>
+    </message>
+    <message>
+        <source>En mode local, internet ne sert plus qu&apos;aux mises à jour de RuneCast et au téléchargement des modèles. Installe d&apos;abord les modèles de tes langues (page « Modèles de traduction »).</source>
+        <translation>In local mode, the internet is only used for RuneCast updates and model downloads. First install the models for your languages (“Translation models” page).</translation>
+    </message>
+    <message>
+        <source>Essai (une phrase par ligne)</source>
+        <translation>Test (one sentence per line)</translation>
+    </message>
+    <message>
+        <source>Exemple</source>
+        <translation>Example</translation>
+    </message>
+    <message>
+        <source>Traduire</source>
+        <translation>Translate</translation>
+    </message>
+    <message>
+        <source>Arrêter</source>
+        <translation>Stop</translation>
+    </message>
+    <message>
+        <source>Original</source>
+        <translation>Original</translation>
+    </message>
+    <message>
+        <source>Moteur</source>
+        <translation>Engine</translation>
+    </message>
+    <message>
+        <source>Local (Argos)</source>
+        <translation>Local (Argos)</translation>
+    </message>
+    <message>
+        <source>Local (NLLB-200)</source>
+        <translation>Local (NLLB-200)</translation>
+    </message>
+    <message>
+        <source>Cache</source>
+        <translation>Cache</translation>
+    </message>
+    <message>
+        <source>Ordre utilisé : {order}</source>
+        <translation>Order used: {order}</translation>
+    </message>
+    <message>
+        <source>Traduction en cours…</source>
+        <translation>Translating…</translation>
+    </message>
+    <message>
+        <source>Échec : {reason}</source>
+        <translation>Failed: {reason}</translation>
+    </message>
+    <message>
+        <source>À vérifier : {text}</source>
+        <translation>To check: {text}</translation>
+    </message>
+    <message>
+        <source>{count} ligne(s) traduite(s) — {details}</source>
+        <translation>{count} line(s) translated — {details}</translation>
+    </message>
+    <message>
+        <source>pas de connexion à internet</source>
+        <translation>no internet connection</translation>
+    </message>
+    <message>
+        <source>clé absente ou refusée</source>
+        <translation>key missing or refused</translation>
+    </message>
+    <message>
+        <source>limite atteinte</source>
+        <translation>limit reached</translation>
+    </message>
+    <message>
+        <source>service en panne</source>
+        <translation>service down</translation>
+    </message>
+    <message>
+        <source>{engine} mis de côté ({reason}) : relais pris par le suivant.</source>
+        <translation>{engine} set aside ({reason}): the next one took over.</translation>
+    </message>
+</context>
+<context>
     <name>WindowPage</name>
     <message>
         <source>Fenêtre</source>

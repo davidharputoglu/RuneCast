@@ -140,3 +140,12 @@ def memory_keyring(monkeypatch: pytest.MonkeyPatch) -> MemoryKeyring:
     fake = MemoryKeyring()
     monkeypatch.setattr(secrets, "_system_keyring", lambda: fake)
     return fake
+
+
+@pytest.fixture(autouse=True)
+def online_translation_allowed():
+    """FR : rouvre le verrou du mode local après chaque test. EN : reopen the local-mode lock."""
+    yield
+    from runecast.engines.online import allow_online_translation
+
+    allow_online_translation(True)

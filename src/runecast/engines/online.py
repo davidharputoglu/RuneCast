@@ -87,6 +87,29 @@ USER_AGENT = f"RuneCast/{about.APP_VERSION} (+{about.REPOSITORY_URL})"
 _XML_MARKER = re.compile(r'<x id="\d+"/>')
 
 
+class _NetworkLock:
+    """FR : verrou du mode local. EN : local mode lock."""
+
+    allowed = True
+
+
+# FR : En mode local, ce verrou est fermé : aucun moteur en ligne ne peut se
+#      connecter, même par erreur. EN : In local mode this lock is closed: no
+#      online engine can connect, even by mistake.
+NETWORK = _NetworkLock()
+
+
+def allow_online_translation(allowed: bool) -> None:
+    """FR : ouvre ou ferme le verrou du mode local. EN : open or close the local mode lock."""
+    if NETWORK.allowed != allowed:
+        logger.info(
+            "Traduction en ligne %s / Online translation %s",
+            "autorisée" if allowed else "bloquée (mode local)",
+            "allowed" if allowed else "blocked (local mode)",
+        )
+    NETWORK.allowed = allowed
+
+
 class OnlineError(EngineUnavailable):
     """FR : moteur en ligne indisponible, avec la raison. EN : online engine unavailable."""
 
@@ -192,6 +215,11 @@ class OnlineEngine(Engine):
         """
         import httpx
 
+        if not NETWORK.allowed:
+            raise OnlineError(
+                REASON_OFFLINE,
+                f"{self.info.name} : mode local, aucune connexion / local mode, no connection",
+            )
         try:
             response = self.client().request(method, url, **options)
         except (httpx.ConnectError, httpx.ConnectTimeout, httpx.ProxyError) as error:
