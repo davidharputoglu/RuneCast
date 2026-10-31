@@ -57,10 +57,11 @@ import json
 import sys
 import tempfile
 import urllib.request
+import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import UTC, datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parent.parent
 CATALOG = ROOT / "src" / "runecast" / "resources" / "models" / "argos-catalog.json"
@@ -107,6 +108,7 @@ def build() -> None:
                 "url": url,
                 "size": previous.get("size"),
                 "sha256": previous.get("sha256"),
+                "tokenizer": previous.get("tokenizer"),
             }
         )
     write_catalog(
@@ -125,7 +127,7 @@ def check_one(item: dict, work: Path) -> dict:
     from runecast.engines.argos import LocalEngine
     from runecast.engines.models import ModelStore, file_sha256, load_catalog
 
-    entry = next(e for e in load_catalog() if e.url == item["url"])
+    entry = next(e for e in load_catalog(include_unsupported=True) if e.url == item["url"])
     folder = work / item["code"]
     store = ModelStore(folder / "installed", folder / "downloads")
     result = {"url": item["url"], "ok": False}
@@ -133,6 +135,15 @@ def check_one(item: dict, work: Path) -> dict:
         archive = store.download(replace(entry, sha256=None))
         result["size"] = archive.stat().st_size
         result["sha256"] = file_sha256(archive)
+        with zipfile.ZipFile(archive) as content:
+            names = [PurePosixPath(name).name for name in content.namelist()]
+        result["tokenizer"] = (
+            "sentencepiece"
+            if "sentencepiece.model" in names
+            else "bpe"
+            if "bpe.model" in names
+            else "unknown"
+        )
         store.install_archive(archive)
         archive.unlink()
         engine = LocalEngine(store.packages, threads=1)
@@ -168,9 +179,12 @@ def apply(results_file: Path) -> None:
     catalog = read_catalog()
     for item in catalog["packages"]:
         result = results.get(item["url"])
-        if result and result.get("ok"):
+        if result and result.get("sha256"):
             item["size"] = result["size"]
             item["sha256"] = result["sha256"]
+            item["tokenizer"] = result.get("tokenizer") or (
+                "sentencepiece" if result.get("ok") else "bpe"
+            )
     write_catalog(catalog)
 
 

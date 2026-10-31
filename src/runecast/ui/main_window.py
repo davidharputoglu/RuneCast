@@ -503,6 +503,7 @@ class MainWindow(QMainWindow):
         self.show_folders(parent=dialog)
         dialog.folders_page.show_paths(self.paths)
         dialog.cache_page.show_paths(self.paths)
+        dialog.models_page.show_paths(self.paths)
         dialog.load(self.settings)
 
     def show_theme_editor(self, parent: QWidget | None = None) -> None:

@@ -19,7 +19,8 @@ Depuis le 31 octobre 2026, à ta demande, j'enchaîne les étapes sans attendre 
 | 9 | Éditeur de thèmes personnels (créer, enregistrer, importer, exporter, supprimer) ; cases à cocher lisibles | 0.1.6 | ✅ | ⏳ | ⏳ | `3428597` |
 | 10 | Fenêtre principale complète (Paramètres, plein écran, journal, signaler un problème) ; fenêtre « Paramètres » | 0.1.7 | ✅ | ⏳ | ⏳ | `b97c466` |
 | 11 | Protection des balises et variables Ren'Py (masquage, restauration, contrôle), environ 190 cas de test ; démonstration `runecast --protect` | 0.1.8 | ✅ | ⏳ | ⏳ | `63e18cb` |
-| 12 | Cache et historique des traductions (SQLite) ; page « Cache des traductions » dans les Paramètres | 0.1.9 | 🔄 | ⏳ | ⏳ | — |
+| 12 | Cache et historique des traductions (SQLite) ; page « Cache des traductions » dans les Paramètres | 0.1.9 | ✅ | ⏳ | ⏳ | `27011fd` |
+| 13 | Moteur local (modèles Argos avec CTranslate2) et gestionnaire de modèles : catalogue vérifié, téléchargement avec reprise, empreintes SHA-256, suppression, pack hors-ligne, « Essayer » | 0.1.10 | 🔄 | ⏳ | ⏳ | — |
 
 Numéros de version : les deux premiers chiffres (« 0.1 ») sont décidés par David ; le dernier augmente à chaque étape validée ou correctif. Les étapes 5 à 8 avaient été numérotées 0.2.x par erreur et ont été corrigées (voir CHANGELOG.md).
 
@@ -63,6 +64,7 @@ Résultat attendu :
 - **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
 - **Étape 3** : `xdg-open` ouvre l'icône 256 px, identique à celle de Windows.
 - **Toutes les étapes** : `uv run pytest` se termine par « passed », sans « failed ».
+- **Étape 13** : Fichier → Paramètres… → Modèles de traduction. Tape « Français » dans la recherche, choisis « English → Français », clique sur « Télécharger et installer » (environ 107 Mo, la barre de progression avance). Ensuite, **coupe le Wi-Fi**, écris « Hello, how are you? » dans « Essayer », clique sur « Traduire » : la traduction française s'affiche. Rallume le Wi-Fi.
 - **Étape 12** : Fichier → Paramètres… → Cache des traductions : la page affiche « Phrases en mémoire : 0 » (le cache se remplira avec les premières traductions, à partir de l'étape 13). Le test « une phrase identique n'est pas retraduite » est fait automatiquement par `uv run pytest`.
 - **Étape 11** : `uv run runecast --protect "{b}Bonjour{/b} [player] !"` affiche `[0]Bonjour[1] [2] !`, la liste des éléments protégés et « Contrôle du retour : OK ».
 - **Étape 10** : Fichier → Paramètres… (ou Ctrl+virgule) ouvre la fenêtre « Paramètres » ; changer le thème puis « Appliquer » le change aussitôt ; « Annuler » ne change rien ; Affichage → Plein écran (F11) ; Aide → Ouvrir le dossier du journal ouvre le dossier ; Aide → Signaler un problème… ouvre la page GitHub.

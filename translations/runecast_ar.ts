@@ -405,6 +405,141 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     </message>
 </context>
 <context>
+    <name>ModelsPage</name>
+    <message>
+        <source>Modèles de traduction</source>
+        <translation>نماذج الترجمة</translation>
+    </message>
+    <message>
+        <source>Les modèles traduisent sur ce PC, sans internet. Chacun traduit dans un seul sens. S&apos;il n&apos;y a pas de modèle direct, RuneCast passe par l&apos;anglais : par exemple Français → English, puis English → Türkçe.</source>
+        <translation>تترجم النماذج على هذا الحاسوب دون إنترنت. يترجم كل نموذج في اتجاه واحد فقط. وإن لم يوجد نموذج مباشر، يمرّ RuneCast عبر الإنجليزية: مثلًا Français → English، ثم English → Türkçe.</translation>
+    </message>
+    <message>
+        <source>Rechercher une langue…</source>
+        <translation>البحث عن لغة…</translation>
+    </message>
+    <message>
+        <source>Sens de traduction</source>
+        <translation>اتجاه الترجمة</translation>
+    </message>
+    <message>
+        <source>Taille</source>
+        <translation>الحجم</translation>
+    </message>
+    <message>
+        <source>État</source>
+        <translation>الحالة</translation>
+    </message>
+    <message>
+        <source>Télécharger et installer</source>
+        <translation>تنزيل وتثبيت</translation>
+    </message>
+    <message>
+        <source>Supprimer</source>
+        <translation>حذف</translation>
+    </message>
+    <message>
+        <source>Télécharger pour un autre PC…</source>
+        <translation>تنزيل لحاسوب آخر…</translation>
+    </message>
+    <message>
+        <source>Importer des fichiers…</source>
+        <translation>استيراد ملفات…</translation>
+    </message>
+    <message>
+        <source>Annuler</source>
+        <translation>إلغاء</translation>
+    </message>
+    <message>
+        <source>Essayer</source>
+        <translation>تجربة</translation>
+    </message>
+    <message>
+        <source>Phrase à traduire</source>
+        <translation>جملة للترجمة</translation>
+    </message>
+    <message>
+        <source>Traduire</source>
+        <translation>ترجمة</translation>
+    </message>
+    <message>
+        <source>Installé</source>
+        <translation>مثبَّت</translation>
+    </message>
+    <message>
+        <source>Installe d&apos;abord un modèle.</source>
+        <translation>ثبّت نموذجًا أولًا.</translation>
+    </message>
+    <message>
+        <source>Le fichier téléchargé est abîmé ou a été modifié : il a été refusé. Réessaie plus tard.</source>
+        <translation>الملف الذي تم تنزيله تالف أو معدَّل: لقد رُفض. أعد المحاولة لاحقًا.</translation>
+    </message>
+    <message>
+        <source>L&apos;opération a échoué :
+{details}</source>
+        <translation>فشلت العملية:
+{details}</translation>
+    </message>
+    <message>
+        <source>Téléchargement : {model}</source>
+        <translation>جارٍ التنزيل: {model}</translation>
+    </message>
+    <message>
+        <source>Supprimer le modèle ?</source>
+        <translation>حذف النموذج؟</translation>
+    </message>
+    <message>
+        <source>Le modèle « {model} » sera supprimé de ce PC. Il pourra être téléchargé de nouveau. Continuer ?</source>
+        <translation>سيُحذف النموذج «{model}» من هذا الحاسوب. ويمكن تنزيله من جديد. هل تريد المتابعة؟</translation>
+    </message>
+    <message>
+        <source>Dossier où enregistrer le modèle (clé USB…)</source>
+        <translation>المجلد الذي سيُحفظ فيه النموذج (ذاكرة USB…)</translation>
+    </message>
+    <message>
+        <source>Modèle enregistré</source>
+        <translation>تم حفظ النموذج</translation>
+    </message>
+    <message>
+        <source>Fichier enregistré :
+{file}
+
+Copie-le sur l&apos;autre PC, puis : Paramètres → Modèles de traduction → Importer des fichiers…</source>
+        <translation>تم حفظ الملف:
+{file}
+
+انسخه إلى الحاسوب الآخر، ثم: الإعدادات ← نماذج الترجمة ← استيراد ملفات…</translation>
+    </message>
+    <message>
+        <source>Importer des modèles</source>
+        <translation>استيراد نماذج</translation>
+    </message>
+    <message>
+        <source>Modèles Argos (*{suffix})</source>
+        <translation>نماذج Argos (*{suffix})</translation>
+    </message>
+    <message>
+        <source>Installation…</source>
+        <translation>جارٍ التثبيت…</translation>
+    </message>
+    <message>
+        <source>Modèles importés</source>
+        <translation>تم استيراد النماذج</translation>
+    </message>
+    <message>
+        <source>{count} modèle(s) installé(s).</source>
+        <translation>عدد النماذج المثبَّتة: {count}.</translation>
+    </message>
+    <message>
+        <source>Aucun modèle installé pour {direction}.</source>
+        <translation>لا يوجد نموذج مثبَّت لـ {direction}.</translation>
+    </message>
+    <message>
+        <source>Traduction en cours…</source>
+        <translation>جارٍ الترجمة…</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <source>Paramètres</source>

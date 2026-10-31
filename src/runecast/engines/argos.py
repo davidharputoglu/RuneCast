@@ -154,6 +154,21 @@ def default_threads() -> int:
     return max(1, min(4, (os.cpu_count() or 2) // 2))
 
 
+def detokenize(pieces: Sequence[str]) -> str:
+    """Recolle les morceaux traduits / Join the translated pieces.
+
+    FR : Le modèle renvoie des morceaux où « ▁ » marque un début de mot :
+         ["▁Bonjour", ",", "▁comment"] → « Bonjour, comment ». On recolle à
+         la main (comme Argos) : le découpeur de la langue d'origine ne
+         connaît pas forcément les morceaux de la langue traduite.
+    EN : The model returns pieces where "▁" marks the start of a word:
+         ["▁Bonjour", ",", "▁comment"] → "Bonjour, comment". They are joined
+         by hand (as Argos does): the source language's splitter does not
+         necessarily know the translated language's pieces.
+    """
+    return "".join(pieces).replace("▁", " ").strip()
+
+
 def split_sentences(text: str) -> list[str]:
     """FR : découpe un texte en phrases. EN : split a text into sentences."""
     parts = [part for part in _SENTENCE_END.split(text.strip()) if part]
@@ -211,7 +226,7 @@ class ArgosTranslator:
                 hypothesis = list(result.hypotheses[0])
                 if prefix and hypothesis[:1] == [prefix]:
                     hypothesis = hypothesis[1:]
-                translated.append(self.tokenizer.decode(hypothesis))
+                translated.append(detokenize(hypothesis))
         joiner = "" if self.package.to_code in NO_SPACE_LANGUAGES else " "
         return [
             joiner.join(translated[start : start + count]) if count else text

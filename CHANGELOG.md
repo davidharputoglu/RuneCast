@@ -12,6 +12,21 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.10 (étape 13 / step 13)
+
+- Moteur de traduction locale : les modèles libres d'Argos Translate tournent sur le PC, sans internet et sans GPU, grâce à CTranslate2 (format compact « int8 ») et SentencePiece. S'il n'y a pas de modèle direct, RuneCast passe par l'anglais (Français → English → Türkçe). Au plus deux modèles en mémoire, pour rester léger sur 8 Go.
+  *Local translation engine: Argos Translate's free models run on the PC, without internet and without GPU, thanks to CTranslate2 (compact "int8" format) and SentencePiece. When there is no direct model, RuneCast goes through English. At most two models in memory, to stay light on 8 GB.*
+- Contrat commun des moteurs (`engines/base.py`) : les moteurs en ligne de l'étape 16 suivront le même.
+  *Common engine contract (`engines/base.py`): the online engines of step 16 will follow the same one.*
+- Catalogue de 85 modèles (`resources/models/argos-catalog.json`), chacun avec sa taille et son empreinte SHA-256. Ces empreintes ont été mesurées par GitHub, qui a téléchargé chaque modèle et lui a fait traduire une phrase avec le moteur de RuneCast (nouveau test automatique « Modèles », relancé quand le catalogue ou le moteur change).
+  *Catalogue of 85 models, each with its size and SHA-256 fingerprint. These fingerprints were measured by GitHub, which downloaded each model and made it translate a sentence with RuneCast's engine (new "Models" automatic check, re-run when the catalogue or the engine changes).*
+- Paramètres → Modèles de traduction : recherche par langue (noms écrits dans chaque langue), téléchargement avec barre de progression, annulation et reprise après coupure, vérification de l'empreinte, installation sûre (archive vérifiée, ancien modèle remplacé seulement si tout réussit), suppression, pack hors-ligne (« Télécharger pour un autre PC… » puis « Importer des fichiers… »), et « Essayer » pour traduire une phrase.
+  *Settings → Translation models: search by language, download with progress bar, cancel and resume, fingerprint check, safe installation, deletion, offline pack, and "Try" to translate a sentence.*
+- Limite connue : 15 modèles Argos utilisent un autre découpeur de texte (« BPE » : tchèque, danois, hongrois, indonésien, lituanien, polonais, et espagnol, finnois, roumain, ukrainien vers l'anglais). Les lire demanderait 5 bibliothèques de plus : ils ne sont pas proposés pour l'instant (les moteurs en ligne de l'étape 16 couvrent ces langues).
+  *Known limit: 15 Argos models use another text splitter ("BPE"). Reading them would need 5 more libraries: they are not offered for now (the online engines of step 16 cover these languages).*
+- Nouvelles dépendances : ctranslate2 (MIT, avec numpy et PyYAML), sentencepiece (Apache 2.0), httpx (BSD).
+  *New dependencies: ctranslate2 (MIT, with numpy and PyYAML), sentencepiece (Apache 2.0), httpx (BSD).*
+
 ## 0.1.9 (étape 12 / step 12)
 
 - Cache des traductions (base SQLite `translations.sqlite3` dans le dossier des données) : une phrase identique n'est jamais retraduite, et chaque phrase n'est envoyée qu'une fois au moteur même si elle se répète. Le journal indique combien de phrases viennent du cache.

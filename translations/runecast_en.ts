@@ -405,6 +405,141 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     </message>
 </context>
 <context>
+    <name>ModelsPage</name>
+    <message>
+        <source>Modèles de traduction</source>
+        <translation>Translation models</translation>
+    </message>
+    <message>
+        <source>Les modèles traduisent sur ce PC, sans internet. Chacun traduit dans un seul sens. S&apos;il n&apos;y a pas de modèle direct, RuneCast passe par l&apos;anglais : par exemple Français → English, puis English → Türkçe.</source>
+        <translation>Models translate on this PC, without internet. Each one translates in one direction only. When there is no direct model, RuneCast goes through English: for example Français → English, then English → Türkçe.</translation>
+    </message>
+    <message>
+        <source>Rechercher une langue…</source>
+        <translation>Search for a language…</translation>
+    </message>
+    <message>
+        <source>Sens de traduction</source>
+        <translation>Translation direction</translation>
+    </message>
+    <message>
+        <source>Taille</source>
+        <translation>Size</translation>
+    </message>
+    <message>
+        <source>État</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Télécharger et installer</source>
+        <translation>Download and install</translation>
+    </message>
+    <message>
+        <source>Supprimer</source>
+        <translation>Delete</translation>
+    </message>
+    <message>
+        <source>Télécharger pour un autre PC…</source>
+        <translation>Download for another PC…</translation>
+    </message>
+    <message>
+        <source>Importer des fichiers…</source>
+        <translation>Import files…</translation>
+    </message>
+    <message>
+        <source>Annuler</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Essayer</source>
+        <translation>Try it</translation>
+    </message>
+    <message>
+        <source>Phrase à traduire</source>
+        <translation>Sentence to translate</translation>
+    </message>
+    <message>
+        <source>Traduire</source>
+        <translation>Translate</translation>
+    </message>
+    <message>
+        <source>Installé</source>
+        <translation>Installed</translation>
+    </message>
+    <message>
+        <source>Installe d&apos;abord un modèle.</source>
+        <translation>Install a model first.</translation>
+    </message>
+    <message>
+        <source>Le fichier téléchargé est abîmé ou a été modifié : il a été refusé. Réessaie plus tard.</source>
+        <translation>The downloaded file is damaged or was altered: it was refused. Try again later.</translation>
+    </message>
+    <message>
+        <source>L&apos;opération a échoué :
+{details}</source>
+        <translation>The operation failed:
+{details}</translation>
+    </message>
+    <message>
+        <source>Téléchargement : {model}</source>
+        <translation>Downloading: {model}</translation>
+    </message>
+    <message>
+        <source>Supprimer le modèle ?</source>
+        <translation>Delete the model?</translation>
+    </message>
+    <message>
+        <source>Le modèle « {model} » sera supprimé de ce PC. Il pourra être téléchargé de nouveau. Continuer ?</source>
+        <translation>The model “{model}” will be deleted from this PC. It can be downloaded again. Continue?</translation>
+    </message>
+    <message>
+        <source>Dossier où enregistrer le modèle (clé USB…)</source>
+        <translation>Folder where to save the model (USB stick…)</translation>
+    </message>
+    <message>
+        <source>Modèle enregistré</source>
+        <translation>Model saved</translation>
+    </message>
+    <message>
+        <source>Fichier enregistré :
+{file}
+
+Copie-le sur l&apos;autre PC, puis : Paramètres → Modèles de traduction → Importer des fichiers…</source>
+        <translation>File saved:
+{file}
+
+Copy it to the other PC, then: Settings → Translation models → Import files…</translation>
+    </message>
+    <message>
+        <source>Importer des modèles</source>
+        <translation>Import models</translation>
+    </message>
+    <message>
+        <source>Modèles Argos (*{suffix})</source>
+        <translation>Argos models (*{suffix})</translation>
+    </message>
+    <message>
+        <source>Installation…</source>
+        <translation>Installing…</translation>
+    </message>
+    <message>
+        <source>Modèles importés</source>
+        <translation>Models imported</translation>
+    </message>
+    <message>
+        <source>{count} modèle(s) installé(s).</source>
+        <translation>{count} model(s) installed.</translation>
+    </message>
+    <message>
+        <source>Aucun modèle installé pour {direction}.</source>
+        <translation>No model installed for {direction}.</translation>
+    </message>
+    <message>
+        <source>Traduction en cours…</source>
+        <translation>Translating…</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <source>Paramètres</source>

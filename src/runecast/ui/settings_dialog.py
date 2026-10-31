@@ -72,28 +72,8 @@ from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings
 from runecast.core.themes import Theme, find_theme
 from runecast.ui.i18n import format_size, keep_left_to_right
-
-
-class SettingsPage(QWidget):
-    """Modèle commun des pages / Common model of the pages.
-
-    FR : Une page a un titre, lit les réglages (load) et y écrit ses valeurs
-         (store). Ses textes sont (re)posés par retranslate().
-    EN : A page has a title, reads the settings (load) and writes its values
-         into them (store). Its texts are (re)set by retranslate().
-    """
-
-    def title(self) -> str:
-        raise NotImplementedError
-
-    def load(self, settings: Settings) -> None:
-        raise NotImplementedError
-
-    def store(self, settings: Settings) -> None:
-        raise NotImplementedError
-
-    def retranslate(self) -> None:
-        """FR : textes de la page. EN : texts of the page."""
+from runecast.ui.models_page import ModelsPage
+from runecast.ui.settings_base import SettingsPage
 
 
 class GeneralPage(SettingsPage):
@@ -419,11 +399,13 @@ class SettingsDialog(QDialog):
         self.window_page = WindowPage()
         self.folders_page = FoldersLogPage(paths)
         self.cache_page = CachePage(paths)
+        self.models_page = ModelsPage(paths)
         self.pages: list[SettingsPage] = [
             self.general_page,
+            self.models_page,
+            self.cache_page,
             self.window_page,
             self.folders_page,
-            self.cache_page,
         ]
 
         self.page_list = QListWidget()
@@ -451,7 +433,7 @@ class SettingsDialog(QDialog):
         layout = QVBoxLayout(self)
         layout.addLayout(body)
         layout.addWidget(self.buttons)
-        self.resize(720, 420)
+        self.resize(860, 560)
         self.load(settings)
         self.retranslate()
 
@@ -485,6 +467,15 @@ class SettingsDialog(QDialog):
         """FR : « OK » : appliquer puis fermer. EN : "OK": apply then close."""
         self.apply()
         super().accept()
+
+    def done(self, result: int) -> None:
+        """FR : fermeture (OK, Annuler, Échap) : chaque page s'arrête proprement.
+
+        EN : closing (OK, Cancel, Esc): every page stops cleanly.
+        """
+        for page in self.pages:
+            page.shutdown()
+        super().done(result)
 
     def retranslate(self) -> None:
         """FR : (re)pose les textes dans la langue actuelle. EN : (re)set every text."""

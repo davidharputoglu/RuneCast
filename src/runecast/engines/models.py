@@ -87,6 +87,16 @@ ARCHIVE_SUFFIX = ".argosmodel"
 MAX_UNPACKED_BYTES = 4 * 1024**3
 # FR : Taille des morceaux lus ou téléchargés. EN : Size of read or downloaded chunks.
 CHUNK = 1024 * 1024
+# FR : Découpeurs de texte des modèles Argos. RuneCast lit les modèles
+#      « sentencepiece » ; les modèles « bpe » (15 sur 100 en octobre 2026 :
+#      tchèque, danois, hongrois, indonésien…) demanderaient 5 bibliothèques
+#      de plus : ils ne sont pas proposés pour l'instant.
+# EN : Text splitters of Argos models. RuneCast reads "sentencepiece"
+#      models; "bpe" models (15 out of 100 in October 2026: Czech, Danish,
+#      Hungarian, Indonesian…) would need 5 more libraries: they are not
+#      offered for now.
+TOKENIZER_SENTENCEPIECE = "sentencepiece"
+TOKENIZER_BPE = "bpe"
 
 # FR : Fonction de progression : (octets faits, octets au total ou 0).
 # EN : Progress function: (bytes done, total bytes or 0).
@@ -121,6 +131,15 @@ class CatalogEntry:
     url: str
     size: int | None = None
     sha256: str | None = None
+    # FR : découpeur de texte du modèle : « sentencepiece » (pris en charge)
+    #      ou « bpe » (pas encore). EN : the model's text splitter:
+    #      "sentencepiece" (supported) or "bpe" (not yet).
+    tokenizer: str | None = None
+
+    @property
+    def supported(self) -> bool:
+        """FR : RuneCast sait-il utiliser ce modèle ? EN : can RuneCast use this model?"""
+        return self.tokenizer != TOKENIZER_BPE
 
     @property
     def file_name(self) -> str:
@@ -142,10 +161,13 @@ class InstalledModel:
         return (self.package.from_code, self.package.to_code)
 
 
-def load_catalog(path: Path | None = None) -> list[CatalogEntry]:
-    """FR : lit le catalogue (celui livré avec RuneCast par défaut).
-
+def load_catalog(path: Path | None = None, include_unsupported: bool = False) -> list[CatalogEntry]:
+    """FR : lit le catalogue (celui livré avec RuneCast par défaut). Les
+         modèles que RuneCast ne sait pas encore lire sont écartés, sauf
+         avec « include_unsupported ».
     EN : read the catalogue (the one shipped with RuneCast by default).
+         Models RuneCast cannot read yet are left out, unless
+         "include_unsupported".
     """
     path = path or resource_path("models", "argos-catalog.json")
     data = json.loads(path.read_text(encoding="utf-8"))
@@ -164,9 +186,10 @@ def load_catalog(path: Path | None = None) -> list[CatalogEntry]:
                 url=item["url"],
                 size=item.get("size"),
                 sha256=item.get("sha256"),
+                tokenizer=item.get("tokenizer"),
             )
         )
-    return entries
+    return [entry for entry in entries if include_unsupported or entry.supported]
 
 
 def file_sha256(path: Path) -> str:

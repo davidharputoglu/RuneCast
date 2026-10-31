@@ -143,3 +143,37 @@ def format_size(size: int) -> str:
     EN : "11,8 Mo" in French, "11.8 MB" in English, "١١٫٨ م.ب" in Arabic.
     """
     return QLocale().formattedDataSize(size, 1, QLocale.DataSizeFormat.DataSizeTraditionalFormat)
+
+
+# FR : Noms écrits à la main quand celui de Qt ne convient pas (Qt dit
+#      « American English » et « español de España »), ou pour distinguer
+#      les deux portugais et les deux chinois.
+# EN : Names written by hand when Qt's does not fit (Qt says "American
+#      English" and "español de España"), or to tell apart the two
+#      Portugueses and the two Chineses.
+_LANGUAGE_NAMES = {
+    "en": "English",
+    "es": "Español",
+    "pt": "Português (Portugal)",
+    "pt-BR": "Português (Brasil)",
+    "zh": "简体中文",
+    "zh-Hant": "繁體中文",
+}
+
+
+def language_name(code: str, fallback: str = "") -> str:
+    """Nom d'une langue, écrit dans cette langue / A language's own name.
+
+    FR : « fr » → « Français », « ar » → « العربية », « kk » → « Қазақ тілі ».
+         Chacun reconnaît ainsi sa langue, quelle que soit la langue de
+         l'interface. « fallback » sert si Qt ne connaît pas la langue.
+    EN : "fr" → "Français", "ar" → "العربية", "kk" → "Қазақ тілі". Everyone
+         thus recognises their language, whatever the interface language.
+         "fallback" is used when Qt does not know the language.
+    """
+    if code in _LANGUAGE_NAMES:
+        return _LANGUAGE_NAMES[code]
+    locale = QLocale(code.replace("-", "_"))
+    name = locale.nativeLanguageName() if locale.language() != QLocale.Language.C else ""
+    name = name or fallback or code
+    return name[:1].upper() + name[1:]
