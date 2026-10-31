@@ -12,6 +12,17 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.11 (étape 14 / step 14)
+
+- Banc d'essai de la traduction locale : `runecast --benchmark [de vers]` mesure, sur le PC, la vitesse (phrases par seconde) et la mémoire pour chaque nombre de cœurs et chaque largeur de recherche (rapide, équilibrée, précise), vérifie que la mémoire reste stable, conseille les meilleurs réglages et enregistre un rapport dans le dossier du journal.
+  *Local translation benchmark: `runecast --benchmark [from to]` measures speed and memory for each core count and search width, checks that memory stays stable, recommends the best settings and saves a report in the log folder.*
+- Paramètres → Modèles de traduction → Performance : cœurs utilisés (automatique ou au choix) et traduction rapide, équilibrée ou précise ; bouton « Mesurer la vitesse… » qui choisit les réglages conseillés.
+  *Settings → Translation models → Performance: cores used and fast/balanced/accurate translation; "Measure the speed…" button selecting the recommended settings.*
+- Mesures réelles sur la machine de GitHub (2 cœurs) : 53 phrases par seconde en anglais → français, moins de 400 Mo de mémoire, stable. Réglages par défaut confirmés : équilibrée, cœurs automatiques.
+  *Real measures on GitHub's machine (2 cores): 53 sentences per second English → French, under 400 MB of memory, stable. Default settings confirmed: balanced, automatic cores.*
+- Nouvelle dépendance : psutil (BSD), pour mesurer la mémoire et compter les cœurs.
+  *New dependency: psutil (BSD), to measure memory and count cores.*
+
 ## 0.1.10 (étape 13 / step 13)
 
 - Moteur de traduction locale : les modèles libres d'Argos Translate tournent sur le PC, sans internet et sans GPU, grâce à CTranslate2 (format compact « int8 ») et SentencePiece. S'il n'y a pas de modèle direct, RuneCast passe par l'anglais (Français → English → Türkçe). Au plus deux modèles en mémoire, pour rester léger sur 8 Go.
