@@ -1,0 +1,46 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# RuneCast — Copyright (C) 2026 HARPUTOGLU David (aidé par l'IA / assisted by AI)
+#
+# FR : Essai réel des moteurs en ligne gratuits (Yandex et Google). Quand le
+#      code des moteurs en ligne change, GitHub leur fait traduire quelques
+#      phrases et publie le résultat en « notice » (tools/engines_check.py).
+#      Ces accès ne sont pas officiels : s'ils cessent de marcher, ce test le
+#      montre tout de suite.
+# EN : Real test of the free online engines (Yandex and Google). When the
+#      online engine code changes, GitHub makes them translate a few
+#      sentences and publishes the result as a "notice". These accesses are
+#      unofficial: if they stop working, this check shows it at once.
+
+name: Moteurs en ligne / Online engines
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/runecast/engines/online.py"
+      - "tools/engines_check.py"
+      - ".github/workflows/online.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Essai réel / Real test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Récupérer le code / Get the code
+        uses: actions/checkout@v7
+
+      - name: Installer uv / Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: true
+
+      - name: Installer RuneCast / Install RuneCast
+        run: uv sync --locked
+
+      - name: Essayer Yandex et Google gratuits / Try free Yandex and Google
+        run: uv run python tools/engines_check.py

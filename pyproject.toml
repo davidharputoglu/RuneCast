@@ -43,19 +43,26 @@ classifiers = [
 #        - ctranslate2 (MIT) fait tourner les modèles de traduction locaux sur
 #          le processeur ; il apporte numpy (BSD) et PyYAML (MIT) (étape 13) ;
 #        - sentencepiece (Apache 2.0) découpe le texte pour ces modèles (étape 13) ;
-#        - httpx (BSD) télécharge les modèles (étape 13), puis servira aux
-#          moteurs en ligne et aux mises à jour.
+#        - httpx (BSD) télécharge les modèles (étape 13) et parle aux moteurs
+#          en ligne (étape 16), puis servira aux mises à jour ;
+#        - psutil (BSD) mesure la mémoire et compte les cœurs (étape 14) ;
+#        - keyring (MIT) range les clés des moteurs payants dans le trousseau
+#          sécurisé du système (étape 16).
 # EN : Libraries shipped with RuneCast. They arrive step by step:
 #        - PySide6-Essentials (Qt 6, LGPLv3) draws the interface (step 4);
 #        - platformdirs (MIT) finds the right data folders (step 6);
 #        - ctranslate2 (MIT) runs the local translation models on the
 #          processor; it brings numpy (BSD) and PyYAML (MIT) (step 13);
 #        - sentencepiece (Apache 2.0) cuts text for these models (step 13);
-#        - httpx (BSD) downloads the models (step 13), then will serve the
-#          online engines and updates.
+#        - httpx (BSD) downloads the models (step 13) and talks to the online
+#          engines (step 16), then will serve the updates;
+#        - psutil (BSD) measures memory and counts cores (step 14);
+#        - keyring (MIT) stores paid engine keys in the system's secure
+#          keyring (step 16).
 dependencies = [
     "ctranslate2>=4.6",
     "httpx>=0.28",
+    "keyring>=25",
     "platformdirs>=4.3",
     "psutil>=6",
     "pyside6-essentials>=6.10",

@@ -109,3 +109,34 @@ def tokenizer_file(tmp_path_factory) -> Path:
         minloglevel=2,
     )
     return folder / "sp.model"
+
+
+class MemoryKeyring:
+    """FR : trousseau en mémoire : les tests ne touchent JAMAIS ton vrai trousseau.
+
+    EN : in-memory keyring: tests NEVER touch your real keyring.
+    """
+
+    priority = 1
+
+    def __init__(self) -> None:
+        self.passwords: dict[tuple[str, str], str] = {}
+
+    def get_password(self, service: str, name: str) -> str | None:
+        return self.passwords.get((service, name))
+
+    def set_password(self, service: str, name: str, value: str) -> None:
+        self.passwords[(service, name)] = value
+
+    def delete_password(self, service: str, name: str) -> None:
+        self.passwords.pop((service, name), None)
+
+
+@pytest.fixture(autouse=True)
+def memory_keyring(monkeypatch: pytest.MonkeyPatch) -> MemoryKeyring:
+    """FR : remplace le trousseau du système pendant chaque test. EN : replaces the keyring."""
+    from runecast.core import secrets
+
+    fake = MemoryKeyring()
+    monkeypatch.setattr(secrets, "_system_keyring", lambda: fake)
+    return fake
