@@ -112,6 +112,24 @@ class Settings:
     #      acceptée) (étape 15). EN : date the NLLB-200 model license was
     #      accepted (empty = not accepted) (step 15).
     nllb_license_accepted: str = ""
+    # FR : moteurs en ligne : ordre d'essai, moteurs cochés, réglages non
+    #      secrets (dossier Yandex Cloud, adresse LibreTranslate, région
+    #      Microsoft). Les clés, elles, sont dans le trousseau (étape 16).
+    # EN : online engines: try order, checked engines, non-secret settings.
+    #      Keys are in the keyring (step 16).
+    engine_order: list[str] = field(
+        default_factory=lambda: [
+            "yandex_key",
+            "yandex_free",
+            "google_free",
+            "deepl",
+            "google_cloud",
+            "microsoft",
+            "libretranslate",
+        ]
+    )
+    engines_enabled: list[str] = field(default_factory=lambda: ["yandex_free", "google_free"])
+    engine_options: dict[str, dict[str, str]] = field(default_factory=dict)
     # FR : réglages inconnus (écrits par une version plus récente) : conservés tels quels.
     # EN : unknown settings (written by a newer version): kept as they are.
     extra: dict[str, Any] = field(default_factory=dict)

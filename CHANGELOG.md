@@ -12,6 +12,21 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.13 (étape 16 / step 16)
+
+- Moteurs de traduction en ligne, tous avec le même contrat que le moteur local : Yandex gratuit (méthode du widget de LocoAI, non officielle), Yandex Cloud (clé officielle, passe avant le gratuit), Google gratuit (non officiel), DeepL (clé Free « :fx » ou Pro), Google Cloud, Microsoft Translator et LibreTranslate (serveur au choix).
+  *Online translation engines, all with the same contract as the local engine: Yandex free (LocoAI's widget method, unofficial), Yandex Cloud (official key, goes before the free one), Google free (unofficial), DeepL (Free ":fx" or Pro key), Google Cloud, Microsoft Translator and LibreTranslate (server of your choice).*
+- Chaque panne devient une raison claire (pas d'internet, clé refusée, limite atteinte, service en panne), prête pour le repli automatique de l'étape 17. Textes envoyés par lots qui respectent les limites de chaque service.
+  *Every failure becomes a clear reason (no internet, key refused, limit reached, service down), ready for step 17's automatic fallback. Texts sent in batches respecting each service's limits.*
+- Paramètres → Moteurs en ligne : moteurs à cocher et ordre réglable (« Monter », « Descendre »), clé et réglages de chaque moteur, prix indicatif et estimation pour un jeu moyen, avertissement pour les accès non officiels, bouton « Tester ».
+  *Settings → Online engines: engines to check and adjustable order, key and settings for each engine, indicative price and estimate for an average game, warning for unofficial accesses, "Test" button.*
+- Clés rangées dans le trousseau sécurisé du système (Gestionnaire d'identification Windows, GNOME Trousseau ou KWallet), jamais dans les réglages ; en mode portable, dans le dossier portable (avec un avertissement).
+  *Keys stored in the system's secure keyring, never in the settings; in portable mode, in the portable folder (with a warning).*
+- Essai réel par GitHub : Google gratuit fonctionne et garde balises et variables ; Yandex gratuit répond « limite atteinte » depuis les serveurs de GitHub (à essayer depuis une connexion personnelle).
+  *Real test by GitHub: Google free works and keeps tags and variables; Yandex free answers "limit reached" from GitHub's servers (to be tried from a personal connection).*
+- Nouvelle dépendance : keyring (MIT), avec ses petites bibliothèques (jaraco, more-itertools, jeepney, SecretStorage, cryptography ; toutes compatibles GPLv3).
+  *New dependency: keyring (MIT), with its small libraries (all GPLv3-compatible).*
+
 ## 0.1.12 (étape 15 / step 15)
 
 - Modèle étendu NLLB-200 (Meta, version « distillée 600M », format CTranslate2 int8, environ 600 Mo) : traduction locale directe entre 38 langues proposées, dont le kazakh, l'ouzbek, le turkmène, le tatar et l'ouïghour, que les modèles Argos ne couvrent pas.

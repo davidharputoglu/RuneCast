@@ -420,6 +420,9 @@ class MainWindow(QMainWindow):
         self.settings.local_threads = new.local_threads
         self.settings.local_beam_size = new.local_beam_size
         self.settings.nllb_license_accepted = new.nllb_license_accepted
+        self.settings.engine_order = new.engine_order
+        self.settings.engines_enabled = new.engines_enabled
+        self.settings.engine_options = new.engine_options
         if new.detailed_log != self.settings.detailed_log:
             self.settings.detailed_log = new.detailed_log
             set_detailed_log(new.detailed_log)
@@ -517,6 +520,7 @@ class MainWindow(QMainWindow):
         dialog.folders_page.show_paths(self.paths)
         dialog.cache_page.show_paths(self.paths)
         dialog.models_page.show_paths(self.paths)
+        dialog.engines_page.show_paths(self.paths)
         dialog.load(self.settings)
 
     def show_theme_editor(self, parent: QWidget | None = None) -> None:

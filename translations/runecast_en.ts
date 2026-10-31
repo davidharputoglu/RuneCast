@@ -649,6 +649,113 @@ They are selected: click “OK” or “Apply” to keep them.</translation>
     </message>
 </context>
 <context>
+    <name>OnlineEnginesPage</name>
+    <message>
+        <source>Moteurs en ligne</source>
+        <translation>Online engines</translation>
+    </message>
+    <message>
+        <source>{name} (gratuit, non officiel)</source>
+        <translation>{name} (free, unofficial)</translation>
+    </message>
+    <message>
+        <source>{name} (clé)</source>
+        <translation>{name} (key)</translation>
+    </message>
+    <message>
+        <source>Les moteurs cochés sont utilisés dans l&apos;ordre de la liste : si l&apos;un ne répond pas (pas d&apos;internet, limite atteinte, clé refusée), RuneCast passe au suivant, puis à la traduction locale.</source>
+        <translation>Checked engines are used in list order: if one does not answer (no internet, limit reached, key refused), RuneCast moves to the next one, then to local translation.</translation>
+    </message>
+    <message>
+        <source>Monter</source>
+        <translation>Up</translation>
+    </message>
+    <message>
+        <source>Descendre</source>
+        <translation>Down</translation>
+    </message>
+    <message>
+        <source>Afficher</source>
+        <translation>Show</translation>
+    </message>
+    <message>
+        <source>Clé :</source>
+        <translation>Key:</translation>
+    </message>
+    <message>
+        <source>Identifiant du dossier :</source>
+        <translation>Folder ID:</translation>
+    </message>
+    <message>
+        <source>Adresse du serveur :</source>
+        <translation>Server address:</translation>
+    </message>
+    <message>
+        <source>Région Azure :</source>
+        <translation>Azure region:</translation>
+    </message>
+    <message>
+        <source>Tester</source>
+        <translation>Test</translation>
+    </message>
+    <message>
+        <source>Les clés sont rangées dans le trousseau sécurisé du système.</source>
+        <translation>Keys are stored in the system&apos;s secure keyring.</translation>
+    </message>
+    <message>
+        <source>Attention : pas de trousseau sécurisé ici (mode portable ou système sans trousseau) : les clés sont gardées dans un fichier du dossier des réglages.</source>
+        <translation>Warning: no secure keyring here (portable mode or system without keyring): keys are kept in a file of the settings folder.</translation>
+    </message>
+    <message>
+        <source>Gratuit, sans compte. Accès NON OFFICIEL : le service peut le limiter ou l&apos;arrêter à tout moment ; RuneCast passera alors au moteur suivant.</source>
+        <translation>Free, no account. UNOFFICIAL access: the service may limit or stop it at any time; RuneCast will then move to the next engine.</translation>
+    </message>
+    <message>
+        <source>Payant. Prix indicatif : environ {price} $ par million de caractères. Un jeu moyen (environ 1 million de caractères) : environ {game} $.</source>
+        <translation>Paid. Indicative price: about {price} $ per million characters. An average game (about 1 million characters): about {game} $.</translation>
+    </message>
+    <message>
+        <source>Part gratuite : {count} caractères par mois.</source>
+        <translation>Free share: {count} characters per month.</translation>
+    </message>
+    <message>
+        <source>Prix relevés en octobre 2026 : vérifie-les sur le site du service.</source>
+        <translation>Prices noted in October 2026: check them on the service&apos;s website.</translation>
+    </message>
+    <message>
+        <source>Libre : utilise ton propre serveur LibreTranslate, ou une instance publique (souvent avec une clé).</source>
+        <translation>Free software: use your own LibreTranslate server, or a public instance (often with a key).</translation>
+    </message>
+    <message>
+        <source>Site du service</source>
+        <translation>Service website</translation>
+    </message>
+    <message>
+        <source>Essai en cours…</source>
+        <translation>Testing…</translation>
+    </message>
+    <message>
+        <source>Ça marche : « {text} »</source>
+        <translation>It works: “{text}”</translation>
+    </message>
+    <message>
+        <source>pas de connexion à internet</source>
+        <translation>no internet connection</translation>
+    </message>
+    <message>
+        <source>clé absente ou refusée</source>
+        <translation>key missing or refused</translation>
+    </message>
+    <message>
+        <source>limite atteinte (réessaie plus tard)</source>
+        <translation>limit reached (try again later)</translation>
+    </message>
+    <message>
+        <source>Échec : {reason}</source>
+        <translation>Failed: {reason}</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <source>Paramètres</source>

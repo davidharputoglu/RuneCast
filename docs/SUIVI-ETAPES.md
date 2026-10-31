@@ -22,7 +22,8 @@ Depuis le 31 octobre 2026, à ta demande, j'enchaîne les étapes sans attendre 
 | 12 | Cache et historique des traductions (SQLite) ; page « Cache des traductions » dans les Paramètres | 0.1.9 | ✅ | ⏳ | ⏳ | `27011fd` |
 | 13 | Moteur local (modèles Argos avec CTranslate2) et gestionnaire de modèles : catalogue vérifié, téléchargement avec reprise, empreintes SHA-256, suppression, pack hors-ligne, « Essayer » | 0.1.10 | ✅ | ⏳ | ⏳ | `24ec9ff` |
 | 14 | Banc d'essai vitesse et mémoire (`runecast --benchmark`, bouton « Mesurer la vitesse… ») ; réglages Performance | 0.1.11 | ✅ | ⏳ | ⏳ | `ac425c7`, `f8d9f7e` |
-| 15 | Modèle étendu NLLB-200 (kazakh, ouzbek, turkmène, tatar, ouïghour en local), après acceptation de sa licence | 0.1.12 | 🔄 | ⏳ | ⏳ | `7c53000` + suivant |
+| 15 | Modèle étendu NLLB-200 (kazakh, ouzbek, turkmène, tatar, ouïghour en local), après acceptation de sa licence | 0.1.12 | ✅ | ⏳ | ⏳ | `7c53000`, `d1388fe` |
+| 16 | Moteurs en ligne (Yandex gratuit et à clé, Google gratuit, DeepL, Google Cloud, Microsoft, LibreTranslate), ordre réglable, clés dans le trousseau, bouton « Tester », prix indicatifs | 0.1.13 | 🔄 | ⏳ | ⏳ | `766a4b3` + suivant |
 
 Numéros de version : les deux premiers chiffres (« 0.1 ») sont décidés par David ; le dernier augmente à chaque étape validée ou correctif. Les étapes 5 à 8 avaient été numérotées 0.2.x par erreur et ont été corrigées (voir CHANGELOG.md).
 
@@ -66,6 +67,7 @@ Résultat attendu :
 - **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
 - **Étape 3** : `xdg-open` ouvre l'icône 256 px, identique à celle de Windows.
 - **Toutes les étapes** : `uv run pytest` se termine par « passed », sans « failed ».
+- **Étape 16** : Paramètres → Moteurs en ligne. Choisis « Google (gratuit, non officiel) » puis « Tester » : « Ça marche : « Bonjour, comment vas-tu aujourd'hui ? » ». Fais de même avec « Yandex (gratuit, non officiel) » **depuis chez toi** : sur les serveurs de GitHub, Yandex a répondu « limite atteinte » (voir ci-dessous) ; dis-moi ce que tu obtiens. Si tu as une clé (DeepL Free par exemple), coche le moteur, colle la clé, « Tester », puis « OK » : la clé va dans le trousseau de Windows ou de Fedora, pas dans un fichier.
 - **Étape 15** : Paramètres → Modèles de traduction → « Modèle étendu NLLB-200 » → « Télécharger… ». La fenêtre de licence s'ouvre : le bouton « Accepter et télécharger » reste grisé tant que la case n'est pas cochée. Coche-la, télécharge (environ 600 Mo), puis dans « Essayer » choisis English → Қазақ тілі, écris « Hello, how are you today? » et clique sur « Traduire » : « Сәлем, бүгін қалайсыз? » s'affiche (Wi-Fi coupé si tu veux).
 - **Étape 14** : après avoir installé « English → Français » (étape 13), tape `uv run runecast --benchmark en fr`. Le tableau des vitesses s'affiche, puis « Conseillé » et « Mémoire stable : oui ». Le rapport est enregistré dans le dossier du journal : envoie-le-moi pour que je règle les valeurs par défaut sur tes vrais PC. Même chose dans Paramètres → Modèles de traduction → Performance → « Mesurer la vitesse… ».
 - **Étape 13** : Fichier → Paramètres… → Modèles de traduction. Tape « Français » dans la recherche, choisis « English → Français », clique sur « Télécharger et installer » (environ 107 Mo, la barre de progression avance). Ensuite, **coupe le Wi-Fi**, écris « Hello, how are you? » dans « Essayer », clique sur « Traduire » : la traduction française s'affiche. Rallume le Wi-Fi.
@@ -91,3 +93,12 @@ Résultat attendu :
 | Ton PC Fedora 44 | ⏳ | | | | |
 
 Réglages par défaut retenus : traduction « équilibrée » (largeur 2), cœurs automatiques (la moitié des cœurs logiques, entre 1 et 4), lots de 32 phrases. Mémoire de RuneCast avec un modèle chargé : moins de 400 Mo, très loin des 8 Go.
+
+## Essai réel des moteurs gratuits (étape 16)
+
+Fait par GitHub le 31/10/2026 (test « Moteurs en ligne ») : deux phrases, dont une avec balises et variables, vers le français, le turc, le kazakh et l'arabe.
+
+| Moteur | Résultat |
+|---|---|
+| Google gratuit | ✅ Fonctionne. Balises et variables intactes : « {b}Bienvenue{/b}, [player] ! Vous avez %d pièces. », « {b}Hoş geldiniz{/b}, [player]! %d jetonunuz var. », « {b}Қош келдіңіз{/b}, [player]! Сізде %d тиын бар. » |
+| Yandex gratuit (widget) | ❌ « 429 : limite atteinte » dès la première demande, depuis les serveurs de GitHub. Même problème signalé en 2026 par d'autres logiciels. À essayer depuis ta connexion avec le bouton « Tester ». S'il refuse, RuneCast passe au moteur suivant |

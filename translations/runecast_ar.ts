@@ -649,6 +649,113 @@ Ils sont sélectionnés : clique sur « OK » ou « Appliquer » pour les garder
     </message>
 </context>
 <context>
+    <name>OnlineEnginesPage</name>
+    <message>
+        <source>Moteurs en ligne</source>
+        <translation>المحركات عبر الإنترنت</translation>
+    </message>
+    <message>
+        <source>{name} (gratuit, non officiel)</source>
+        <translation>{name} (مجاني، غير رسمي)</translation>
+    </message>
+    <message>
+        <source>{name} (clé)</source>
+        <translation>{name} (مفتاح)</translation>
+    </message>
+    <message>
+        <source>Les moteurs cochés sont utilisés dans l&apos;ordre de la liste : si l&apos;un ne répond pas (pas d&apos;internet, limite atteinte, clé refusée), RuneCast passe au suivant, puis à la traduction locale.</source>
+        <translation>تُستخدم المحركات المحدَّدة بترتيب القائمة: إذا لم يستجب أحدها (لا إنترنت، أو بلوغ الحد، أو رفض المفتاح) ينتقل RuneCast إلى التالي، ثم إلى الترجمة المحلية.</translation>
+    </message>
+    <message>
+        <source>Monter</source>
+        <translation>إلى الأعلى</translation>
+    </message>
+    <message>
+        <source>Descendre</source>
+        <translation>إلى الأسفل</translation>
+    </message>
+    <message>
+        <source>Afficher</source>
+        <translation>إظهار</translation>
+    </message>
+    <message>
+        <source>Clé :</source>
+        <translation>المفتاح:</translation>
+    </message>
+    <message>
+        <source>Identifiant du dossier :</source>
+        <translation>معرّف المجلد:</translation>
+    </message>
+    <message>
+        <source>Adresse du serveur :</source>
+        <translation>عنوان الخادم:</translation>
+    </message>
+    <message>
+        <source>Région Azure :</source>
+        <translation>منطقة Azure:</translation>
+    </message>
+    <message>
+        <source>Tester</source>
+        <translation>اختبار</translation>
+    </message>
+    <message>
+        <source>Les clés sont rangées dans le trousseau sécurisé du système.</source>
+        <translation>تُحفظ المفاتيح في سلسلة المفاتيح الآمنة للنظام.</translation>
+    </message>
+    <message>
+        <source>Attention : pas de trousseau sécurisé ici (mode portable ou système sans trousseau) : les clés sont gardées dans un fichier du dossier des réglages.</source>
+        <translation>تنبيه: لا توجد سلسلة مفاتيح آمنة هنا (الوضع المحمول أو نظام بلا سلسلة مفاتيح): تُحفظ المفاتيح في ملف داخل مجلد الإعدادات.</translation>
+    </message>
+    <message>
+        <source>Gratuit, sans compte. Accès NON OFFICIEL : le service peut le limiter ou l&apos;arrêter à tout moment ; RuneCast passera alors au moteur suivant.</source>
+        <translation>مجاني ودون حساب. وصول غير رسمي: قد تقيّده الخدمة أو توقفه في أي وقت؛ وعندها ينتقل RuneCast إلى المحرك التالي.</translation>
+    </message>
+    <message>
+        <source>Payant. Prix indicatif : environ {price} $ par million de caractères. Un jeu moyen (environ 1 million de caractères) : environ {game} $.</source>
+        <translation>مدفوع. السعر التقريبي: نحو {price} $ لكل مليون حرف. لعبة متوسطة (نحو مليون حرف): نحو {game} $.</translation>
+    </message>
+    <message>
+        <source>Part gratuite : {count} caractères par mois.</source>
+        <translation>الحصة المجانية: {count} حرف شهريًا.</translation>
+    </message>
+    <message>
+        <source>Prix relevés en octobre 2026 : vérifie-les sur le site du service.</source>
+        <translation>أسعار مسجَّلة في أكتوبر 2026: تحقّق منها على موقع الخدمة.</translation>
+    </message>
+    <message>
+        <source>Libre : utilise ton propre serveur LibreTranslate, ou une instance publique (souvent avec une clé).</source>
+        <translation>برنامج حر: استخدم خادم LibreTranslate الخاص بك، أو نسخة عامة (غالبًا بمفتاح).</translation>
+    </message>
+    <message>
+        <source>Site du service</source>
+        <translation>موقع الخدمة</translation>
+    </message>
+    <message>
+        <source>Essai en cours…</source>
+        <translation>جارٍ الاختبار…</translation>
+    </message>
+    <message>
+        <source>Ça marche : « {text} »</source>
+        <translation>يعمل: «{text}»</translation>
+    </message>
+    <message>
+        <source>pas de connexion à internet</source>
+        <translation>لا يوجد اتصال بالإنترنت</translation>
+    </message>
+    <message>
+        <source>clé absente ou refusée</source>
+        <translation>المفتاح مفقود أو مرفوض</translation>
+    </message>
+    <message>
+        <source>limite atteinte (réessaie plus tard)</source>
+        <translation>تم بلوغ الحد (أعد المحاولة لاحقًا)</translation>
+    </message>
+    <message>
+        <source>Échec : {reason}</source>
+        <translation>فشل: {reason}</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <source>Paramètres</source>

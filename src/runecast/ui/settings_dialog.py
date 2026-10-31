@@ -71,6 +71,7 @@ from runecast.core.languages import LANGUAGES, SYSTEM_LANGUAGE
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings
 from runecast.core.themes import Theme, find_theme
+from runecast.ui.engines_page import OnlineEnginesPage
 from runecast.ui.i18n import format_size, keep_left_to_right
 from runecast.ui.models_page import ModelsPage
 from runecast.ui.settings_base import SettingsPage
@@ -400,8 +401,10 @@ class SettingsDialog(QDialog):
         self.folders_page = FoldersLogPage(paths)
         self.cache_page = CachePage(paths)
         self.models_page = ModelsPage(paths)
+        self.engines_page = OnlineEnginesPage(paths)
         self.pages: list[SettingsPage] = [
             self.general_page,
+            self.engines_page,
             self.models_page,
             self.cache_page,
             self.window_page,
