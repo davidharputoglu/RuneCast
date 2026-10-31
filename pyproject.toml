@@ -38,12 +38,27 @@ classifiers = [
     "Topic :: Software Development :: Localization",
 ]
 # FR : Bibliothèques livrées avec RuneCast. Elles arrivent étape par étape :
-#      PySide6-Essentials (Qt 6, licence LGPLv3) dessine l'interface.
+#        - PySide6-Essentials (Qt 6, LGPLv3) dessine l'interface (étape 4) ;
+#        - platformdirs (MIT) trouve les bons dossiers de données (étape 6) ;
+#        - ctranslate2 (MIT) fait tourner les modèles de traduction locaux sur
+#          le processeur ; il apporte numpy (BSD) et PyYAML (MIT) (étape 13) ;
+#        - sentencepiece (Apache 2.0) découpe le texte pour ces modèles (étape 13) ;
+#        - httpx (BSD) télécharge les modèles (étape 13), puis servira aux
+#          moteurs en ligne et aux mises à jour.
 # EN : Libraries shipped with RuneCast. They arrive step by step:
-#      PySide6-Essentials (Qt 6, LGPLv3 license) draws the user interface.
+#        - PySide6-Essentials (Qt 6, LGPLv3) draws the interface (step 4);
+#        - platformdirs (MIT) finds the right data folders (step 6);
+#        - ctranslate2 (MIT) runs the local translation models on the
+#          processor; it brings numpy (BSD) and PyYAML (MIT) (step 13);
+#        - sentencepiece (Apache 2.0) cuts text for these models (step 13);
+#        - httpx (BSD) downloads the models (step 13), then will serve the
+#          online engines and updates.
 dependencies = [
+    "ctranslate2>=4.6",
+    "httpx>=0.28",
     "platformdirs>=4.3",
     "pyside6-essentials>=6.10",
+    "sentencepiece>=0.2",
 ]
 
 [project.urls]

@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# RuneCast — Copyright (C) 2026 HARPUTOGLU David (aidé par l'IA / assisted by AI)
+#
+# FR : Vérification des modèles de traduction locaux. Quand le catalogue des
+#      modèles ou le code du moteur local change, GitHub télécharge CHAQUE
+#      modèle du catalogue, calcule sa taille et son empreinte SHA-256, puis
+#      lui fait traduire une phrase avec le moteur local de RuneCast. Les
+#      résultats sont publiés en « notices » (visibles sur la page du test) ;
+#      ils servent à compléter le catalogue (outil tools/model_catalog.py).
+# EN : Local translation model check. When the model catalogue or the local
+#      engine code changes, GitHub downloads EVERY model of the catalogue,
+#      computes its size and SHA-256 fingerprint, then makes it translate a
+#      sentence with RuneCast's local engine. Results are published as
+#      "notices" (shown on the run page); they are used to complete the
+#      catalogue (tools/model_catalog.py tool).
+
+name: Modèles / Models
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/runecast/resources/models/**"
+      - "src/runecast/engines/argos.py"
+      - "src/runecast/engines/models.py"
+      - "tools/model_catalog.py"
+      - ".github/workflows/models.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: models-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Vérifier les modèles / Check the models
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Récupérer le code / Get the code
+        uses: actions/checkout@v7
+
+      - name: Installer uv / Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: true
+
+      - name: Installer RuneCast / Install RuneCast
+        run: uv sync --locked
+
+      - name: Télécharger et essayer chaque modèle / Download and try every model
+        run: uv run python tools/model_catalog.py check --workers 4
