@@ -21,7 +21,8 @@ Depuis le 31 octobre 2026, à ta demande, j'enchaîne les étapes sans attendre 
 | 11 | Protection des balises et variables Ren'Py (masquage, restauration, contrôle), environ 190 cas de test ; démonstration `runecast --protect` | 0.1.8 | ✅ | ⏳ | ⏳ | `63e18cb` |
 | 12 | Cache et historique des traductions (SQLite) ; page « Cache des traductions » dans les Paramètres | 0.1.9 | ✅ | ⏳ | ⏳ | `27011fd` |
 | 13 | Moteur local (modèles Argos avec CTranslate2) et gestionnaire de modèles : catalogue vérifié, téléchargement avec reprise, empreintes SHA-256, suppression, pack hors-ligne, « Essayer » | 0.1.10 | ✅ | ⏳ | ⏳ | `24ec9ff` |
-| 14 | Banc d'essai vitesse et mémoire (`runecast --benchmark`, bouton « Mesurer la vitesse… ») ; réglages Performance | 0.1.11 | 🔄 | ⏳ | ⏳ | `ac425c7` + suivant |
+| 14 | Banc d'essai vitesse et mémoire (`runecast --benchmark`, bouton « Mesurer la vitesse… ») ; réglages Performance | 0.1.11 | ✅ | ⏳ | ⏳ | `ac425c7`, `f8d9f7e` |
+| 15 | Modèle étendu NLLB-200 (kazakh, ouzbek, turkmène, tatar, ouïghour en local), après acceptation de sa licence | 0.1.12 | 🔄 | ⏳ | ⏳ | `7c53000` + suivant |
 
 Numéros de version : les deux premiers chiffres (« 0.1 ») sont décidés par David ; le dernier augmente à chaque étape validée ou correctif. Les étapes 5 à 8 avaient été numérotées 0.2.x par erreur et ont été corrigées (voir CHANGELOG.md).
 
@@ -65,6 +66,7 @@ Résultat attendu :
 - **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
 - **Étape 3** : `xdg-open` ouvre l'icône 256 px, identique à celle de Windows.
 - **Toutes les étapes** : `uv run pytest` se termine par « passed », sans « failed ».
+- **Étape 15** : Paramètres → Modèles de traduction → « Modèle étendu NLLB-200 » → « Télécharger… ». La fenêtre de licence s'ouvre : le bouton « Accepter et télécharger » reste grisé tant que la case n'est pas cochée. Coche-la, télécharge (environ 600 Mo), puis dans « Essayer » choisis English → Қазақ тілі, écris « Hello, how are you today? » et clique sur « Traduire » : « Сәлем, бүгін қалайсыз? » s'affiche (Wi-Fi coupé si tu veux).
 - **Étape 14** : après avoir installé « English → Français » (étape 13), tape `uv run runecast --benchmark en fr`. Le tableau des vitesses s'affiche, puis « Conseillé » et « Mémoire stable : oui ». Le rapport est enregistré dans le dossier du journal : envoie-le-moi pour que je règle les valeurs par défaut sur tes vrais PC. Même chose dans Paramètres → Modèles de traduction → Performance → « Mesurer la vitesse… ».
 - **Étape 13** : Fichier → Paramètres… → Modèles de traduction. Tape « Français » dans la recherche, choisis « English → Français », clique sur « Télécharger et installer » (environ 107 Mo, la barre de progression avance). Ensuite, **coupe le Wi-Fi**, écris « Hello, how are you? » dans « Essayer », clique sur « Traduire » : la traduction française s'affiche. Rallume le Wi-Fi.
 - **Étape 12** : Fichier → Paramètres… → Cache des traductions : la page affiche « Phrases en mémoire : 0 » (le cache se remplira avec les premières traductions, à partir de l'étape 13). Le test « une phrase identique n'est pas retraduite » est fait automatiquement par `uv run pytest`.

@@ -7,9 +7,25 @@
  "repository": "https://huggingface.co/JustFrederik/nllb-200-distilled-600M-ct2-int8",
  "revision": "f84941bd43259bdf2e6e56ab779bc30b481df5a0",
  "files": [
-  {"name": "config.json", "size": null, "sha256": null},
-  {"name": "shared_vocabulary.txt", "size": null, "sha256": null},
-  {"name": "sentencepiece.bpe.model", "size": null, "sha256": null},
-  {"name": "model.bin", "size": null, "sha256": null}
+  {
+   "name": "config.json",
+   "size": 159,
+   "sha256": "0c2f6fa2057c7264d052fb4a62ba3476eeae70487acddfa8e779a53a00cbf44c"
+  },
+  {
+   "name": "shared_vocabulary.txt",
+   "size": 2568098,
+   "sha256": "a132a83330f45514c2476eb81d1d69b3c41762264d16ce0a7ea982e5d6c728e5"
+  },
+  {
+   "name": "sentencepiece.bpe.model",
+   "size": 4852054,
+   "sha256": "14bb8dfb35c0ffdea7bc01e56cea38b9e3d5efcdcb9c251d6b40538e1aab555a"
+  },
+  {
+   "name": "model.bin",
+   "size": 622595991,
+   "sha256": "ed1beaf75134de7505315a5223162f56acff397eff6b50638a500d3936fe707b"
+  }
  ]
 }

@@ -12,6 +12,19 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.12 (étape 15 / step 15)
+
+- Modèle étendu NLLB-200 (Meta, version « distillée 600M », format CTranslate2 int8, environ 600 Mo) : traduction locale directe entre 38 langues proposées, dont le kazakh, l'ouzbek, le turkmène, le tatar et l'ouïghour, que les modèles Argos ne couvrent pas.
+  *NLLB-200 extended model (Meta, "distilled 600M", CTranslate2 int8, about 600 MB): direct local translation between 38 offered languages, including Kazakh, Uzbek, Turkmen, Tatar and Uyghur, which Argos models do not cover.*
+- Téléchargé seulement après acceptation de sa licence (CC-BY-NC 4.0, usage non commercial) dans une fenêtre dédiée ; la date d'acceptation est enregistrée.
+  *Downloaded only after its license (CC-BY-NC 4.0, non-commercial use) is accepted in a dedicated window; the acceptance date is recorded.*
+- Fichiers figés sur une révision précise du dépôt Hugging Face, chacun vérifié par son empreinte SHA-256 ; installation complète ou rien.
+  *Files pinned to one precise revision of the Hugging Face repository, each checked by its SHA-256 fingerprint; complete-or-nothing installation.*
+- Vérifié pour de vrai par GitHub : « Hello, how are you today? » → « Сәлем, бүгін қалайсыз? » (kazakh), « Salom, bugun qandaysan? » (ouzbek), « Salam, bu gün nähili? » (turkmène), « Сәлам, син бүген ничек? » (tatar), « ئەسسالامۇ ئەلەيكۇم، بۈگۈن قانداق؟ » (ouïghour).
+  *Really checked by GitHub (see the sentences above).*
+- « Essayer » utilise NLLB-200 quand aucun modèle Argos ne couvre la paire de langues.
+  *"Try" uses NLLB-200 when no Argos model covers the language pair.*
+
 ## 0.1.11 (étape 14 / step 14)
 
 - Banc d'essai de la traduction locale : `runecast --benchmark [de vers]` mesure, sur le PC, la vitesse (phrases par seconde) et la mémoire pour chaque nombre de cœurs et chaque largeur de recherche (rapide, équilibrée, précise), vérifie que la mémoire reste stable, conseille les meilleurs réglages et enregistre un rapport dans le dossier du journal.
