@@ -30,7 +30,7 @@ RuneCast est un logiciel libre qui traduit les jeux vidéo, pour que chacun puis
 
 ### État du projet
 
-🚧 **En cours de développement : rien n'est encore utilisable.** Le développement suit un plan en 51 étapes, chacune testée sur Windows 10 et Fedora 44 avant de passer à la suivante :
+🚧 **En cours de développement : rien n'est encore utilisable.** Le développement suit un plan en 51 étapes. Chaque étape est vérifiée par des tests automatiques sur Windows, Ubuntu et Fedora 44, puis testée à la main sur Windows 10 et Fedora 44 :
 
 - [Plan de développement](docs/PLAN-V1.md)
 - [Suivi des étapes](docs/SUIVI-ETAPES.md)
@@ -105,7 +105,7 @@ RuneCast is free software that translates video games, so that everyone can read
 
 ### Project status
 
-🚧 **Under development: nothing is usable yet.** Development follows a 51-step plan (in French), each step tested on Windows 10 and Fedora 44 before moving on:
+🚧 **Under development: nothing is usable yet.** Development follows a 51-step plan (in French). Each step is checked by automatic tests on Windows, Ubuntu and Fedora 44, then tested by hand on Windows 10 and Fedora 44:
 
 - [Development plan](docs/PLAN-V1.md)
 - [Step tracking](docs/SUIVI-ETAPES.md)

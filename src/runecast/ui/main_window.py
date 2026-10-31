@@ -28,37 +28,52 @@
 
 """Fenêtre principale de RuneCast / RuneCast main window.
 
-FR : Fenêtre principale : titre, icône, menus « Fichier », « Affichage »
-     (langue et thème) et « Aide », et un écran d'accueil. Elle se rouvre à
-     la même taille et à la même place qu'à la dernière fermeture, et change
-     aussitôt de langue ou de thème quand on le demande. Règle du cahier des
-     charges : aucun élément factice. Chaque menu présent fait donc vraiment
-     quelque chose ; les autres menus arriveront avec leurs fonctions.
+FR : Fenêtre principale : titre, icône, menus « Fichier » (Paramètres,
+     Quitter), « Affichage » (langue, thème, plein écran) et « Aide »
+     (dossiers, journal, signaler un problème, À propos), et un écran
+     d'accueil. Elle se rouvre à la même taille et à la même place qu'à la
+     dernière fermeture (réglable), et change aussitôt de langue ou de thème
+     quand on le demande. Règle du cahier des charges : aucun élément
+     factice. Chaque menu présent fait donc vraiment quelque chose (un test
+     automatique le vérifie) ; les autres menus arriveront avec leurs
+     fonctions.
 
-EN : Main window: title, icon, "File", "View" (language and theme) and
-     "Help" menus, and a welcome screen. It reopens with the same size and
-     position as when it was last closed, and switches language or theme
+EN : Main window: title, icon, "File" (Settings, Quit), "View" (language,
+     theme, full screen) and "Help" (folders, log, report a problem, About)
+     menus, and a welcome screen. It reopens with the same size and position
+     as when it was last closed (adjustable), and switches language or theme
      immediately when asked.
      Rule from the specification: no dummy element. Every menu shown therefore
-     really does something; the other menus will come with their features.
+     really does something (an automatic test checks it); the other menus
+     will come with their features.
 """
 
 import logging
 from html import escape
 
-from PySide6.QtCore import QByteArray, QEvent, QLocale, Qt
-from PySide6.QtGui import QAction, QActionGroup, QCloseEvent, QKeySequence
-from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QMenu, QVBoxLayout, QWidget
+from PySide6.QtCore import QByteArray, QEvent, QLocale, Qt, QUrl
+from PySide6.QtGui import QAction, QActionGroup, QCloseEvent, QDesktopServices, QKeySequence
+from PySide6.QtWidgets import (
+    QApplication,
+    QLabel,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QVBoxLayout,
+    QWidget,
+)
 
 from runecast import about
 from runecast.core.languages import LANGUAGES, SYSTEM_LANGUAGE, resolve_language
+from runecast.core.logs import set_detailed_log
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings, load_settings, save_settings
 from runecast.core.themes import DEFAULT_THEME, Theme, all_themes, find_theme
 from runecast.ui.about_dialog import AboutDialog
-from runecast.ui.folders_dialog import FoldersDialog
-from runecast.ui.i18n import LanguageManager
+from runecast.ui.folders_dialog import FoldersDialog, open_folder
+from runecast.ui.i18n import LanguageManager, keep_left_to_right
 from runecast.ui.icons import app_icon
+from runecast.ui.settings_dialog import SettingsDialog
 from runecast.ui.theme import apply_theme
 from runecast.ui.theme_editor import ThemeEditorDialog
 
@@ -110,6 +125,29 @@ class MainWindow(QMainWindow):
         self.quit_action = QAction(self)
         self.quit_action.setShortcut(QKeySequence("Ctrl+Q"))
         self.quit_action.triggered.connect(self.close)
+
+        # FR : Ouvrir la fenêtre « Paramètres » (Ctrl+virgule).
+        # EN : Open the "Settings" window (Ctrl+comma).
+        self.settings_action = QAction(self)
+        self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
+        self.settings_action.triggered.connect(self.show_settings)
+
+        # FR : Plein écran (touche F11), et retour à la normale.
+        # EN : Full screen (F11 key), and back to normal.
+        self.full_screen_action = QAction(self)
+        self.full_screen_action.setCheckable(True)
+        self.full_screen_action.setShortcut(QKeySequence("F11"))
+        self.full_screen_action.toggled.connect(self.set_full_screen)
+
+        # FR : Ouvrir le dossier du journal (à joindre pour signaler un problème).
+        # EN : Open the log folder (to attach when reporting a problem).
+        self.open_log_action = QAction(self)
+        self.open_log_action.triggered.connect(self.open_log_folder)
+
+        # FR : Signaler un problème : ouvre la page GitHub du projet.
+        # EN : Report a problem: opens the project's GitHub page.
+        self.report_problem_action = QAction(self)
+        self.report_problem_action.triggered.connect(self.report_problem)
 
         # FR : Ouvrir la fenêtre « Dossiers de RuneCast ».
         # EN : Open the "RuneCast folders" window.
@@ -164,6 +202,8 @@ class MainWindow(QMainWindow):
     def _create_menus(self) -> None:
         self.file_menu = self.menuBar().addMenu("")
         self.file_menu.setObjectName("fileMenu")
+        self.file_menu.addAction(self.settings_action)
+        self.file_menu.addSeparator()
         self.file_menu.addAction(self.quit_action)
 
         self.view_menu = self.menuBar().addMenu("")
@@ -180,10 +220,14 @@ class MainWindow(QMainWindow):
         self.theme_menu.setObjectName("themeMenu")
         self._rebuild_theme_menu()
         self.view_menu.addMenu(self.theme_menu)
+        self.view_menu.addSeparator()
+        self.view_menu.addAction(self.full_screen_action)
 
         self.help_menu = self.menuBar().addMenu("")
         self.help_menu.setObjectName("helpMenu")
         self.help_menu.addAction(self.folders_action)
+        self.help_menu.addAction(self.open_log_action)
+        self.help_menu.addAction(self.report_problem_action)
         self.help_menu.addSeparator()
         self.help_menu.addAction(self.about_action)
         self.help_menu.addAction(self.about_qt_action)
@@ -261,6 +305,10 @@ class MainWindow(QMainWindow):
         self.theme_menu.setTitle(self.tr("&Thème"))
         self._retranslate_theme_menu()
         self.quit_action.setText(self.tr("&Quitter"))
+        self.settings_action.setText(self.tr("&Paramètres…"))
+        self.full_screen_action.setText(self.tr("&Plein écran"))
+        self.open_log_action.setText(self.tr("Ouvrir le dossier du &journal"))
+        self.report_problem_action.setText(self.tr("&Signaler un problème…"))
         self.folders_action.setText(self.tr("&Dossiers de RuneCast…"))
         self.about_action.setText(self.tr("À &propos de RuneCast…"))
         self.about_qt_action.setText(self.tr("À propos de &Qt…"))
@@ -309,6 +357,16 @@ class MainWindow(QMainWindow):
             return builtin_names[theme.id]
         return theme.name
 
+    def save(self) -> None:
+        """FR : enregistre les réglages (une erreur est notée, sans bloquer).
+
+        EN : save the settings (an error is logged, without blocking).
+        """
+        try:
+            save_settings(self.settings, self.paths.settings_file)
+        except OSError:
+            logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
+
     def change_theme(self, theme_id: str) -> None:
         """Change le thème / Change the theme.
 
@@ -318,10 +376,8 @@ class MainWindow(QMainWindow):
         theme = find_theme(theme_id, self.themes)
         self.settings.theme = theme.id
         apply_theme(QApplication.instance(), theme)
-        try:
-            save_settings(self.settings, self.paths.settings_file)
-        except OSError:
-            logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
+        self.theme_actions[theme.id].setChecked(True)
+        self.save()
 
     def reload_themes(self) -> None:
         """Relit les thèmes / Re-read the themes.
@@ -350,11 +406,59 @@ class MainWindow(QMainWindow):
              right away.
         """
         self.settings.interface_language = code
+        self.language_actions.get(code, self.language_actions[SYSTEM_LANGUAGE]).setChecked(True)
         self.languages.apply(resolve_language(code, QLocale.system().name()))
-        try:
-            save_settings(self.settings, self.paths.settings_file)
-        except OSError:
-            logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
+        self.save()
+
+    def apply_settings(self, new: Settings) -> None:
+        """Applique les réglages de la fenêtre « Paramètres » / Apply the Settings window.
+
+        FR : Seul ce qui a changé est appliqué, puis tout est enregistré.
+        EN : Only what changed is applied, then everything is saved.
+        """
+        self.settings.remember_window = new.remember_window
+        if new.detailed_log != self.settings.detailed_log:
+            self.settings.detailed_log = new.detailed_log
+            set_detailed_log(new.detailed_log)
+            logger.info("Journal détaillé / Detailed log: %s", new.detailed_log)
+        if new.theme != self.settings.theme:
+            self.change_theme(new.theme)
+        if new.interface_language != self.settings.interface_language:
+            self.change_language(new.interface_language)
+        self.save()
+
+    def set_full_screen(self, full_screen: bool) -> None:
+        """FR : passe en plein écran ou revient à la normale. EN : full screen on or off."""
+        if full_screen:
+            self.showFullScreen()
+        else:
+            self.showNormal()
+
+    def open_log_folder(self) -> None:
+        """FR : ouvre le dossier du journal. EN : open the log folder."""
+        if not open_folder(self.paths.log_dir):
+            self._cannot_open(str(self.paths.log_dir))
+
+    def report_problem(self) -> None:
+        """FR : ouvre la page « Issues » du projet sur GitHub, dans le navigateur.
+
+        EN : open the project's "Issues" page on GitHub, in the browser.
+        """
+        if not QDesktopServices.openUrl(QUrl(about.ISSUES_URL)):
+            self._cannot_open(about.ISSUES_URL)
+
+    def _cannot_open(self, target: str) -> None:
+        """FR : le système n'a pas pu ouvrir un dossier ou une adresse.
+
+        EN : the system could not open a folder or an address.
+        """
+        QMessageBox.warning(
+            self,
+            self.tr("Ouverture impossible"),
+            self.tr("Le système n'a pas pu ouvrir :\n{target}").format(
+                target=keep_left_to_right(target)
+            ),
+        )
 
     # ------------------------------------------------------------------
     # FR : Fenêtres secondaires / EN : Secondary windows
@@ -363,15 +467,46 @@ class MainWindow(QMainWindow):
         """Ouvre la fenêtre « À propos » / Open the "About" window."""
         AboutDialog(self).exec()
 
-    def show_folders(self) -> None:
+    def show_folders(self, parent: QWidget | None = None) -> None:
         """Ouvre la fenêtre « Dossiers » / Open the "Folders" window."""
-        dialog = FoldersDialog(self.paths, self)
+        dialog = FoldersDialog(self.paths, parent or self)
         dialog.paths_changed.connect(self.use_paths)
         dialog.exec()
 
-    def show_theme_editor(self) -> None:
+    def show_settings(self) -> None:
+        """Ouvre la fenêtre « Paramètres » / Open the "Settings" window."""
+        self.create_settings_dialog().exec()
+
+    def create_settings_dialog(self) -> SettingsDialog:
+        """FR : prépare la fenêtre « Paramètres », reliée à cette fenêtre.
+
+        EN : prepare the "Settings" window, connected to this window.
+        """
+        dialog = SettingsDialog(self.settings, self.themes, self.paths, self.theme_name, self)
+        dialog.applied.connect(self.apply_settings)
+        dialog.general_page.manage_themes_button.clicked.connect(
+            lambda: self._manage_themes_from(dialog)
+        )
+        dialog.folders_page.manage_folders_button.clicked.connect(
+            lambda: self._manage_folders_from(dialog)
+        )
+        dialog.folders_page.open_log_button.clicked.connect(self.open_log_folder)
+        return dialog
+
+    def _manage_themes_from(self, dialog: SettingsDialog) -> None:
+        """FR : « Gérer les thèmes… » depuis les Paramètres. EN : from the Settings."""
+        self.show_theme_editor(parent=dialog)
+        dialog.general_page.set_themes(self.themes, self.settings.theme)
+
+    def _manage_folders_from(self, dialog: SettingsDialog) -> None:
+        """FR : « Gérer les dossiers… » depuis les Paramètres. EN : from the Settings."""
+        self.show_folders(parent=dialog)
+        dialog.folders_page.show_paths(self.paths)
+        dialog.load(self.settings)
+
+    def show_theme_editor(self, parent: QWidget | None = None) -> None:
         """Ouvre l'éditeur de thèmes / Open the theme editor."""
-        dialog = ThemeEditorDialog(self.paths.config_dir, self.settings.theme, self)
+        dialog = ThemeEditorDialog(self.paths.config_dir, self.settings.theme, parent or self)
         dialog.themes_changed.connect(self.reload_themes)
         dialog.theme_chosen.connect(self._use_chosen_theme)
         dialog.exec()
@@ -379,7 +514,6 @@ class MainWindow(QMainWindow):
     def _use_chosen_theme(self, theme_id: str) -> None:
         """FR : « Utiliser ce thème » dans l'éditeur. EN : "Use this theme" in the editor."""
         self.change_theme(theme_id)
-        self.theme_actions[theme_id].setChecked(True)
 
     def use_paths(self, paths: AppPaths) -> None:
         """FR : les données ont changé de dossier : on suit le nouveau dossier.
@@ -405,20 +539,21 @@ class MainWindow(QMainWindow):
 
         EN : put the window back to its last size and position.
         """
-        if not self.settings.window_geometry:
+        if not self.settings.remember_window or not self.settings.window_geometry:
             return
         geometry = QByteArray.fromBase64(self.settings.window_geometry.encode("ascii"))
         if not self.restoreGeometry(geometry):
             logger.warning("Position de fenêtre illisible / Unreadable window position")
+        self.full_screen_action.setChecked(self.isFullScreen())
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802 (nom imposé par Qt)
         """FR : à la fermeture, mémorise la taille et la place, puis enregistre.
 
         EN : on close, remember the size and position, then save.
         """
-        self.settings.window_geometry = bytes(self.saveGeometry().toBase64()).decode("ascii")
-        try:
-            save_settings(self.settings, self.paths.settings_file)
-        except OSError:
-            logger.exception("Impossible d'enregistrer les réglages / Cannot save settings")
+        if self.settings.remember_window:
+            self.settings.window_geometry = bytes(self.saveGeometry().toBase64()).decode("ascii")
+        else:
+            self.settings.window_geometry = ""
+        self.save()
         super().closeEvent(event)

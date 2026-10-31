@@ -191,6 +191,72 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     </message>
 </context>
 <context>
+    <name>FoldersLogPage</name>
+    <message>
+        <source>Dossiers et journal</source>
+        <translation>Folders and log</translation>
+    </message>
+    <message>
+        <source>Dossiers</source>
+        <translation>Folders</translation>
+    </message>
+    <message>
+        <source>Journal</source>
+        <translation>Log</translation>
+    </message>
+    <message>
+        <source>Gérer les dossiers…</source>
+        <translation>Manage folders…</translation>
+    </message>
+    <message>
+        <source>Journal détaillé</source>
+        <translation>Detailed log</translation>
+    </message>
+    <message>
+        <source>À activer seulement pour signaler un problème : RuneCast note alors aussi les messages techniques.</source>
+        <translation>Only turn this on to report a problem: RuneCast then also records technical messages.</translation>
+    </message>
+    <message>
+        <source>Ouvrir le dossier du journal</source>
+        <translation>Open the log folder</translation>
+    </message>
+    <message>
+        <source>Réglages : {folder}</source>
+        <translation>Settings: {folder}</translation>
+    </message>
+    <message>
+        <source>Données : {folder}</source>
+        <translation>Data: {folder}</translation>
+    </message>
+</context>
+<context>
+    <name>GeneralPage</name>
+    <message>
+        <source>Général</source>
+        <translation>General</translation>
+    </message>
+    <message>
+        <source>Langue de l&apos;interface :</source>
+        <translation>Interface language:</translation>
+    </message>
+    <message>
+        <source>Thème :</source>
+        <translation>Theme:</translation>
+    </message>
+    <message>
+        <source>Gérer les thèmes…</source>
+        <translation>Manage themes…</translation>
+    </message>
+    <message>
+        <source>C&apos;est la langue des menus et des fenêtres de RuneCast. Les jeux pourront être traduits vers d&apos;autres langues.</source>
+        <translation>This is the language of RuneCast&apos;s menus and windows. Games can be translated into other languages.</translation>
+    </message>
+    <message>
+        <source>Langue du système</source>
+        <translation>System language</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>&amp;Fichier</source>
@@ -215,6 +281,22 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     <message>
         <source>&amp;Quitter</source>
         <translation>&amp;Quit</translation>
+    </message>
+    <message>
+        <source>&amp;Paramètres…</source>
+        <translation>&amp;Settings…</translation>
+    </message>
+    <message>
+        <source>&amp;Plein écran</source>
+        <translation>&amp;Full screen</translation>
+    </message>
+    <message>
+        <source>Ouvrir le dossier du &amp;journal</source>
+        <translation>Open the &amp;log folder</translation>
+    </message>
+    <message>
+        <source>&amp;Signaler un problème…</source>
+        <translation>&amp;Report a problem…</translation>
     </message>
     <message>
         <source>&amp;Dossiers de RuneCast…</source>
@@ -263,6 +345,23 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     <message>
         <source>Clair</source>
         <translation>Light</translation>
+    </message>
+    <message>
+        <source>Ouverture impossible</source>
+        <translation>Cannot open</translation>
+    </message>
+    <message>
+        <source>Le système n&apos;a pas pu ouvrir :
+{target}</source>
+        <translation>The system could not open:
+{target}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Paramètres</source>
+        <translation>Settings</translation>
     </message>
 </context>
 <context>
@@ -500,6 +599,17 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     <message>
         <source>Le thème « {name} » a été modifié. Enregistrer les modifications ?</source>
         <translation>The theme “{name}” has been changed. Save the changes?</translation>
+    </message>
+</context>
+<context>
+    <name>WindowPage</name>
+    <message>
+        <source>Fenêtre</source>
+        <translation>Window</translation>
+    </message>
+    <message>
+        <source>Rouvrir la fenêtre principale à la même taille et à la même place</source>
+        <translation>Reopen the main window with the same size and position</translation>
     </message>
 </context>
 </TS>

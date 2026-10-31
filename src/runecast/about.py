@@ -74,6 +74,9 @@ LICENSE_NAME = "GNU General Public License v3.0 or later"
 # EN : Address of the source code on GitHub.
 REPOSITORY_URL = "https://github.com/davidharputoglu/RuneCast"
 
+# FR : Page GitHub pour signaler un problème. EN : GitHub page to report a problem.
+ISSUES_URL = REPOSITORY_URL + "/issues"
+
 # FR : Adresse du texte officiel de la licence.
 # EN : Address of the official license text.
 LICENSE_URL = "https://www.gnu.org/licenses/gpl-3.0.html"

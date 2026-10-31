@@ -104,6 +104,18 @@ def setup_logging(
     return log_file
 
 
+def set_detailed_log(detailed: bool) -> None:
+    """Journal détaillé ou normal / Detailed or normal log.
+
+    FR : En mode détaillé, RuneCast note aussi les messages techniques
+         (niveau DEBUG) : utile pour comprendre un problème. Effet immédiat.
+    EN : In detailed mode, RuneCast also writes technical messages (DEBUG
+         level): useful to understand a problem. Takes effect immediately.
+    """
+    level = logging.DEBUG if detailed else logging.INFO
+    logging.getLogger(ROOT_LOGGER_NAME).setLevel(level)
+
+
 def log_startup(paths: AppPaths) -> None:
     """FR : note la version, le système et les dossiers utilisés.
 

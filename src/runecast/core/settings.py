@@ -96,6 +96,12 @@ class Settings:
     # FR : taille et position de la fenêtre principale, mémorisées à la fermeture.
     # EN : size and position of the main window, remembered when it closes.
     window_geometry: str = ""
+    # FR : rouvrir la fenêtre à la même taille et à la même place (étape 10).
+    # EN : reopen the window with the same size and position (step 10).
+    remember_window: bool = True
+    # FR : journal détaillé, utile pour signaler un problème (étape 10).
+    # EN : detailed log, useful to report a problem (step 10).
+    detailed_log: bool = False
     # FR : réglages inconnus (écrits par une version plus récente) : conservés tels quels.
     # EN : unknown settings (written by a newer version): kept as they are.
     extra: dict[str, Any] = field(default_factory=dict)

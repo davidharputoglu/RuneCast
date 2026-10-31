@@ -191,6 +191,72 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     </message>
 </context>
 <context>
+    <name>FoldersLogPage</name>
+    <message>
+        <source>Dossiers et journal</source>
+        <translation>المجلدات والسجل</translation>
+    </message>
+    <message>
+        <source>Dossiers</source>
+        <translation>المجلدات</translation>
+    </message>
+    <message>
+        <source>Journal</source>
+        <translation>السجل</translation>
+    </message>
+    <message>
+        <source>Gérer les dossiers…</source>
+        <translation>إدارة المجلدات…</translation>
+    </message>
+    <message>
+        <source>Journal détaillé</source>
+        <translation>سجل مفصَّل</translation>
+    </message>
+    <message>
+        <source>À activer seulement pour signaler un problème : RuneCast note alors aussi les messages techniques.</source>
+        <translation>لا تفعّله إلا للإبلاغ عن مشكلة: عندها يسجّل RuneCast الرسائل التقنية أيضًا.</translation>
+    </message>
+    <message>
+        <source>Ouvrir le dossier du journal</source>
+        <translation>فتح مجلد السجل</translation>
+    </message>
+    <message>
+        <source>Réglages : {folder}</source>
+        <translation>الإعدادات: {folder}</translation>
+    </message>
+    <message>
+        <source>Données : {folder}</source>
+        <translation>البيانات: {folder}</translation>
+    </message>
+</context>
+<context>
+    <name>GeneralPage</name>
+    <message>
+        <source>Général</source>
+        <translation>عام</translation>
+    </message>
+    <message>
+        <source>Langue de l&apos;interface :</source>
+        <translation>لغة الواجهة:</translation>
+    </message>
+    <message>
+        <source>Thème :</source>
+        <translation>السمة:</translation>
+    </message>
+    <message>
+        <source>Gérer les thèmes…</source>
+        <translation>إدارة السمات…</translation>
+    </message>
+    <message>
+        <source>C&apos;est la langue des menus et des fenêtres de RuneCast. Les jeux pourront être traduits vers d&apos;autres langues.</source>
+        <translation>هذه هي لغة قوائم RuneCast ونوافذه. يمكن ترجمة الألعاب إلى لغات أخرى.</translation>
+    </message>
+    <message>
+        <source>Langue du système</source>
+        <translation>لغة النظام</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>&amp;Fichier</source>
@@ -215,6 +281,22 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     <message>
         <source>&amp;Quitter</source>
         <translation>&amp;خروج</translation>
+    </message>
+    <message>
+        <source>&amp;Paramètres…</source>
+        <translation>الإ&amp;عدادات…</translation>
+    </message>
+    <message>
+        <source>&amp;Plein écran</source>
+        <translation>&amp;ملء الشاشة</translation>
+    </message>
+    <message>
+        <source>Ouvrir le dossier du &amp;journal</source>
+        <translation>فتح مجلد ال&amp;سجل</translation>
+    </message>
+    <message>
+        <source>&amp;Signaler un problème…</source>
+        <translation>الإ&amp;بلاغ عن مشكلة…</translation>
     </message>
     <message>
         <source>&amp;Dossiers de RuneCast…</source>
@@ -263,6 +345,23 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     <message>
         <source>Clair</source>
         <translation>فاتح</translation>
+    </message>
+    <message>
+        <source>Ouverture impossible</source>
+        <translation>تعذّر الفتح</translation>
+    </message>
+    <message>
+        <source>Le système n&apos;a pas pu ouvrir :
+{target}</source>
+        <translation>تعذّر على النظام فتح:
+{target}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Paramètres</source>
+        <translation>الإعدادات</translation>
     </message>
 </context>
 <context>
@@ -500,6 +599,17 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     <message>
         <source>Le thème « {name} » a été modifié. Enregistrer les modifications ?</source>
         <translation>تم تعديل السمة «{name}». هل تريد حفظ التغييرات؟</translation>
+    </message>
+</context>
+<context>
+    <name>WindowPage</name>
+    <message>
+        <source>Fenêtre</source>
+        <translation>النافذة</translation>
+    </message>
+    <message>
+        <source>Rouvrir la fenêtre principale à la même taille et à la même place</source>
+        <translation>إعادة فتح النافذة الرئيسية بالحجم والموضع نفسيهما</translation>
     </message>
 </context>
 </TS>

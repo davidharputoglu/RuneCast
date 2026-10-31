@@ -12,6 +12,23 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.7 (étape 10 / step 10)
+
+- Fenêtre « Paramètres » (Fichier → Paramètres…, ou Ctrl+virgule), avec les boutons OK, Annuler et Appliquer, et trois pages :
+  *"Settings" window (File → Settings…, or Ctrl+comma), with OK, Cancel and Apply buttons, and three pages:*
+  - Général : langue de l'interface et thème (avec accès à l'éditeur de thèmes) ;
+    *General: interface language and theme (with access to the theme editor);*
+  - Fenêtre : rouvrir ou non la fenêtre à la même taille et à la même place ;
+    *Window: reopen the window with the same size and position, or not;*
+  - Dossiers et journal : dossiers utilisés, accès à « Dossiers de RuneCast », journal détaillé (pour signaler un problème), ouverture du dossier du journal.
+    *Folders and log: folders in use, access to "RuneCast folders", detailed log (to report a problem), opening the log folder.*
+- Nouveaux menus : Affichage → Plein écran (F11) ; Aide → Ouvrir le dossier du journal ; Aide → Signaler un problème… (page GitHub du projet).
+  *New menus: View → Full screen (F11); Help → Open the log folder; Help → Report a problem… (project's GitHub page).*
+- Un test automatique vérifie qu'aucune entrée de menu n'est factice (règle du cahier des charges).
+  *An automatic test checks that no menu entry is a dummy (specification rule).*
+- Réglages : deux nouveaux réglages (`remember_window`, `detailed_log`), avec une valeur par défaut ; les anciens fichiers de réglages restent lisibles.
+  *Settings: two new settings (`remember_window`, `detailed_log`), with a default value; older settings files stay readable.*
+
 ## 0.1.6 (étape 9 / step 9)
 
 - Éditeur de thèmes personnels (Affichage → Thème → Gérer les thèmes…) : dupliquer un thème, changer ses 12 couleurs (sélecteur de couleurs ou code #RRGGBB), son nom et le caractère sombre ou clair, avec un aperçu en direct.

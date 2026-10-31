@@ -48,7 +48,12 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 
 from runecast import about
 from runecast.core.languages import resolve_language
-from runecast.core.logs import log_startup, log_uncaught_exceptions, setup_logging
+from runecast.core.logs import (
+    log_startup,
+    log_uncaught_exceptions,
+    set_detailed_log,
+    setup_logging,
+)
 from runecast.core.paths import resolve_paths
 from runecast.core.settings import load_settings, save_settings
 from runecast.core.themes import DEFAULT_THEME, all_themes, builtin_themes, find_theme
@@ -120,6 +125,7 @@ def run(argv: list[str] | None = None, portable: bool = False) -> int:
     log_uncaught_exceptions()
     log_startup(paths)
     settings = load_settings(paths.settings_file)
+    set_detailed_log(settings.detailed_log)
     # FR : on enregistre tout de suite : le fichier existe dès le 1er lancement.
     # EN : save right away so the file exists from the first launch.
     save_settings(settings, paths.settings_file)
