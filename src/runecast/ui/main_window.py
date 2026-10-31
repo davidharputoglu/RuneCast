@@ -69,10 +69,11 @@ from runecast.core.logs import set_detailed_log
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings, load_settings, save_settings
 from runecast.core.themes import DEFAULT_THEME, Theme, all_themes, find_theme
-from runecast.engines.chain import MODE_LOCAL
+from runecast.engines.chain import MODE_LOCAL, build_chain
 from runecast.engines.online import allow_online_translation
 from runecast.ui.about_dialog import AboutDialog
 from runecast.ui.folders_dialog import FoldersDialog, open_folder
+from runecast.ui.glossary_dialog import GlossaryDialog
 from runecast.ui.i18n import LanguageManager, keep_left_to_right
 from runecast.ui.icons import app_icon
 from runecast.ui.settings_dialog import SettingsDialog
@@ -151,6 +152,11 @@ class MainWindow(QMainWindow):
         self.report_problem_action = QAction(self)
         self.report_problem_action.triggered.connect(self.report_problem)
 
+        # FR : Ouvrir la fenêtre « Glossaires » (étape 18).
+        # EN : Open the "Glossaries" window (step 18).
+        self.glossaries_action = QAction(self)
+        self.glossaries_action.triggered.connect(self.show_glossaries)
+
         # FR : Ouvrir la fenêtre « Dossiers de RuneCast ».
         # EN : Open the "RuneCast folders" window.
         self.folders_action = QAction(self)
@@ -224,6 +230,10 @@ class MainWindow(QMainWindow):
         self.view_menu.addMenu(self.theme_menu)
         self.view_menu.addSeparator()
         self.view_menu.addAction(self.full_screen_action)
+
+        self.tools_menu = self.menuBar().addMenu("")
+        self.tools_menu.setObjectName("toolsMenu")
+        self.tools_menu.addAction(self.glossaries_action)
 
         self.help_menu = self.menuBar().addMenu("")
         self.help_menu.setObjectName("helpMenu")
@@ -302,7 +312,9 @@ class MainWindow(QMainWindow):
         """
         self.file_menu.setTitle(self.tr("&Fichier"))
         self.view_menu.setTitle(self.tr("&Affichage"))
+        self.tools_menu.setTitle(self.tr("&Outils"))
         self.help_menu.setTitle(self.tr("&Aide"))
+        self.glossaries_action.setText(self.tr("&Glossaires…"))
         self.language_menu.setTitle(self.tr("&Langue de l'interface"))
         self.theme_menu.setTitle(self.tr("&Thème"))
         self._retranslate_theme_menu()
@@ -483,6 +495,12 @@ class MainWindow(QMainWindow):
         dialog = FoldersDialog(self.paths, parent or self)
         dialog.paths_changed.connect(self.use_paths)
         dialog.exec()
+
+    def show_glossaries(self) -> None:
+        """Ouvre la fenêtre « Glossaires » / Open the "Glossaries" window."""
+        GlossaryDialog(
+            self.paths.config_dir, lambda: build_chain(self.settings, self.paths), self
+        ).exec()
 
     def show_settings(self) -> None:
         """Ouvre la fenêtre « Paramètres » / Open the "Settings" window."""

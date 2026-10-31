@@ -63,6 +63,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 
 from runecast.core.cache import ORIGIN_CACHE, ORIGIN_ENGINE, TranslationCache
+from runecast.core.glossary import Glossary
 from runecast.core.paths import AppPaths
 from runecast.core.protect import protect, restore
 from runecast.core.secrets import KeyStore
@@ -86,6 +87,8 @@ MODE_LOCAL = "local"
 CHUNK_SIZE = 20
 # FR : Nom donné aux traductions reprises du cache. EN : Name for cached translations.
 FROM_CACHE = "cache"
+# FR : Problème : un terme imposé du glossaire manque. EN : Problem: an imposed term is missing.
+PROBLEM_GLOSSARY = "glossary"
 
 
 @dataclass
@@ -143,15 +146,26 @@ class EngineChain:
         )
 
     def translate_lines(
-        self, lines: Sequence[str], source_lang: str, target_lang: str
+        self,
+        lines: Sequence[str],
+        source_lang: str,
+        target_lang: str,
+        glossary: Glossary | None = None,
     ) -> list[LineResult]:
         """Traduit un paquet de lignes / Translate a chunk of lines.
 
         FR : Essaie chaque moteur disponible jusqu'à ce que l'un réussisse.
-        EN : Tries each available engine until one succeeds.
+             Les termes du glossaire sont protégés comme les balises, puis
+             remplacés par leur traduction imposée.
+        EN : Tries each available engine until one succeeds. Glossary terms
+             are protected like tags, then replaced by their imposed
+             translation.
         """
+        use_glossary = glossary is not None and glossary.applies_to(source_lang, target_lang)
         for engine in self.candidates(source_lang, target_lang):
             protected = [protect(line, engine.marker_style) for line in lines]
+            if use_glossary:
+                protected = [glossary.apply(item) for item in protected]
             to_send = [p.masked for p in protected if p.translatable]
             try:
                 answer = engine.translate(to_send, source_lang, target_lang)
@@ -164,13 +178,17 @@ class EngineChain:
             results = []
             for line, item in zip(lines, protected, strict=True):
                 if not item.translatable:
-                    results.append(LineResult(line, line, True, engine.engine_id))
+                    # FR : rien à traduire (balises, termes imposés seuls…).
+                    # EN : nothing to translate (tags, imposed terms only…).
+                    restored = restore(item.masked, item)
+                    results.append(LineResult(line, restored.text, True, engine.engine_id))
                     continue
                 restored = restore(next(translated), item)
+                problems = list(restored.problems)
+                if use_glossary and restored.ok and glossary.check(line, restored.text):
+                    problems.append(PROBLEM_GLOSSARY)
                 results.append(
-                    LineResult(
-                        line, restored.text, restored.ok, engine.engine_id, restored.problems
-                    )
+                    LineResult(line, restored.text, not problems, engine.engine_id, problems)
                 )
             return results
         raise EngineUnavailable(
@@ -188,21 +206,29 @@ def translate_texts(
     progress: Callable[[int, int], None] | None = None,
     should_cancel: Callable[[], bool] | None = None,
     chunk_size: int = CHUNK_SIZE,
+    glossary: Glossary | None = None,
 ) -> list[LineResult | None]:
     """Traduit des lignes, avec cache et repli / Translate lines, with cache and fallback.
 
     FR : Les lignes identiques ne sont traduites qu'une fois ; celles déjà
          dans le cache n'en sortent pas. En cas d'annulation, les lignes non
          traduites valent None. Seules les traductions sans problème entrent
-         dans le cache.
+         dans le cache. Les lignes qui contiennent un terme du glossaire ne
+         passent pas par le cache (leur traduction dépend du glossaire).
     EN : Identical lines are translated once; those already in the cache are
          taken from it. If cancelled, untranslated lines are None. Only
-         problem-free translations enter the cache.
+         problem-free translations enter the cache. Lines holding a glossary
+         term skip the cache (their translation depends on the glossary).
     """
     unique = list(dict.fromkeys(texts))
     results: dict[str, LineResult] = {}
+    active = (
+        glossary if glossary is not None and glossary.applies_to(source_lang, target_lang) else None
+    )
+    glossary_lines = {text for text in unique if active is not None and active.matches(text)}
     if cache is not None:
-        for source, text in cache.get_many(unique, source_lang, target_lang).items():
+        cacheable = [text for text in unique if text not in glossary_lines]
+        for source, text in cache.get_many(cacheable, source_lang, target_lang).items():
             results[source] = LineResult(source, text, True, FROM_CACHE)
         if results:
             cache.record_many(
@@ -221,9 +247,9 @@ def translate_texts(
         if should_cancel is not None and should_cancel():
             break
         chunk = pending[start : start + chunk_size]
-        for result in chain.translate_lines(chunk, source_lang, target_lang):
+        for result in chain.translate_lines(chunk, source_lang, target_lang, active):
             results[result.source] = result
-            if cache is not None and result.ok:
+            if cache is not None and result.ok and result.source not in glossary_lines:
                 cache.put(result.source, result.text, source_lang, target_lang, result.engine)
                 cache.record(
                     result.source,

@@ -12,6 +12,19 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.15 (étape 18 / step 18)
+
+- Glossaires par jeu (`core/glossary.py`), un fichier par glossaire dans le dossier des réglages (`glossaires`), avec numéro de format. Ils seront reliés aux profils de jeux aux étapes 21 et 28.
+  *Per-game glossaries, one file per glossary in the settings folder, with a format number. They will be linked to game profiles in steps 21 and 28.*
+- Application forcée : chaque terme imposé est protégé comme une balise avant l'envoi au moteur (qui ne le voit jamais), puis remplacé par sa traduction imposée. Mots entiers (« Ann » ne touche pas « Anna »), les plus longs d'abord, majuscules ignorées sauf si demandé, balises et variables jamais touchées. Les lignes avec un terme imposé ne passent pas par le cache.
+  *Forced application: each imposed term is protected like a tag before being sent to the engine (which never sees it), then replaced by its imposed translation. Whole words, longest first, case ignored unless asked, tags and variables never touched. Lines with an imposed term skip the cache.*
+- Rapport de contrôle : chaque ligne est vérifiée ; un terme imposé absent la marque « à vérifier ».
+  *Control report: each line is checked; a missing imposed term marks it "to check".*
+- Outils → Glossaires… : créer, renommer, supprimer ; tableau modifiable (terme, traduction imposée, note, respecter la casse) ; import et export CSV (virgule ou point-virgule, compatible Excel et LibreOffice) ; « Traduire et contrôler » avec rapport.
+  *Tools → Glossaries…: create, rename, delete; editable table; CSV import and export (Excel and LibreOffice compatible); "Translate and check" with report.*
+- Nouveau menu « Outils ».
+  *New "Tools" menu.*
+
 ## 0.1.14 (étape 17 / step 17)
 
 - Chaîne de traduction (`engines/chain.py`) : protection des balises, cache, moteurs en ligne cochés dans l'ordre, puis modèles Argos, puis NLLB-200. Une ligne qui perd une balise est marquée « à vérifier » et n'entre pas dans le cache.

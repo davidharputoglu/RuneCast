@@ -304,6 +304,161 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     </message>
 </context>
 <context>
+    <name>GlossaryDialog</name>
+    <message>
+        <source>Glossaires</source>
+        <translation>Glossaries</translation>
+    </message>
+    <message>
+        <source>Nouveau…</source>
+        <translation>New…</translation>
+    </message>
+    <message>
+        <source>Renommer…</source>
+        <translation>Rename…</translation>
+    </message>
+    <message>
+        <source>Supprimer</source>
+        <translation>Delete</translation>
+    </message>
+    <message>
+        <source>Langues :</source>
+        <translation>Languages:</translation>
+    </message>
+    <message>
+        <source>Terme d&apos;origine</source>
+        <translation>Original term</translation>
+    </message>
+    <message>
+        <source>Traduction imposée</source>
+        <translation>Imposed translation</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>Note</translation>
+    </message>
+    <message>
+        <source>Respecter la casse</source>
+        <translation>Match case</translation>
+    </message>
+    <message>
+        <source>Ajouter un terme</source>
+        <translation>Add a term</translation>
+    </message>
+    <message>
+        <source>Supprimer le terme</source>
+        <translation>Delete the term</translation>
+    </message>
+    <message>
+        <source>Importer un CSV…</source>
+        <translation>Import a CSV…</translation>
+    </message>
+    <message>
+        <source>Exporter en CSV…</source>
+        <translation>Export as CSV…</translation>
+    </message>
+    <message>
+        <source>Contrôle (une phrase d&apos;essai par ligne)</source>
+        <translation>Check (one test sentence per line)</translation>
+    </message>
+    <message>
+        <source>Traduire et contrôler</source>
+        <translation>Translate and check</translation>
+    </message>
+    <message>
+        <source>Enregistrer</source>
+        <translation>Save</translation>
+    </message>
+    <message>
+        <source>Fermer</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>Nouveau glossaire</source>
+        <translation>New glossary</translation>
+    </message>
+    <message>
+        <source>Nom du jeu ou du glossaire :</source>
+        <translation>Game or glossary name:</translation>
+    </message>
+    <message>
+        <source>Renommer le glossaire</source>
+        <translation>Rename the glossary</translation>
+    </message>
+    <message>
+        <source>Nouveau nom :</source>
+        <translation>New name:</translation>
+    </message>
+    <message>
+        <source>Supprimer le glossaire ?</source>
+        <translation>Delete the glossary?</translation>
+    </message>
+    <message>
+        <source>Le glossaire « {name} » sera supprimé définitivement. Continuer ?</source>
+        <translation>The glossary “{name}” will be deleted permanently. Continue?</translation>
+    </message>
+    <message>
+        <source>Termes incomplets</source>
+        <translation>Incomplete terms</translation>
+    </message>
+    <message>
+        <source>Chaque terme doit avoir sa traduction imposée ({count} incomplet(s)).</source>
+        <translation>Each term must have its imposed translation ({count} incomplete).</translation>
+    </message>
+    <message>
+        <source>Importer un CSV</source>
+        <translation>Import a CSV</translation>
+    </message>
+    <message>
+        <source>Fichiers CSV (*.csv)</source>
+        <translation>CSV files (*.csv)</translation>
+    </message>
+    <message>
+        <source>Import impossible</source>
+        <translation>Cannot import</translation>
+    </message>
+    <message>
+        <source>Import terminé</source>
+        <translation>Import finished</translation>
+    </message>
+    <message>
+        <source>{count} terme(s) importé(s). Pense à cliquer sur « Enregistrer ».</source>
+        <translation>{count} term(s) imported. Remember to click “Save”.</translation>
+    </message>
+    <message>
+        <source>Exporter en CSV</source>
+        <translation>Export as CSV</translation>
+    </message>
+    <message>
+        <source>Traduction en cours…</source>
+        <translation>Translating…</translation>
+    </message>
+    <message>
+        <source>Échec : {reason}</source>
+        <translation>Failed: {reason}</translation>
+    </message>
+    <message>
+        <source>terme imposé absent : « {source} » → « {target} »</source>
+        <translation>imposed term missing: “{source}” → “{target}”</translation>
+    </message>
+    <message>
+        <source>Rapport : tous les termes imposés sont respectés.</source>
+        <translation>Report: all imposed terms are respected.</translation>
+    </message>
+    <message>
+        <source>Rapport : {count} ligne(s) à vérifier.</source>
+        <translation>Report: {count} line(s) to check.</translation>
+    </message>
+    <message>
+        <source>Modifications non enregistrées</source>
+        <translation>Unsaved changes</translation>
+    </message>
+    <message>
+        <source>Le glossaire « {name} » a été modifié. Enregistrer les modifications ?</source>
+        <translation>The glossary “{name}” has been changed. Save the changes?</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>&amp;Fichier</source>
@@ -314,8 +469,16 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
         <translation>&amp;View</translation>
     </message>
     <message>
+        <source>&amp;Outils</source>
+        <translation>&amp;Tools</translation>
+    </message>
+    <message>
         <source>&amp;Aide</source>
         <translation>&amp;Help</translation>
+    </message>
+    <message>
+        <source>&amp;Glossaires…</source>
+        <translation>&amp;Glossaries…</translation>
     </message>
     <message>
         <source>&amp;Langue de l&apos;interface</source>

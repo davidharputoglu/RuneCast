@@ -304,6 +304,161 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     </message>
 </context>
 <context>
+    <name>GlossaryDialog</name>
+    <message>
+        <source>Glossaires</source>
+        <translation>المسارد</translation>
+    </message>
+    <message>
+        <source>Nouveau…</source>
+        <translation>جديد…</translation>
+    </message>
+    <message>
+        <source>Renommer…</source>
+        <translation>إعادة تسمية…</translation>
+    </message>
+    <message>
+        <source>Supprimer</source>
+        <translation>حذف</translation>
+    </message>
+    <message>
+        <source>Langues :</source>
+        <translation>اللغات:</translation>
+    </message>
+    <message>
+        <source>Terme d&apos;origine</source>
+        <translation>المصطلح الأصلي</translation>
+    </message>
+    <message>
+        <source>Traduction imposée</source>
+        <translation>الترجمة المفروضة</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>ملاحظة</translation>
+    </message>
+    <message>
+        <source>Respecter la casse</source>
+        <translation>مطابقة حالة الأحرف</translation>
+    </message>
+    <message>
+        <source>Ajouter un terme</source>
+        <translation>إضافة مصطلح</translation>
+    </message>
+    <message>
+        <source>Supprimer le terme</source>
+        <translation>حذف المصطلح</translation>
+    </message>
+    <message>
+        <source>Importer un CSV…</source>
+        <translation>استيراد ملف CSV…</translation>
+    </message>
+    <message>
+        <source>Exporter en CSV…</source>
+        <translation>تصدير بصيغة CSV…</translation>
+    </message>
+    <message>
+        <source>Contrôle (une phrase d&apos;essai par ligne)</source>
+        <translation>التحقق (جملة تجريبية واحدة في كل سطر)</translation>
+    </message>
+    <message>
+        <source>Traduire et contrôler</source>
+        <translation>ترجمة وتحقق</translation>
+    </message>
+    <message>
+        <source>Enregistrer</source>
+        <translation>حفظ</translation>
+    </message>
+    <message>
+        <source>Fermer</source>
+        <translation>إغلاق</translation>
+    </message>
+    <message>
+        <source>Nouveau glossaire</source>
+        <translation>مسرد جديد</translation>
+    </message>
+    <message>
+        <source>Nom du jeu ou du glossaire :</source>
+        <translation>اسم اللعبة أو المسرد:</translation>
+    </message>
+    <message>
+        <source>Renommer le glossaire</source>
+        <translation>إعادة تسمية المسرد</translation>
+    </message>
+    <message>
+        <source>Nouveau nom :</source>
+        <translation>الاسم الجديد:</translation>
+    </message>
+    <message>
+        <source>Supprimer le glossaire ?</source>
+        <translation>حذف المسرد؟</translation>
+    </message>
+    <message>
+        <source>Le glossaire « {name} » sera supprimé définitivement. Continuer ?</source>
+        <translation>سيُحذف المسرد «{name}» نهائيًا. هل تريد المتابعة؟</translation>
+    </message>
+    <message>
+        <source>Termes incomplets</source>
+        <translation>مصطلحات ناقصة</translation>
+    </message>
+    <message>
+        <source>Chaque terme doit avoir sa traduction imposée ({count} incomplet(s)).</source>
+        <translation>يجب أن يكون لكل مصطلح ترجمته المفروضة (عدد الناقص: {count}).</translation>
+    </message>
+    <message>
+        <source>Importer un CSV</source>
+        <translation>استيراد ملف CSV</translation>
+    </message>
+    <message>
+        <source>Fichiers CSV (*.csv)</source>
+        <translation>ملفات CSV (*.csv)</translation>
+    </message>
+    <message>
+        <source>Import impossible</source>
+        <translation>تعذّر الاستيراد</translation>
+    </message>
+    <message>
+        <source>Import terminé</source>
+        <translation>اكتمل الاستيراد</translation>
+    </message>
+    <message>
+        <source>{count} terme(s) importé(s). Pense à cliquer sur « Enregistrer ».</source>
+        <translation>عدد المصطلحات المستوردة: {count}. لا تنسَ النقر على «حفظ».</translation>
+    </message>
+    <message>
+        <source>Exporter en CSV</source>
+        <translation>تصدير بصيغة CSV</translation>
+    </message>
+    <message>
+        <source>Traduction en cours…</source>
+        <translation>جارٍ الترجمة…</translation>
+    </message>
+    <message>
+        <source>Échec : {reason}</source>
+        <translation>فشل: {reason}</translation>
+    </message>
+    <message>
+        <source>terme imposé absent : « {source} » → « {target} »</source>
+        <translation>المصطلح المفروض غائب: «{source}» ← «{target}»</translation>
+    </message>
+    <message>
+        <source>Rapport : tous les termes imposés sont respectés.</source>
+        <translation>التقرير: جميع المصطلحات المفروضة محترمة.</translation>
+    </message>
+    <message>
+        <source>Rapport : {count} ligne(s) à vérifier.</source>
+        <translation>التقرير: عدد الأسطر التي تحتاج إلى مراجعة: {count}.</translation>
+    </message>
+    <message>
+        <source>Modifications non enregistrées</source>
+        <translation>تغييرات غير محفوظة</translation>
+    </message>
+    <message>
+        <source>Le glossaire « {name} » a été modifié. Enregistrer les modifications ?</source>
+        <translation>تم تعديل المسرد «{name}». هل تريد حفظ التغييرات؟</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>&amp;Fichier</source>
@@ -314,8 +469,16 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
         <translation>&amp;عرض</translation>
     </message>
     <message>
+        <source>&amp;Outils</source>
+        <translation>أ&amp;دوات</translation>
+    </message>
+    <message>
         <source>&amp;Aide</source>
         <translation>&amp;مساعدة</translation>
+    </message>
+    <message>
+        <source>&amp;Glossaires…</source>
+        <translation>ال&amp;مسارد…</translation>
     </message>
     <message>
         <source>&amp;Langue de l&apos;interface</source>
