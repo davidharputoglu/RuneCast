@@ -49,7 +49,7 @@ EN : Gathers all RuneCast settings, sorted into pages (list on the left,
 from collections.abc import Callable
 from dataclasses import replace
 
-from PySide6.QtCore import QEvent, Qt, Signal
+from PySide6.QtCore import QEvent, QLocale, Qt, Signal
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -59,17 +59,19 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QListWidget,
+    QMessageBox,
     QPushButton,
     QStackedWidget,
     QVBoxLayout,
     QWidget,
 )
 
+from runecast.core.cache import TranslationCache, cache_file
 from runecast.core.languages import LANGUAGES, SYSTEM_LANGUAGE
 from runecast.core.paths import AppPaths
 from runecast.core.settings import Settings
 from runecast.core.themes import Theme, find_theme
-from runecast.ui.i18n import keep_left_to_right
+from runecast.ui.i18n import format_size, keep_left_to_right
 
 
 class SettingsPage(QWidget):
@@ -266,6 +268,132 @@ class FoldersLogPage(SettingsPage):
         settings.detailed_log = self.detailed_log_check.isChecked()
 
 
+class CachePage(SettingsPage):
+    """Page « Cache des traductions » / "Translation cache" page.
+
+    FR : Montre ce que contient le cache et l'historique, et permet de les
+         vider (après confirmation). Ces boutons agissent tout de suite.
+    EN : Shows what the cache and the history hold, and lets the user empty
+         them (after confirmation). These buttons act at once.
+    """
+
+    def __init__(self, paths: AppPaths) -> None:
+        super().__init__()
+        self.setObjectName("cachePage")
+        self.paths = paths
+        self.explanation = QLabel()
+        self.explanation.setWordWrap(True)
+        self.translations_label = QLabel()
+        self.history_label = QLabel()
+        self.size_label = QLabel()
+        self.clear_cache_button = QPushButton()
+        self.clear_cache_button.clicked.connect(self.clear_cache)
+        self.clear_history_button = QPushButton()
+        self.clear_history_button.clicked.connect(self.clear_history)
+        buttons = QHBoxLayout()
+        buttons.addWidget(self.clear_cache_button)
+        buttons.addWidget(self.clear_history_button)
+        buttons.addStretch()
+        layout = QVBoxLayout(self)
+        for widget in (
+            self.explanation,
+            self.translations_label,
+            self.history_label,
+            self.size_label,
+        ):
+            layout.addWidget(widget)
+        layout.addLayout(buttons)
+        layout.addStretch()
+        self.retranslate()
+
+    def title(self) -> str:
+        return self.tr("Cache des traductions")
+
+    def retranslate(self) -> None:
+        self.explanation.setText(
+            self.tr(
+                "RuneCast garde chaque phrase déjà traduite : une phrase identique "
+                "n'est jamais retraduite (c'est plus rapide, et gratuit avec les "
+                "moteurs payants). L'historique garde la trace de ce qui a été traduit."
+            )
+        )
+        self.clear_cache_button.setText(self.tr("Vider le cache…"))
+        self.clear_history_button.setText(self.tr("Vider l'historique…"))
+        self.refresh()
+
+    def _cache(self) -> TranslationCache | None:
+        """FR : ouvre la base si elle existe déjà (sans la créer pour rien).
+
+        EN : open the base if it already exists (without creating it for nothing).
+        """
+        path = cache_file(self.paths.data_dir)
+        return TranslationCache(path) if path.exists() else None
+
+    def refresh(self) -> None:
+        """FR : met à jour les chiffres. EN : update the figures."""
+        translations = history = size = 0
+        cache = self._cache()
+        if cache is not None:
+            with cache:
+                stats = cache.stats()
+            translations, history, size = stats.translations, stats.history, stats.size_bytes
+        self.translations_label.setText(
+            self.tr("Phrases en mémoire : {count}").format(count=QLocale().toString(translations))
+        )
+        self.history_label.setText(
+            self.tr("Lignes d'historique : {count}").format(count=QLocale().toString(history))
+        )
+        self.size_label.setText(
+            self.tr("Taille du fichier : {size}").format(size=format_size(size))
+        )
+        self.clear_cache_button.setEnabled(translations > 0)
+        self.clear_history_button.setEnabled(history > 0)
+
+    def _confirm(self, title: str, text: str) -> bool:
+        answer = QMessageBox.question(self, title, text)
+        return answer == QMessageBox.StandardButton.Yes
+
+    def clear_cache(self) -> None:
+        """FR : vide le cache, après confirmation. EN : empty the cache, after confirmation."""
+        if not self._confirm(
+            self.tr("Vider le cache ?"),
+            self.tr(
+                "Les phrases déjà traduites seront oubliées : elles seront "
+                "retraduites la prochaine fois. Continuer ?"
+            ),
+        ):
+            return
+        cache = self._cache()
+        if cache is not None:
+            with cache:
+                cache.clear_cache()
+        self.refresh()
+
+    def clear_history(self) -> None:
+        """FR : vide l'historique (après confirmation). EN : empty the history (confirmed)."""
+        if not self._confirm(
+            self.tr("Vider l'historique ?"),
+            self.tr("L'historique des traductions sera effacé définitivement. Continuer ?"),
+        ):
+            return
+        cache = self._cache()
+        if cache is not None:
+            with cache:
+                cache.clear_history()
+        self.refresh()
+
+    def show_paths(self, paths: AppPaths) -> None:
+        """FR : les données ont changé de dossier. EN : the data moved."""
+        self.paths = paths
+        self.refresh()
+
+    def load(self, settings: Settings) -> None:
+        self.refresh()
+
+    def store(self, settings: Settings) -> None:
+        """FR : aucun réglage sur cette page. EN : no setting on this page."""
+
+
 class SettingsDialog(QDialog):
     """Fenêtre « Paramètres » / "Settings" window."""
 
@@ -290,7 +418,13 @@ class SettingsDialog(QDialog):
         self.general_page.set_themes(themes, settings.theme)
         self.window_page = WindowPage()
         self.folders_page = FoldersLogPage(paths)
-        self.pages: list[SettingsPage] = [self.general_page, self.window_page, self.folders_page]
+        self.cache_page = CachePage(paths)
+        self.pages: list[SettingsPage] = [
+            self.general_page,
+            self.window_page,
+            self.folders_page,
+            self.cache_page,
+        ]
 
         self.page_list = QListWidget()
         self.page_list.setObjectName("pageList")

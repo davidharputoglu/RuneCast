@@ -18,7 +18,8 @@ Depuis le 31 octobre 2026, à ta demande, j'enchaîne les étapes sans attendre 
 | 8 | 4 thèmes intégrés (Turquoise, Noir, Sombre, Clair) | 0.1.5 | ✅ | ✅ 18/10/2026 | ⏳ | `2535bba` |
 | 9 | Éditeur de thèmes personnels (créer, enregistrer, importer, exporter, supprimer) ; cases à cocher lisibles | 0.1.6 | ✅ | ⏳ | ⏳ | `3428597` |
 | 10 | Fenêtre principale complète (Paramètres, plein écran, journal, signaler un problème) ; fenêtre « Paramètres » | 0.1.7 | ✅ | ⏳ | ⏳ | `b97c466` |
-| 11 | Protection des balises et variables Ren'Py (masquage, restauration, contrôle), environ 190 cas de test ; démonstration `runecast --protect` | 0.1.8 | 🔄 | ⏳ | ⏳ | — |
+| 11 | Protection des balises et variables Ren'Py (masquage, restauration, contrôle), environ 190 cas de test ; démonstration `runecast --protect` | 0.1.8 | ✅ | ⏳ | ⏳ | `63e18cb` |
+| 12 | Cache et historique des traductions (SQLite) ; page « Cache des traductions » dans les Paramètres | 0.1.9 | 🔄 | ⏳ | ⏳ | — |
 
 Numéros de version : les deux premiers chiffres (« 0.1 ») sont décidés par David ; le dernier augmente à chaque étape validée ou correctif. Les étapes 5 à 8 avaient été numérotées 0.2.x par erreur et ont été corrigées (voir CHANGELOG.md).
 
@@ -62,6 +63,7 @@ Résultat attendu :
 - **Étape 2** : `uv run runecast --version` affiche « Créé par HARPUTOGLU David, aidé par l'IA ».
 - **Étape 3** : `xdg-open` ouvre l'icône 256 px, identique à celle de Windows.
 - **Toutes les étapes** : `uv run pytest` se termine par « passed », sans « failed ».
+- **Étape 12** : Fichier → Paramètres… → Cache des traductions : la page affiche « Phrases en mémoire : 0 » (le cache se remplira avec les premières traductions, à partir de l'étape 13). Le test « une phrase identique n'est pas retraduite » est fait automatiquement par `uv run pytest`.
 - **Étape 11** : `uv run runecast --protect "{b}Bonjour{/b} [player] !"` affiche `[0]Bonjour[1] [2] !`, la liste des éléments protégés et « Contrôle du retour : OK ».
 - **Étape 10** : Fichier → Paramètres… (ou Ctrl+virgule) ouvre la fenêtre « Paramètres » ; changer le thème puis « Appliquer » le change aussitôt ; « Annuler » ne change rien ; Affichage → Plein écran (F11) ; Aide → Ouvrir le dossier du journal ouvre le dossier ; Aide → Signaler un problème… ouvre la page GitHub.
 - **Étape 9** : Affichage → Thème → Gérer les thèmes… → Dupliquer, changer une couleur, Enregistrer, Utiliser ce thème ; après avoir fermé et relancé `uv run runecast`, le thème personnel est toujours appliqué.

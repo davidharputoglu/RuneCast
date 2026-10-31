@@ -50,6 +50,53 @@ RuneCast is using the standard location this time. Reconnect the drive, then res
     </message>
 </context>
 <context>
+    <name>CachePage</name>
+    <message>
+        <source>Cache des traductions</source>
+        <translation>Translation cache</translation>
+    </message>
+    <message>
+        <source>RuneCast garde chaque phrase déjà traduite : une phrase identique n&apos;est jamais retraduite (c&apos;est plus rapide, et gratuit avec les moteurs payants). L&apos;historique garde la trace de ce qui a été traduit.</source>
+        <translation>RuneCast keeps every sentence already translated: an identical sentence is never translated again (it is faster, and free with paid engines). The history keeps track of what was translated.</translation>
+    </message>
+    <message>
+        <source>Vider le cache…</source>
+        <translation>Empty the cache…</translation>
+    </message>
+    <message>
+        <source>Vider l&apos;historique…</source>
+        <translation>Empty the history…</translation>
+    </message>
+    <message>
+        <source>Phrases en mémoire : {count}</source>
+        <translation>Sentences stored: {count}</translation>
+    </message>
+    <message>
+        <source>Lignes d&apos;historique : {count}</source>
+        <translation>History lines: {count}</translation>
+    </message>
+    <message>
+        <source>Taille du fichier : {size}</source>
+        <translation>File size: {size}</translation>
+    </message>
+    <message>
+        <source>Vider le cache ?</source>
+        <translation>Empty the cache?</translation>
+    </message>
+    <message>
+        <source>Les phrases déjà traduites seront oubliées : elles seront retraduites la prochaine fois. Continuer ?</source>
+        <translation>Sentences already translated will be forgotten: they will be translated again next time. Continue?</translation>
+    </message>
+    <message>
+        <source>Vider l&apos;historique ?</source>
+        <translation>Empty the history?</translation>
+    </message>
+    <message>
+        <source>L&apos;historique des traductions sera effacé définitivement. Continuer ?</source>
+        <translation>The translation history will be erased permanently. Continue?</translation>
+    </message>
+</context>
+<context>
     <name>FoldersDialog</name>
     <message>
         <source>Dossiers de RuneCast</source>

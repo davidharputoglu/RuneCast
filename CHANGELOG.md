@@ -12,6 +12,19 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.9 (étape 12 / step 12)
+
+- Cache des traductions (base SQLite `translations.sqlite3` dans le dossier des données) : une phrase identique n'est jamais retraduite, et chaque phrase n'est envoyée qu'une fois au moteur même si elle se répète. Le journal indique combien de phrases viennent du cache.
+  *Translation cache (SQLite base `translations.sqlite3` in the data folder): an identical sentence is never translated again, and each sentence is sent only once to the engine even when it repeats. The log says how many sentences came from the cache.*
+- Historique des traductions : date, jeu, moteur, langues, et origine (moteur, cache ou correction à la main).
+  *Translation history: date, game, engine, languages, and origin (engine, cache or manual fix).*
+- Base protégée : numéro de version pour les futures conversions, fichier abîmé mis de côté (jamais effacé), utilisation simultanée possible.
+  *Protected base: version number for future conversions, damaged file set aside (never deleted), simultaneous use possible.*
+- Paramètres → Cache des traductions : nombre de phrases, lignes d'historique, taille ; boutons pour vider le cache ou l'historique (après confirmation).
+  *Settings → Translation cache: number of sentences, history lines, size; buttons to empty the cache or the history (after confirmation).*
+- Correctif : les tailles de fichiers (fenêtre « Dossiers de RuneCast ») s'affichent maintenant dans la langue choisie (« 11.8 MB » en anglais) au lieu de toujours en français.
+  *Fix: file sizes ("RuneCast folders" window) are now shown in the chosen language ("11.8 MB" in English) instead of always in French.*
+
 ## 0.1.8 (étape 11 / step 11)
 
 - Protection des balises et des variables avant traduction (`core/protect.py`) : balises Ren'Py ({b}, {color=…}, {w}, {a=…}, {rb}/{rt}…), variables ([player], [mc!t], [items[0]]…), échappements ({{, [[, %%, \n…), formats Python (%s, %(nom)s, {0}…), retours à la ligne et espaces de début et de fin. Chaque élément est remplacé par un repère numéroté ([0], [1]… ou <x id="0"/> pour les moteurs HTML), puis remis à sa place.

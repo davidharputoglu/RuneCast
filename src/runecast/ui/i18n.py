@@ -134,3 +134,12 @@ class LanguageManager:
             self._translators.append(translator)
         else:
             logger.error("Traduction introuvable / Translation not found: %s", path)
+
+
+def format_size(size: int) -> str:
+    """Taille lisible dans la langue choisie / Readable size in the chosen language.
+
+    FR : « 11,8 Mo » en français, « 11.8 MB » en anglais, « ١١٫٨ م.ب » en arabe.
+    EN : "11,8 Mo" in French, "11.8 MB" in English, "١١٫٨ م.ب" in Arabic.
+    """
+    return QLocale().formattedDataSize(size, 1, QLocale.DataSizeFormat.DataSizeTraditionalFormat)

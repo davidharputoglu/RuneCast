@@ -68,7 +68,7 @@ from runecast.core.paths import (
     system_paths,
     write_custom_root,
 )
-from runecast.ui.i18n import keep_left_to_right
+from runecast.ui.i18n import format_size, keep_left_to_right
 
 logger = logging.getLogger(__name__)
 
@@ -262,7 +262,7 @@ class FoldersDialog(QDialog):
                 "La copie sera vérifiée avant d'utiliser le nouveau dossier. Continuer ?"
             ).format(
                 count=len(plan.files),
-                size=relocate.human_size(plan.total_bytes),
+                size=format_size(plan.total_bytes),
                 folder=keep_left_to_right(destination),
             ),
         )
