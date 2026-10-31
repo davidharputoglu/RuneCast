@@ -12,6 +12,15 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.8 (étape 11 / step 11)
+
+- Protection des balises et des variables avant traduction (`core/protect.py`) : balises Ren'Py ({b}, {color=…}, {w}, {a=…}, {rb}/{rt}…), variables ([player], [mc!t], [items[0]]…), échappements ({{, [[, %%, \n…), formats Python (%s, %(nom)s, {0}…), retours à la ligne et espaces de début et de fin. Chaque élément est remplacé par un repère numéroté ([0], [1]… ou <x id="0"/> pour les moteurs HTML), puis remis à sa place.
+  *Tag and variable protection before translation (`core/protect.py`): Ren'Py tags, variables, escapes, Python formats, line breaks and leading/trailing spaces. Each item is replaced by a numbered marker ([0], [1]… or <x id="0"/> for HTML engines), then put back.*
+- Contrôle après traduction : repère perdu, en double ou inventé, balises dans le désordre, « [ » ou « { » ajouté par le moteur, traduction vide. Une ligne qui échoue est marquée « à vérifier » au lieu d'être écrite dans le jeu.
+  *Check after translation: lost, duplicated or made-up marker, tags out of order, "[" or "{" added by the engine, empty translation. A failing line is marked "to check" instead of being written into the game.*
+- Environ 190 cas de test tirés de vrais jeux Ren'Py, et démonstration en ligne de commande : `runecast --protect "texte"`.
+  *About 190 test cases taken from real Ren'Py games, and a command-line demonstration: `runecast --protect "text"`.*
+
 ## 0.1.7 (étape 10 / step 10)
 
 - Fenêtre « Paramètres » (Fichier → Paramètres…, ou Ctrl+virgule), avec les boutons OK, Annuler et Appliquer, et trois pages :

@@ -34,7 +34,9 @@ FR : Permet de lancer RuneCast depuis un terminal, avec « runecast » ou
        - --version   : affiche la version et les crédits, sans ouvrir de fenêtre ;
        - --paths     : affiche les dossiers utilisés, sans ouvrir de fenêtre ;
        - --portable  : range toutes les données dans le dossier « portable-data »
-                       à côté de l'application (pour tester le mode portable).
+                       à côté de l'application (pour tester le mode portable) ;
+       - --protect « texte » : montre comment une réplique est protégée avant
+                       d'être envoyée à un moteur de traduction (étape 11).
 
 EN : Lets you start RuneCast from a terminal, with "runecast" or
      "python -m runecast".
@@ -42,7 +44,9 @@ EN : Lets you start RuneCast from a terminal, with "runecast" or
        - --version  : prints the version and credits, without opening a window;
        - --paths    : prints the folders in use, without opening a window;
        - --portable : stores all data in the "portable-data" folder next to the
-                      application (to test portable mode).
+                      application (to test portable mode);
+       - --protect "text" : shows how a line is protected before being sent to
+                      a translation engine (step 11).
 """
 
 import argparse
@@ -50,6 +54,7 @@ import sys
 
 from runecast import about
 from runecast.core.paths import MODE_CUSTOM, MODE_NORMAL, MODE_PORTABLE, resolve_paths
+from runecast.core.protect import protect, restore
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -77,7 +82,36 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="mode portable : données à côté de l'application / portable mode",
     )
+    # FR : --protect montre la protection des balises d'une réplique.
+    # EN : --protect shows the tag protection of a line.
+    parser.add_argument(
+        "--protect",
+        metavar="TEXTE",
+        help="montre la protection des balises d'une réplique / show tag protection",
+    )
     return parser
+
+
+def protect_text(text: str) -> str:
+    """FR : explique la protection d'une réplique (démonstration de l'étape 11).
+
+    EN : explain the protection of a line (step 11 demonstration).
+    """
+    protected = protect(text)
+    lines = [
+        "Texte envoyé au moteur / Text sent to the engine:",
+        f"  {protected.masked}",
+        "Éléments protégés / Protected items:",
+    ]
+    for index, token in enumerate(protected.tokens):
+        shown = "(retour à la ligne / line break)" if token == "\n" else token
+        lines.append(f"  [{index}] = {shown}")
+    if not protected.tokens:
+        lines.append("  (aucun / none)")
+    restored = restore(protected.masked, protected)
+    check = "OK" if restored.ok and restored.text == text else "ÉCHEC / FAILED"
+    lines.append(f"Contrôle du retour / Round-trip check: {check}")
+    return "\n".join(lines)
 
 
 def paths_text(portable: bool = False) -> str:
@@ -114,6 +148,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.paths:
         print(paths_text(portable=args.portable))
+        return 0
+
+    if args.protect is not None:
+        # FR : sortie en UTF-8, pour afficher toutes les langues (même sous Windows).
+        # EN : UTF-8 output, to show every language (even on Windows).
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        print(protect_text(args.protect))
         return 0
 
     # FR : L'interface n'est chargée qu'ici : « --version » reste ainsi
