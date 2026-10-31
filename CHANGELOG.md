@@ -12,6 +12,17 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.17 (étape 19 / step 19)
+
+- Assistant de premier lancement : il s'ouvre tout seul quand RuneCast démarre sur un profil vierge (aucun fichier de réglages), et reste disponible dans Aide → Assistant de premier lancement…
+  *First-launch wizard: it opens by itself when RuneCast starts on a blank profile (no settings file), and stays available in Help → First-launch wizard…*
+- Cinq pages : langue de l'interface et thème (appliqués aussitôt, pour voir le résultat), traduction en ligne ou 100 % locale, modèle local conseillé pour la langue choisie (Argos, ou NLLB-200 après acceptation de sa licence) avec téléchargement immédiat et annulable, puis résumé. Le résumé prévient si le mode local est choisi sans modèle installé.
+  *Five pages: interface language and theme (applied at once, to see the result), online or 100 % local translation, advised local model for the chosen language (Argos, or NLLB-200 after accepting its license) with immediate, cancellable download, then summary. The summary warns when local mode is chosen without an installed model.*
+- Pas d'assistant quand le dossier de données personnalisé est introuvable (disque débranché) : ce n'est pas un vrai premier lancement.
+  *No wizard when the custom data folder is missing (unplugged drive): this is not a real first launch.*
+- Correction : le style de RuneCast n'est plus réinstallé à chaque changement de thème (seulement la palette et la feuille de style). La réinstallation reconstruisait les fenêtres ouvertes et faisait planter l'assistant.
+  *Fix: RuneCast's style is no longer reinstalled at every theme change (only the palette and the stylesheet). Reinstalling rebuilt the open windows and crashed the wizard.*
+
 ## 0.1.16 (correctif / fix)
 
 - Yandex gratuit : nouvelle porte d'entrée, le service de traduction du navigateur Yandex (celui de Yandex Browser) : pas de clé, pas de session, plusieurs phrases par demande. Méthode documentée par le projet libre OverTranslate (licence MIT), mesurée le 30 octobre 2026. L'ancienne méthode du widget (LocoAI), qui répondait « 429 limited », reste essayée en second ; la première qui répond est retenue.

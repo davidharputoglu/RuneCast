@@ -97,6 +97,117 @@ RuneCast is using the standard location this time. Reconnect the drive, then res
     </message>
 </context>
 <context>
+    <name>FirstRunWizard</name>
+    <message>
+        <source>Bienvenue dans RuneCast</source>
+        <translation>Welcome to RuneCast</translation>
+    </message>
+    <message>
+        <source>Langue de l&apos;interface</source>
+        <translation>Interface language</translation>
+    </message>
+    <message>
+        <source>Bienvenue ! Quelques questions pour préparer RuneCast. Tout reste modifiable ensuite dans Fichier → Paramètres…</source>
+        <translation>Welcome! A few questions to set up RuneCast. Everything can be changed later in File → Settings…</translation>
+    </message>
+    <message>
+        <source>Langue du système</source>
+        <translation>System language</translation>
+    </message>
+    <message>
+        <source>Thème</source>
+        <translation>Theme</translation>
+    </message>
+    <message>
+        <source>Tu pourras aussi créer ton propre thème : Affichage → Thème → Gérer les thèmes…</source>
+        <translation>You can also create your own theme: View → Theme → Manage themes…</translation>
+    </message>
+    <message>
+        <source>Traduction en ligne ou locale ?</source>
+        <translation>Online or local translation?</translation>
+    </message>
+    <message>
+        <source>En ligne (conseillé si tu as internet)</source>
+        <translation>Online (recommended if you have internet)</translation>
+    </message>
+    <message>
+        <source>Les phrases sont envoyées à Yandex, Google ou un autre moteur. Si internet est coupé ou si un moteur refuse, RuneCast passe au suivant, puis à la traduction locale.</source>
+        <translation>Sentences are sent to Yandex, Google or another engine. If the internet is down or an engine refuses, RuneCast moves on to the next one, then to local translation.</translation>
+    </message>
+    <message>
+        <source>100 % local</source>
+        <translation>100 % local</translation>
+    </message>
+    <message>
+        <source>Tout est traduit sur ce PC : aucune phrase n&apos;est envoyée sur internet. Internet ne sert qu&apos;aux mises à jour et au téléchargement des modèles.</source>
+        <translation>Everything is translated on this PC: no sentence is sent over the internet. The internet is only used for updates and model downloads.</translation>
+    </message>
+    <message>
+        <source>Modèle de traduction locale</source>
+        <translation>Local translation model</translation>
+    </message>
+    <message>
+        <source>Un modèle permet de traduire sans internet. La plupart des jeux Ren&apos;Py sont en anglais : vers quelle langue veux-tu traduire ?</source>
+        <translation>A model lets you translate without the internet. Most Ren&apos;Py games are in English: which language do you want to translate into?</translation>
+    </message>
+    <message>
+        <source>Télécharger maintenant</source>
+        <translation>Download now</translation>
+    </message>
+    <message>
+        <source>Annuler</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>C&apos;est prêt !</source>
+        <translation>All set!</translation>
+    </message>
+    <message>
+        <source>Modèle déjà installé : {model}.</source>
+        <translation>Model already installed: {model}.</translation>
+    </message>
+    <message>
+        <source>Modèle conseillé : {model} ({size}).</source>
+        <translation>Recommended model: {model} ({size}).</translation>
+    </message>
+    <message>
+        <source>Modèle conseillé : NLLB-200 ({size}), qui couvre cette langue. Sa licence (usage non commercial) te sera présentée avant le téléchargement.</source>
+        <translation>Recommended model: NLLB-200 ({size}), which covers this language. Its license (non-commercial use) will be shown to you before the download.</translation>
+    </message>
+    <message>
+        <source>Téléchargement interrompu : {reason}. Tu pourras réessayer dans Paramètres → Modèles de traduction.</source>
+        <translation>Download interrupted: {reason}. You can try again in Settings → Translation models.</translation>
+    </message>
+    <message>
+        <source>Mode : {mode}</source>
+        <translation>Mode: {mode}</translation>
+    </message>
+    <message>
+        <source>en ligne</source>
+        <translation>online</translation>
+    </message>
+    <message>
+        <source>Modèle local : {state}</source>
+        <translation>Local model: {state}</translation>
+    </message>
+    <message>
+        <source>installé</source>
+        <translation>installed</translation>
+    </message>
+    <message>
+        <source>pas encore installé</source>
+        <translation>not installed yet</translation>
+    </message>
+    <message>
+        <source>Attention : en mode local, il faut un modèle pour traduire. Tu pourras l&apos;installer dans Fichier → Paramètres → Modèles de traduction.</source>
+        <translation>Warning: in local mode, a model is needed to translate. You can install it in File → Settings → Translation models.</translation>
+    </message>
+    <message>
+        <source>Tout reste modifiable dans Fichier → Paramètres…</source>
+        <translation>Everything can be changed in File → Settings…</translation>
+    </message>
+</context>
+<context>
     <name>FoldersDialog</name>
     <message>
         <source>Dossiers de RuneCast</source>
@@ -479,6 +590,10 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     <message>
         <source>&amp;Glossaires…</source>
         <translation>&amp;Glossaries…</translation>
+    </message>
+    <message>
+        <source>Assistant de premier &amp;lancement…</source>
+        <translation>First-&amp;launch wizard…</translation>
     </message>
     <message>
         <source>&amp;Langue de l&apos;interface</source>

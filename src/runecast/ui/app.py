@@ -54,7 +54,7 @@ from runecast.core.logs import (
     set_detailed_log,
     setup_logging,
 )
-from runecast.core.paths import resolve_paths
+from runecast.core.paths import AppPaths, resolve_paths
 from runecast.core.settings import load_settings, save_settings
 from runecast.core.themes import DEFAULT_THEME, all_themes, builtin_themes, find_theme
 from runecast.engines.chain import MODE_LOCAL
@@ -84,6 +84,22 @@ def _set_windows_taskbar_id() -> None:
         # FR : Très ancien Windows : on continue sans, ce n'est pas bloquant.
         # EN : Very old Windows: carry on without it, this is not blocking.
         pass
+
+
+def is_first_launch(paths: AppPaths) -> bool:
+    """FR : profil vierge (aucun fichier de réglages) : l'assistant s'ouvrira.
+
+         Exception : si le dossier de données choisi est introuvable (disque
+         débranché), RuneCast utilise l'emplacement standard pour cette fois.
+         Ce n'est pas un vrai premier lancement : pas d'assistant.
+    EN : blank profile (no settings file): the wizard will open.
+         Exception: if the chosen data folder is missing (unplugged drive),
+         RuneCast uses the standard location this time. This is not a real
+         first launch: no wizard.
+    """
+    if paths.unavailable_custom_root is not None:
+        return False
+    return not paths.settings_file.exists()
 
 
 def create_application(argv: list[str] | None = None) -> QApplication:
@@ -126,6 +142,7 @@ def run(argv: list[str] | None = None, portable: bool = False) -> int:
     setup_logging(paths.log_dir)
     log_uncaught_exceptions()
     log_startup(paths)
+    first_launch = is_first_launch(paths)
     settings = load_settings(paths.settings_file)
     set_detailed_log(settings.detailed_log)
     # FR : mode local : aucune connexion vers un service de traduction (étape 17).
@@ -142,6 +159,8 @@ def run(argv: list[str] | None = None, portable: bool = False) -> int:
     languages.apply(resolve_language(settings.interface_language, QLocale.system().name()))
     window = MainWindow(paths, settings, languages)
     window.show()
+    if first_launch:
+        window.show_first_run_wizard()
     if paths.unavailable_custom_root is not None:
         # FR : le dossier choisi est introuvable (ex. disque débranché) : on prévient.
         # EN : the chosen folder is missing (e.g. unplugged drive): warn the user.

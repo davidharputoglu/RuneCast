@@ -97,6 +97,117 @@ RuneCast utilise l&apos;emplacement standard pour cette fois. Rebranche le disqu
     </message>
 </context>
 <context>
+    <name>FirstRunWizard</name>
+    <message>
+        <source>Bienvenue dans RuneCast</source>
+        <translation>مرحبًا بك في RuneCast</translation>
+    </message>
+    <message>
+        <source>Langue de l&apos;interface</source>
+        <translation>لغة الواجهة</translation>
+    </message>
+    <message>
+        <source>Bienvenue ! Quelques questions pour préparer RuneCast. Tout reste modifiable ensuite dans Fichier → Paramètres…</source>
+        <translation>مرحبًا! بضعة أسئلة لتهيئة RuneCast. يمكن تغيير كل شيء لاحقًا من ملف ← الإعدادات…</translation>
+    </message>
+    <message>
+        <source>Langue du système</source>
+        <translation>لغة النظام</translation>
+    </message>
+    <message>
+        <source>Thème</source>
+        <translation>السمة</translation>
+    </message>
+    <message>
+        <source>Tu pourras aussi créer ton propre thème : Affichage → Thème → Gérer les thèmes…</source>
+        <translation>يمكنك أيضًا إنشاء سمتك الخاصة: عرض ← السمة ← إدارة السمات…</translation>
+    </message>
+    <message>
+        <source>Traduction en ligne ou locale ?</source>
+        <translation>ترجمة عبر الإنترنت أم محلية؟</translation>
+    </message>
+    <message>
+        <source>En ligne (conseillé si tu as internet)</source>
+        <translation>عبر الإنترنت (يُنصح به إذا كان لديك إنترنت)</translation>
+    </message>
+    <message>
+        <source>Les phrases sont envoyées à Yandex, Google ou un autre moteur. Si internet est coupé ou si un moteur refuse, RuneCast passe au suivant, puis à la traduction locale.</source>
+        <translation>تُرسَل الجمل إلى Yandex أو Google أو محرك آخر. إذا انقطع الإنترنت أو رفض أحد المحركات، ينتقل RuneCast إلى المحرك التالي، ثم إلى الترجمة المحلية.</translation>
+    </message>
+    <message>
+        <source>100 % local</source>
+        <translation>محلي 100 %</translation>
+    </message>
+    <message>
+        <source>Tout est traduit sur ce PC : aucune phrase n&apos;est envoyée sur internet. Internet ne sert qu&apos;aux mises à jour et au téléchargement des modèles.</source>
+        <translation>تتم الترجمة كلها على هذا الحاسوب: لا تُرسَل أي جملة عبر الإنترنت. لا يُستخدم الإنترنت إلا للتحديثات وتنزيل النماذج.</translation>
+    </message>
+    <message>
+        <source>Modèle de traduction locale</source>
+        <translation>نموذج الترجمة المحلية</translation>
+    </message>
+    <message>
+        <source>Un modèle permet de traduire sans internet. La plupart des jeux Ren&apos;Py sont en anglais : vers quelle langue veux-tu traduire ?</source>
+        <translation>يتيح لك النموذج الترجمة دون إنترنت. معظم ألعاب Ren&apos;Py باللغة الإنجليزية: إلى أي لغة تريد الترجمة؟</translation>
+    </message>
+    <message>
+        <source>Télécharger maintenant</source>
+        <translation>التنزيل الآن</translation>
+    </message>
+    <message>
+        <source>Annuler</source>
+        <translation>إلغاء</translation>
+    </message>
+    <message>
+        <source>C&apos;est prêt !</source>
+        <translation>كل شيء جاهز!</translation>
+    </message>
+    <message>
+        <source>Modèle déjà installé : {model}.</source>
+        <translation>النموذج مثبّت مسبقًا: {model}.</translation>
+    </message>
+    <message>
+        <source>Modèle conseillé : {model} ({size}).</source>
+        <translation>النموذج المقترح: {model} ({size}).</translation>
+    </message>
+    <message>
+        <source>Modèle conseillé : NLLB-200 ({size}), qui couvre cette langue. Sa licence (usage non commercial) te sera présentée avant le téléchargement.</source>
+        <translation>النموذج المقترح: NLLB-200 ({size})، وهو يغطي هذه اللغة. ستُعرض عليك رخصته (للاستخدام غير التجاري) قبل التنزيل.</translation>
+    </message>
+    <message>
+        <source>Téléchargement interrompu : {reason}. Tu pourras réessayer dans Paramètres → Modèles de traduction.</source>
+        <translation>توقف التنزيل: {reason}. يمكنك إعادة المحاولة من الإعدادات ← نماذج الترجمة.</translation>
+    </message>
+    <message>
+        <source>Mode : {mode}</source>
+        <translation>الوضع: {mode}</translation>
+    </message>
+    <message>
+        <source>en ligne</source>
+        <translation>عبر الإنترنت</translation>
+    </message>
+    <message>
+        <source>Modèle local : {state}</source>
+        <translation>النموذج المحلي: {state}</translation>
+    </message>
+    <message>
+        <source>installé</source>
+        <translation>مثبّت</translation>
+    </message>
+    <message>
+        <source>pas encore installé</source>
+        <translation>غير مثبّت بعد</translation>
+    </message>
+    <message>
+        <source>Attention : en mode local, il faut un modèle pour traduire. Tu pourras l&apos;installer dans Fichier → Paramètres → Modèles de traduction.</source>
+        <translation>تنبيه: في الوضع المحلي، يلزم نموذج للترجمة. يمكنك تثبيته من ملف ← الإعدادات ← نماذج الترجمة.</translation>
+    </message>
+    <message>
+        <source>Tout reste modifiable dans Fichier → Paramètres…</source>
+        <translation>يمكن تغيير كل شيء من ملف ← الإعدادات…</translation>
+    </message>
+</context>
+<context>
     <name>FoldersDialog</name>
     <message>
         <source>Dossiers de RuneCast</source>
@@ -479,6 +590,10 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     <message>
         <source>&amp;Glossaires…</source>
         <translation>ال&amp;مسارد…</translation>
+    </message>
+    <message>
+        <source>Assistant de premier &amp;lancement…</source>
+        <translation>معالج التشغيل الأ&amp;ول…</translation>
     </message>
     <message>
         <source>&amp;Langue de l&apos;interface</source>

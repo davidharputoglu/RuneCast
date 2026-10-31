@@ -210,9 +210,28 @@ class RuneCastStyle(QProxyStyle):
         painter.restore()
 
 
+# FR : Marque posée sur l'application quand le style RuneCast est installé.
+# EN : Mark set on the application once the RuneCast style is installed.
+STYLE_PROPERTY = "runecastStyleInstalled"
+
+
 def apply_theme(app: QApplication, theme: Theme) -> None:
-    """Applique un thème à toute l'application / Apply a theme app-wide."""
-    app.setStyle(RuneCastStyle())
+    """Applique un thème à toute l'application / Apply a theme app-wide.
+
+    FR : Le style RuneCast n'est installé qu'UNE fois : il lit ses couleurs
+         dans la palette, donc changer de thème ne demande que de changer la
+         palette et la feuille de style. Réinstaller un style à chaque
+         changement faisait reconstruire certaines fenêtres (l'assistant de
+         premier lancement) pendant que Qt les parcourait : plantage possible.
+    EN : The RuneCast style is installed only ONCE: it reads its colours from
+         the palette, so changing theme only needs a new palette and style
+         sheet. Reinstalling a style on every change made some windows (the
+         first-launch wizard) rebuild themselves while Qt was going through
+         them: possible crash.
+    """
+    if not app.property(STYLE_PROPERTY):
+        app.setStyle(RuneCastStyle())
+        app.setProperty(STYLE_PROPERTY, True)
     app.setPalette(build_palette(theme.colors))
     app.setStyleSheet(build_stylesheet(theme.colors))
     app.setProperty(THEME_PROPERTY, theme.id)

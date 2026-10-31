@@ -72,6 +72,7 @@ from runecast.core.themes import DEFAULT_THEME, Theme, all_themes, find_theme
 from runecast.engines.chain import MODE_LOCAL, build_chain
 from runecast.engines.online import allow_online_translation
 from runecast.ui.about_dialog import AboutDialog
+from runecast.ui.first_run import FirstRunWizard
 from runecast.ui.folders_dialog import FoldersDialog, open_folder
 from runecast.ui.glossary_dialog import GlossaryDialog
 from runecast.ui.i18n import LanguageManager, keep_left_to_right
@@ -151,6 +152,11 @@ class MainWindow(QMainWindow):
         # EN : Report a problem: opens the project's GitHub page.
         self.report_problem_action = QAction(self)
         self.report_problem_action.triggered.connect(self.report_problem)
+
+        # FR : Relancer l'assistant de premier lancement (étape 19).
+        # EN : Run the first-launch wizard again (step 19).
+        self.first_run_action = QAction(self)
+        self.first_run_action.triggered.connect(self.show_first_run_wizard)
 
         # FR : Ouvrir la fenêtre « Glossaires » (étape 18).
         # EN : Open the "Glossaries" window (step 18).
@@ -237,6 +243,7 @@ class MainWindow(QMainWindow):
 
         self.help_menu = self.menuBar().addMenu("")
         self.help_menu.setObjectName("helpMenu")
+        self.help_menu.addAction(self.first_run_action)
         self.help_menu.addAction(self.folders_action)
         self.help_menu.addAction(self.open_log_action)
         self.help_menu.addAction(self.report_problem_action)
@@ -315,6 +322,7 @@ class MainWindow(QMainWindow):
         self.tools_menu.setTitle(self.tr("&Outils"))
         self.help_menu.setTitle(self.tr("&Aide"))
         self.glossaries_action.setText(self.tr("&Glossaires…"))
+        self.first_run_action.setText(self.tr("Assistant de premier &lancement…"))
         self.language_menu.setTitle(self.tr("&Langue de l'interface"))
         self.theme_menu.setTitle(self.tr("&Thème"))
         self._retranslate_theme_menu()
@@ -495,6 +503,25 @@ class MainWindow(QMainWindow):
         dialog = FoldersDialog(self.paths, parent or self)
         dialog.paths_changed.connect(self.use_paths)
         dialog.exec()
+
+    def show_first_run_wizard(self) -> None:
+        """Assistant de premier lancement / First-launch wizard.
+
+        FR : Langue et thème s'appliquent pendant l'assistant ; le mode de
+             traduction est enregistré à la fin (même si on ferme avant la
+             dernière page, les choix déjà faits restent).
+        EN : Language and theme apply during the wizard; the translation mode
+             is saved at the end (closing early keeps the choices already made).
+        """
+        wizard = FirstRunWizard(self.paths, self.settings, self.themes, self.theme_name, self)
+        wizard.language_chosen.connect(self.change_language)
+        wizard.theme_chosen.connect(self.change_theme)
+        wizard.nllb_license_accepted.connect(self._record_nllb_license)
+        if wizard.exec() == FirstRunWizard.DialogCode.Accepted:
+            self.settings.translation_mode = wizard.mode()
+            allow_online_translation(wizard.mode() != MODE_LOCAL)
+            logger.info("Assistant terminé / Wizard finished: mode %s", wizard.mode())
+        self.save()
 
     def show_glossaries(self) -> None:
         """Ouvre la fenêtre « Glossaires » / Open the "Glossaries" window."""
