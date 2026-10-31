@@ -26,7 +26,7 @@ Depuis le 31 octobre 2026, à ta demande, j'enchaîne les étapes sans attendre 
 | 16 | Moteurs en ligne (Yandex gratuit et à clé, Google gratuit, DeepL, Google Cloud, Microsoft, LibreTranslate), ordre réglable, clés dans le trousseau, bouton « Tester », prix indicatifs | 0.1.13 | ✅ | ⏳ | ⏳ | `766a4b3`, `ae0af92` |
 | 17 | Repli automatique (moteur suivant, puis local, par paquets) et mode 100 % local verrouillé ; page « Traduction » avec essai | 0.1.14 | ✅ | ⏳ | ⏳ | `84713a6` |
 | 18 | Glossaires par jeu : tableau modifiable, import/export CSV, application forcée, rapport de contrôle ; menu Outils | 0.1.15 | ✅ | ⏳ | ⏳ | `eb0ebcb` |
-| Correctif | Yandex gratuit : nouvelle méthode (service de traduction du navigateur Yandex), le widget gardé en second | 0.1.16 | 🔄 | ⏳ | ⏳ | — |
+| Correctif | Yandex gratuit : nouvelle méthode (service de traduction du navigateur Yandex), le widget gardé en second | 0.1.16 | ✅ | ⏳ | ⏳ | `b5584c7` |
 
 Numéros de version : les deux premiers chiffres (« 0.1 ») sont décidés par David ; le dernier augmente à chaque étape validée ou correctif. Les étapes 5 à 8 avaient été numérotées 0.2.x par erreur et ont été corrigées (voir CHANGELOG.md).
 
@@ -106,4 +106,5 @@ Fait par GitHub le 31/10/2026 (test « Moteurs en ligne ») : deux phrases, dont
 | Moteur | Résultat |
 |---|---|
 | Google gratuit | ✅ Fonctionne. Balises et variables intactes : « {b}Bienvenue{/b}, [player] ! Vous avez %d pièces. », « {b}Hoş geldiniz{/b}, [player]! %d jetonunuz var. », « {b}Қош келдіңіз{/b}, [player]! Сізде %d тиын бар. » |
-| Yandex gratuit (widget) | ❌ « 429 : limite atteinte » dès la première demande, depuis les serveurs de GitHub. Même problème signalé en 2026 par d'autres logiciels. À essayer depuis ta connexion avec le bouton « Tester ». S'il refuse, RuneCast passe au moteur suivant |
+| Yandex gratuit, ancienne méthode (widget de LocoAI) | ❌ « 429 : limite atteinte » dès la première demande (31/10/2026). Même problème signalé en 2026 par d'autres logiciels. Gardée en second recours |
+| Yandex gratuit, nouvelle méthode (service du navigateur Yandex, version 0.1.16) | ✅ Fonctionne (31/10/2026, 119 langues). Balises et variables intactes : « {b}Accueil{/b}, [player]! Vous avez %d pièces de monnaie. », « {b}Hoş geldiniz{/b}, [player]! %d jetonunuz var. », « {b}Қош келдіңіз{/b}, [player]! Сізде %d монеталар бар. », « {b}Добро пожаловать{/b}, [player]! У вас %d монет. » |
