@@ -419,6 +419,7 @@ class MainWindow(QMainWindow):
         self.settings.remember_window = new.remember_window
         self.settings.local_threads = new.local_threads
         self.settings.local_beam_size = new.local_beam_size
+        self.settings.nllb_license_accepted = new.nllb_license_accepted
         if new.detailed_log != self.settings.detailed_log:
             self.settings.detailed_log = new.detailed_log
             set_detailed_log(new.detailed_log)
@@ -493,7 +494,17 @@ class MainWindow(QMainWindow):
             lambda: self._manage_folders_from(dialog)
         )
         dialog.folders_page.open_log_button.clicked.connect(self.open_log_folder)
+        dialog.models_page.nllb_license_accepted.connect(self._record_nllb_license)
         return dialog
+
+    def _record_nllb_license(self, date: str) -> None:
+        """FR : note tout de suite l'acceptation de la licence NLLB (et dans le journal).
+
+        EN : record the NLLB license acceptance at once (and in the log).
+        """
+        self.settings.nllb_license_accepted = date
+        logger.info("Licence NLLB-200 acceptée / NLLB-200 license accepted: %s", date)
+        self.save()
 
     def _manage_themes_from(self, dialog: SettingsDialog) -> None:
         """FR : « Gérer les thèmes… » depuis les Paramètres. EN : from the Settings."""

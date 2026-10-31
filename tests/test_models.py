@@ -81,27 +81,6 @@ from runecast.ui.models_page import ModelsPage, model_store
 # ----------------------------------------------------------------------
 # FR : Petits modèles factices / EN : Small fake models
 # ----------------------------------------------------------------------
-@pytest.fixture(scope="session")
-def tokenizer_file(tmp_path_factory) -> Path:
-    """FR : un vrai découpeur SentencePiece, minuscule. EN : a real, tiny SentencePiece splitter."""
-    import sentencepiece
-
-    folder = tmp_path_factory.mktemp("spm")
-    corpus = folder / "corpus.txt"
-    corpus.write_text(
-        "\n".join(["Hello, how are you today?", "The quick brown fox jumps.", "Bonjour."] * 40),
-        encoding="utf-8",
-    )
-    sentencepiece.SentencePieceTrainer.train(
-        input=str(corpus),
-        model_prefix=str(folder / "sp"),
-        vocab_size=64,
-        hard_vocab_limit=False,
-        minloglevel=2,
-    )
-    return folder / "sp.model"
-
-
 def make_archive(
     folder: Path,
     tokenizer_file: Path,

@@ -463,6 +463,14 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
         <translation>Translate</translation>
     </message>
     <message>
+        <source>Modèle étendu NLLB-200 (200 langues)</source>
+        <translation>NLLB-200 extended model (200 languages)</translation>
+    </message>
+    <message>
+        <source>Télécharger…</source>
+        <translation>Download…</translation>
+    </message>
+    <message>
         <source>Performance</source>
         <translation>Performance</translation>
     </message>
@@ -497,6 +505,14 @@ Delete the {count} old files? If you answer No, they stay where they are.</trans
     <message>
         <source>Installé</source>
         <translation>Installed</translation>
+    </message>
+    <message>
+        <source>Installé ({size}). Traduit directement, sans internet, entre {count} langues dont Қазақша, Oʻzbekcha et Türkmençe. Usage non commercial seulement.</source>
+        <translation>Installed ({size}). Translates directly, without internet, between {count} languages including Қазақша, Oʻzbekcha and Türkmençe. Non-commercial use only.</translation>
+    </message>
+    <message>
+        <source>Non installé (environ {size}). Pour traduire sans internet vers le kazakh, l&apos;ouzbek, le turkmène, le tatar ou l&apos;ouïghour. Licence non commerciale, à accepter avant le téléchargement.</source>
+        <translation>Not installed (about {size}). To translate without internet into Kazakh, Uzbek, Turkmen, Tatar or Uyghur. Non-commercial license, to be accepted before downloading.</translation>
     </message>
     <message>
         <source>Installe d&apos;abord un modèle.</source>
@@ -571,6 +587,10 @@ Copy it to the other PC, then: Settings → Translation models → Import files�
         <translation>Translating…</translation>
     </message>
     <message>
+        <source>Téléchargement : NLLB-200</source>
+        <translation>Downloading: NLLB-200</translation>
+    </message>
+    <message>
         <source>Mesure de la vitesse…</source>
         <translation>Measuring the speed…</translation>
     </message>
@@ -595,6 +615,37 @@ Ils sont sélectionnés : clique sur « OK » ou « Appliquer » pour les garder
 Speed: {speed} sentences per second. Memory: {memory} ({stable}).
 
 They are selected: click “OK” or “Apply” to keep them.</translation>
+    </message>
+</context>
+<context>
+    <name>NllbLicenseDialog</name>
+    <message>
+        <source>Licence du modèle NLLB-200</source>
+        <translation>NLLB-200 model license</translation>
+    </message>
+    <message>
+        <source>Modèle étendu NLLB-200 (Meta)</source>
+        <translation>NLLB-200 extended model (Meta)</translation>
+    </message>
+    <message>
+        <source>Ce modèle traduit sans internet entre 200 langues, dont le kazakh, l&apos;ouzbek, le turkmène, le tatar et l&apos;ouïghour. Taille : {size}.</source>
+        <translation>This model translates without internet between 200 languages, including Kazakh, Uzbek, Turkmen, Tatar and Uyghur. Size: {size}.</translation>
+    </message>
+    <message>
+        <source>Il est publié par Meta sous la licence Creative Commons BY-NC 4.0 : utilisation NON COMMERCIALE seulement (pas de traduction vendue ou faite pour une entreprise), en citant Meta. Meta le présente comme un modèle de recherche : ses traductions peuvent contenir des erreurs.</source>
+        <translation>It is published by Meta under the Creative Commons BY-NC 4.0 license: NON-COMMERCIAL use only (no translation sold or made for a company), with credit to Meta. Meta presents it as a research model: its translations may contain errors.</translation>
+    </message>
+    <message>
+        <source>Lire la licence complète</source>
+        <translation>Read the full license</translation>
+    </message>
+    <message>
+        <source>J&apos;ai lu la licence et je m&apos;engage à n&apos;utiliser ce modèle que sans but commercial</source>
+        <translation>I have read the license and I agree to use this model only for non-commercial purposes</translation>
+    </message>
+    <message>
+        <source>Accepter et télécharger</source>
+        <translation>Accept and download</translation>
     </message>
 </context>
 <context>

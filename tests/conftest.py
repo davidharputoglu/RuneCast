@@ -84,3 +84,28 @@ def standard_like_paths(tmp_path: Path) -> paths.AppPaths:
 def custom_paths(tmp_path: Path) -> paths.AppPaths:
     """FR : un dossier personnalisé fictif. EN : a fake custom folder."""
     return paths.single_folder_paths(tmp_path / "mes-donnees", paths.MODE_CUSTOM)
+
+
+@pytest.fixture(scope="session")
+def tokenizer_file(tmp_path_factory) -> Path:
+    """FR : un vrai découpeur SentencePiece, minuscule (entraîné en une seconde),
+         pour essayer les moteurs locaux sans les vrais modèles de 100 Mo.
+    EN : a real, tiny SentencePiece splitter (trained in one second), to try
+         the local engines without the real 100 MB models.
+    """
+    import sentencepiece
+
+    folder = tmp_path_factory.mktemp("spm")
+    corpus = folder / "corpus.txt"
+    corpus.write_text(
+        "\n".join(["Hello, how are you today?", "The quick brown fox jumps.", "Bonjour."] * 40),
+        encoding="utf-8",
+    )
+    sentencepiece.SentencePieceTrainer.train(
+        input=str(corpus),
+        model_prefix=str(folder / "sp"),
+        vocab_size=64,
+        hard_vocab_limit=False,
+        minloglevel=2,
+    )
+    return folder / "sp.model"

@@ -43,7 +43,12 @@ FR : Tient à jour src/runecast/resources/models/argos-catalog.json, la liste
            ajoute les tailles et empreintes vérifiées au catalogue ;
        uv run python tools/model_catalog.py benchmark en fr
            télécharge un modèle et lance le banc d'essai de l'étape 14
-           (vitesse et mémoire) ; résultat publié en « notice » GitHub.
+           (vitesse et mémoire) ; résultat publié en « notice » GitHub ;
+       uv run python tools/model_catalog.py nllb [--apply resultats.json]
+           télécharge le modèle étendu NLLB-200 (étape 15), mesure la taille
+           et l'empreinte de chaque fichier et lui fait traduire une phrase
+           vers le kazakh, l'ouzbek, le turkmène, le tatar et l'ouïghour ;
+           avec --apply, complète la fiche nllb-catalog.json.
 
 EN : Keeps src/runecast/resources/models/argos-catalog.json up to date, the
      list of Argos models RuneCast offers for download. "build" reads the
@@ -218,6 +223,42 @@ def benchmark(source: str, target: str) -> None:
     print(f"::notice title=benchmark::{json.dumps(report)}")
 
 
+NLLB_CATALOG = ROOT / "src" / "runecast" / "resources" / "models" / "nllb-catalog.json"
+
+
+def nllb(apply_file: Path | None) -> None:
+    """FR : vérifie (ou complète) le modèle NLLB-200. EN : check (or complete) NLLB-200."""
+    if apply_file is not None:
+        results = {item["name"]: item for item in json.loads(apply_file.read_text("utf-8"))}
+        sheet = json.loads(NLLB_CATALOG.read_text(encoding="utf-8"))
+        for item in sheet["files"]:
+            if item["name"] in results:
+                item["size"] = results[item["name"]]["size"]
+                item["sha256"] = results[item["name"]]["sha256"]
+        NLLB_CATALOG.write_text(json.dumps(sheet, indent=1) + "\n", encoding="utf-8")
+        return
+    from runecast.engines.models import file_sha256
+    from runecast.engines.nllb import NllbEngine, NllbStore
+
+    report: dict = {"files": [], "samples": {}}
+    with tempfile.TemporaryDirectory() as temporary:
+        store = NllbStore(Path(temporary) / "nllb", Path(temporary) / "downloads")
+        try:
+            store.install()
+            for file in store.catalog.files:
+                path = store.folder / file.name
+                report["files"].append(
+                    {"name": file.name, "size": path.stat().st_size, "sha256": file_sha256(path)}
+                )
+            engine = NllbEngine(store, threads=2)
+            for target in ("kk", "uz", "tk", "tt", "ug", "fr", "tr"):
+                report["samples"][target] = engine.translate([TEST_SENTENCE], "en", target)[0]
+            report["samples"]["kk>en"] = engine.translate([report["samples"]["kk"]], "kk", "en")[0]
+        except Exception as error:  # noqa: BLE001 (on note toute erreur / record any error)
+            report["error"] = f"{type(error).__name__}: {error}"[:300]
+    print(f"::notice title=nllb::{json.dumps(report, ensure_ascii=True)}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     commands = parser.add_subparsers(dest="command", required=True)
@@ -228,6 +269,8 @@ def main(argv: list[str] | None = None) -> int:
     check_parser.add_argument("--output", type=Path)
     apply_parser = commands.add_parser("apply")
     apply_parser.add_argument("results", type=Path)
+    nllb_parser = commands.add_parser("nllb")
+    nllb_parser.add_argument("--apply", type=Path)
     benchmark_parser = commands.add_parser("benchmark")
     benchmark_parser.add_argument("source")
     benchmark_parser.add_argument("target")
@@ -238,6 +281,8 @@ def main(argv: list[str] | None = None) -> int:
         return check(args.limit, args.workers, args.output)
     elif args.command == "benchmark":
         benchmark(args.source, args.target)
+    elif args.command == "nllb":
+        nllb(args.apply)
     else:
         apply(args.results)
     return 0

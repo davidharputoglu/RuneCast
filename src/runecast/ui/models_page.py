@@ -40,6 +40,9 @@ FR : Page des Paramètres qui gère les modèles de traduction locale (sans
          fichiers… » l'installe sur un PC sans internet ;
        - « Essayer » : traduit une phrase avec les modèles installés, pour
          vérifier que tout marche, même Wi-Fi coupé ;
+       - « Modèle étendu NLLB-200 » : 200 langues dont le kazakh, l'ouzbek et
+         le turkmène, téléchargé seulement après acceptation de sa licence
+         (usage non commercial) (étape 15) ;
        - « Performance » : cœurs du processeur utilisés et largeur de
          recherche (rapide, équilibré, précis), avec un bouton « Mesurer la
          vitesse… » qui essaie chaque réglage sur ce PC et choisit le meilleur
@@ -53,16 +56,19 @@ EN : Settings page managing the local (offline) translation models: list of
      "Delete"; offline pack: "Download for another PC…" saves the model file
      into a folder (USB stick…), "Import files…" installs it on a PC without
      internet; "Try": translates a sentence with the installed models, to
-     check everything works, even with Wi-Fi off; "Performance": processor
-     cores used and search width (fast, balanced, accurate), with a "Measure
-     the speed…" button that tries each setting on this PC and picks the best
-     (step 14). Long jobs run in the background: the window never freezes.
+     check everything works, even with Wi-Fi off; "NLLB-200 extended model":
+     200 languages, downloaded only after its license is accepted (step 15);
+     "Performance": processor cores used and search width (fast, balanced,
+     accurate), with a "Measure the speed…" button that tries each setting on
+     this PC and picks the best (step 14). Long jobs run in the background:
+     the window never freezes.
 """
 
 import logging
+from datetime import UTC, datetime
 from pathlib import Path
 
-from PySide6.QtCore import QLocale, Qt
+from PySide6.QtCore import QLocale, Qt, Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QComboBox,
@@ -93,7 +99,9 @@ from runecast.engines.models import (
     load_catalog,
     models_folder,
 )
+from runecast.engines.nllb import NLLB_CODES, NllbEngine, NllbStore, nllb_folder
 from runecast.ui.i18n import format_size, keep_left_to_right, language_name
+from runecast.ui.license_dialog import NllbLicenseDialog
 from runecast.ui.settings_base import SettingsPage
 from runecast.ui.tasks import TaskThread
 
@@ -108,8 +116,17 @@ def model_store(paths: AppPaths) -> ModelStore:
     return ModelStore(models_folder(paths.data_dir), paths.cache_dir / "downloads")
 
 
+def nllb_store(paths: AppPaths) -> NllbStore:
+    """FR : le modèle NLLB-200 pour ces dossiers. EN : the NLLB-200 model for these folders."""
+    return NllbStore(nllb_folder(paths.data_dir), paths.cache_dir / "downloads")
+
+
 class ModelsPage(SettingsPage):
     """Page « Modèles de traduction » / "Translation models" page."""
+
+    # FR : licence NLLB acceptée (date ISO), à enregistrer tout de suite.
+    # EN : NLLB license accepted (ISO date), to be saved at once.
+    nllb_license_accepted = Signal(str)
 
     def __init__(self, paths: AppPaths) -> None:
         super().__init__()
@@ -118,6 +135,9 @@ class ModelsPage(SettingsPage):
         self.models = model_store(paths)
         self.catalog: list[CatalogEntry] = load_catalog()
         self.engine = LocalEngine(self.models.packages)
+        self.nllb = nllb_store(paths)
+        self.nllb_engine = NllbEngine(self.nllb)
+        self.license_date = ""
         self.task: TaskThread | None = None
 
         self.explanation = QLabel()
@@ -187,6 +207,19 @@ class ModelsPage(SettingsPage):
         try_layout.addLayout(try_row)
         try_layout.addWidget(self.try_result)
 
+        self.nllb_box = QGroupBox()
+        self.nllb_status = QLabel()
+        self.nllb_status.setObjectName("nllbStatus")
+        self.nllb_status.setWordWrap(True)
+        self.nllb_install_button = QPushButton()
+        self.nllb_install_button.clicked.connect(self.install_nllb)
+        self.nllb_remove_button = QPushButton()
+        self.nllb_remove_button.clicked.connect(self.remove_nllb)
+        nllb_row = QHBoxLayout(self.nllb_box)
+        nllb_row.addWidget(self.nllb_status, stretch=1)
+        nllb_row.addWidget(self.nllb_install_button)
+        nllb_row.addWidget(self.nllb_remove_button)
+
         self.performance_box = QGroupBox()
         self.threads_label = QLabel()
         self.threads_combo = QComboBox()
@@ -211,6 +244,7 @@ class ModelsPage(SettingsPage):
         layout.addWidget(self.table, stretch=1)
         layout.addLayout(buttons)
         layout.addLayout(progress_row)
+        layout.addWidget(self.nllb_box)
         layout.addWidget(self.try_box)
         layout.addWidget(self.performance_box)
         self.retranslate()
@@ -241,6 +275,9 @@ class ModelsPage(SettingsPage):
         self.try_box.setTitle(self.tr("Essayer"))
         self.try_text.setPlaceholderText(self.tr("Phrase à traduire"))
         self.try_button.setText(self.tr("Traduire"))
+        self.nllb_box.setTitle(self.tr("Modèle étendu NLLB-200 (200 langues)"))
+        self.nllb_install_button.setText(self.tr("Télécharger…"))
+        self.nllb_remove_button.setText(self.tr("Supprimer"))
         self.performance_box.setTitle(self.tr("Performance"))
         self.threads_label.setText(self.tr("Cœurs utilisés :"))
         self.beam_label.setText(self.tr("Traduction :"))
@@ -291,6 +328,22 @@ class ModelsPage(SettingsPage):
             if entry == selected:
                 self.table.selectRow(row)
         self._apply_filter()
+        if self.nllb.installed():
+            self.nllb_status.setText(
+                self.tr(
+                    "Installé ({size}). Traduit directement, sans internet, entre "
+                    "{count} langues dont Қазақша, Oʻzbekcha et Türkmençe. Usage non "
+                    "commercial seulement."
+                ).format(size=format_size(self.nllb.size()), count=len(set(NLLB_CODES.values())))
+            )
+        else:
+            self.nllb_status.setText(
+                self.tr(
+                    "Non installé (environ {size}). Pour traduire sans internet vers le "
+                    "kazakh, l'ouzbek, le turkmène, le tatar ou l'ouïghour. Licence non "
+                    "commerciale, à accepter avant le téléchargement."
+                ).format(size=format_size(self.nllb.catalog.total_size))
+            )
         self._fill_try_languages(installed)
         self._update_buttons()
 
@@ -343,11 +396,18 @@ class ModelsPage(SettingsPage):
         self.import_button.setEnabled(not busy)
         self.try_button.setEnabled(not busy and self.try_from.count() > 0)
         self.measure_button.setEnabled(not busy and bool(self.models.installed()))
+        nllb_installed = self.nllb.installed()
+        self.nllb_install_button.setEnabled(not busy and not nllb_installed)
+        self.nllb_remove_button.setEnabled(not busy and nllb_installed)
 
     def _fill_try_languages(self, installed) -> None:
         """FR : langues des modèles installés, pour « Essayer ». EN : languages for "Try"."""
-        sources = sorted({key[0] for key in installed})
-        targets = sorted({key[1] for key in installed})
+        sources = {key[0] for key in installed}
+        targets = {key[1] for key in installed}
+        if self.nllb.installed():
+            sources |= set(NLLB_CODES)
+            targets |= set(NLLB_CODES)
+        sources, targets = sorted(sources), sorted(targets)
         for combo, codes in ((self.try_from, sources), (self.try_to, targets)):
             current = combo.currentData()
             combo.clear()
@@ -360,7 +420,7 @@ class ModelsPage(SettingsPage):
             index = self.try_to.findData(PIVOT_LANGUAGE)
             if index == self.try_to.currentIndex():
                 self.try_to.setCurrentIndex(0 if index != 0 else 1)
-        has_models = bool(installed)
+        has_models = bool(installed) or self.nllb.installed()
         for widget in (self.try_from, self.try_to, self.try_text):
             widget.setEnabled(has_models)
         if not has_models:
@@ -428,6 +488,7 @@ class ModelsPage(SettingsPage):
             self.task.cancel()
             self.task.wait()
         self.engine.unload()
+        self.nllb_engine.unload()
 
     # ------------------------------------------------------------------
     # FR : Actions / EN : Actions
@@ -527,7 +588,12 @@ class ModelsPage(SettingsPage):
         source, target = self.try_from.currentData(), self.try_to.currentData()
         if not text or source is None or target is None:
             return
-        if not self.engine.supports(source, target):
+        # FR : modèles Argos d'abord (plus légers), sinon NLLB-200.
+        # EN : Argos models first (lighter), otherwise NLLB-200.
+        engine = next(
+            (e for e in (self.engine, self.nllb_engine) if e.supports(source, target)), None
+        )
+        if engine is None:
             self.try_result.setText(
                 self.tr("Aucun modèle installé pour {direction}.").format(
                     direction=self.direction(source, target)
@@ -536,10 +602,43 @@ class ModelsPage(SettingsPage):
             return
         self.try_result.setText(self.tr("Traduction en cours…"))
         self._start(
-            lambda _progress, _cancelled: self.engine.translate([text], source, target)[0],
+            lambda _progress, _cancelled: engine.translate([text], source, target)[0],
             self.tr("Traduction en cours…"),
             self.try_result.setText,
         )
+
+    def install_nllb(self) -> None:
+        """FR : télécharge NLLB-200, après acceptation de sa licence.
+
+        EN : download NLLB-200, after its license is accepted.
+        """
+        if not self.license_date:
+            dialog = NllbLicenseDialog(self.nllb.catalog, self)
+            if dialog.exec() != NllbLicenseDialog.DialogCode.Accepted:
+                return
+            self.license_date = datetime.now(UTC).isoformat(timespec="seconds")
+            self.nllb_license_accepted.emit(self.license_date)
+        self._start(
+            lambda progress, cancelled: self.nllb.install(progress, cancelled),
+            self.tr("Téléchargement : NLLB-200"),
+            lambda _result: None,
+        )
+
+    def remove_nllb(self) -> None:
+        """FR : supprime NLLB-200, après confirmation. EN : delete NLLB-200, after confirmation."""
+        answer = QMessageBox.question(
+            self,
+            self.tr("Supprimer le modèle ?"),
+            self.tr(
+                "Le modèle « {model} » sera supprimé de ce PC. Il pourra être "
+                "téléchargé de nouveau. Continuer ?"
+            ).format(model="NLLB-200"),
+        )
+        if answer != QMessageBox.StandardButton.Yes:
+            return
+        self.nllb_engine.unload()
+        self.nllb.remove()
+        self.refresh()
 
     def _select_performance(self, threads: int, beam: int) -> None:
         """FR : affiche des réglages de performance. EN : show performance settings."""
@@ -620,18 +719,25 @@ class ModelsPage(SettingsPage):
     def show_paths(self, paths: AppPaths) -> None:
         """FR : les données ont changé de dossier. EN : the data moved."""
         self.engine.unload()
+        self.nllb_engine.unload()
         self.paths = paths
         self.models = model_store(paths)
         self.engine = LocalEngine(self.models.packages)
+        self.nllb = nllb_store(paths)
+        self.nllb_engine = NllbEngine(self.nllb)
         self.refresh()
 
     def load(self, settings: Settings) -> None:
         self._select_performance(settings.local_threads, settings.local_beam_size)
         self.engine.configure(settings.local_threads or None, settings.local_beam_size)
+        self.nllb_engine.configure(settings.local_threads or None, settings.local_beam_size)
+        self.license_date = settings.nllb_license_accepted
         self.refresh()
 
     def store(self, settings: Settings) -> None:
         """FR : réglages de performance. EN : performance settings."""
         settings.local_threads = self.threads_combo.currentData()
         settings.local_beam_size = self.beam_combo.currentData()
+        settings.nllb_license_accepted = self.license_date
         self.engine.configure(settings.local_threads or None, settings.local_beam_size)
+        self.nllb_engine.configure(settings.local_threads or None, settings.local_beam_size)

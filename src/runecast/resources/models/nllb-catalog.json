@@ -1,0 +1,15 @@
+{
+ "format": 1,
+ "name": "NLLB-200 distilled 600M (CTranslate2 int8)",
+ "license": "CC-BY-NC-4.0",
+ "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+ "source": "https://huggingface.co/facebook/nllb-200-distilled-600M",
+ "repository": "https://huggingface.co/JustFrederik/nllb-200-distilled-600M-ct2-int8",
+ "revision": "f84941bd43259bdf2e6e56ab779bc30b481df5a0",
+ "files": [
+  {"name": "config.json", "size": null, "sha256": null},
+  {"name": "shared_vocabulary.txt", "size": null, "sha256": null},
+  {"name": "sentencepiece.bpe.model", "size": null, "sha256": null},
+  {"name": "model.bin", "size": null, "sha256": null}
+ ]
+}

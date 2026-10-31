@@ -108,6 +108,10 @@ class Settings:
     #      (1 fast, 2 balanced, 4 accurate) (step 14).
     local_threads: int = 0
     local_beam_size: int = 2
+    # FR : date d'acceptation de la licence du modèle NLLB-200 (vide = pas
+    #      acceptée) (étape 15). EN : date the NLLB-200 model license was
+    #      accepted (empty = not accepted) (step 15).
+    nllb_license_accepted: str = ""
     # FR : réglages inconnus (écrits par une version plus récente) : conservés tels quels.
     # EN : unknown settings (written by a newer version): kept as they are.
     extra: dict[str, Any] = field(default_factory=dict)

@@ -463,6 +463,14 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
         <translation>ترجمة</translation>
     </message>
     <message>
+        <source>Modèle étendu NLLB-200 (200 langues)</source>
+        <translation>النموذج الموسَّع NLLB-200 (200 لغة)</translation>
+    </message>
+    <message>
+        <source>Télécharger…</source>
+        <translation>تنزيل…</translation>
+    </message>
+    <message>
         <source>Performance</source>
         <translation>الأداء</translation>
     </message>
@@ -497,6 +505,14 @@ Supprimer les {count} anciens fichiers ? Si tu réponds Non, ils restent en plac
     <message>
         <source>Installé</source>
         <translation>مثبَّت</translation>
+    </message>
+    <message>
+        <source>Installé ({size}). Traduit directement, sans internet, entre {count} langues dont Қазақша, Oʻzbekcha et Türkmençe. Usage non commercial seulement.</source>
+        <translation>مثبَّت ({size}). يترجم مباشرة ودون إنترنت بين {count} لغة منها Қазақша وOʻzbekcha وTürkmençe. للاستخدام غير التجاري فقط.</translation>
+    </message>
+    <message>
+        <source>Non installé (environ {size}). Pour traduire sans internet vers le kazakh, l&apos;ouzbek, le turkmène, le tatar ou l&apos;ouïghour. Licence non commerciale, à accepter avant le téléchargement.</source>
+        <translation>غير مثبَّت (نحو {size}). للترجمة دون إنترنت إلى الكازاخية أو الأوزبكية أو التركمانية أو التتارية أو الأويغورية. ترخيص غير تجاري يجب قبوله قبل التنزيل.</translation>
     </message>
     <message>
         <source>Installe d&apos;abord un modèle.</source>
@@ -571,6 +587,10 @@ Copie-le sur l&apos;autre PC, puis : Paramètres → Modèles de traduction → 
         <translation>جارٍ الترجمة…</translation>
     </message>
     <message>
+        <source>Téléchargement : NLLB-200</source>
+        <translation>جارٍ التنزيل: NLLB-200</translation>
+    </message>
+    <message>
         <source>Mesure de la vitesse…</source>
         <translation>جارٍ قياس السرعة…</translation>
     </message>
@@ -595,6 +615,37 @@ Ils sont sélectionnés : clique sur « OK » ou « Appliquer » pour les garder
 السرعة: {speed} جملة في الثانية. الذاكرة: {memory} ({stable}).
 
 لقد حُدِّدت: انقر على «حسنًا» أو «تطبيق» للاحتفاظ بها.</translation>
+    </message>
+</context>
+<context>
+    <name>NllbLicenseDialog</name>
+    <message>
+        <source>Licence du modèle NLLB-200</source>
+        <translation>ترخيص النموذج NLLB-200</translation>
+    </message>
+    <message>
+        <source>Modèle étendu NLLB-200 (Meta)</source>
+        <translation>النموذج الموسَّع NLLB-200 (Meta)</translation>
+    </message>
+    <message>
+        <source>Ce modèle traduit sans internet entre 200 langues, dont le kazakh, l&apos;ouzbek, le turkmène, le tatar et l&apos;ouïghour. Taille : {size}.</source>
+        <translation>يترجم هذا النموذج دون إنترنت بين 200 لغة، منها الكازاخية والأوزبكية والتركمانية والتتارية والأويغورية. الحجم: {size}.</translation>
+    </message>
+    <message>
+        <source>Il est publié par Meta sous la licence Creative Commons BY-NC 4.0 : utilisation NON COMMERCIALE seulement (pas de traduction vendue ou faite pour une entreprise), en citant Meta. Meta le présente comme un modèle de recherche : ses traductions peuvent contenir des erreurs.</source>
+        <translation>تنشره Meta بموجب ترخيص المشاع الإبداعي BY-NC 4.0: للاستخدام غير التجاري فقط (لا ترجمة تُباع أو تُنجز لصالح شركة)، مع نسبه إلى Meta. وتقدّمه Meta بوصفه نموذجًا بحثيًا: قد تحتوي ترجماته على أخطاء.</translation>
+    </message>
+    <message>
+        <source>Lire la licence complète</source>
+        <translation>قراءة الترخيص كاملًا</translation>
+    </message>
+    <message>
+        <source>J&apos;ai lu la licence et je m&apos;engage à n&apos;utiliser ce modèle que sans but commercial</source>
+        <translation>قرأت الترخيص وأتعهد بعدم استخدام هذا النموذج إلا لأغراض غير تجارية</translation>
+    </message>
+    <message>
+        <source>Accepter et télécharger</source>
+        <translation>قبول وتنزيل</translation>
     </message>
 </context>
 <context>

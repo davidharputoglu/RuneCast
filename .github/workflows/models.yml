@@ -24,6 +24,7 @@ on:
       - "src/runecast/engines/argos.py"
       - "src/runecast/engines/models.py"
       - "src/runecast/engines/benchmark.py"
+      - "src/runecast/engines/nllb.py"
       - "tools/model_catalog.py"
       - ".github/workflows/models.yml"
   workflow_dispatch:
@@ -54,6 +55,9 @@ jobs:
 
       - name: Banc d'essai (vitesse et mémoire) / Benchmark (speed and memory)
         run: uv run python tools/model_catalog.py benchmark en fr
+
+      - name: Modèle étendu NLLB-200 / NLLB-200 extended model
+        run: uv run python tools/model_catalog.py nllb
 
       - name: Télécharger et essayer chaque modèle / Download and try every model
         run: uv run python tools/model_catalog.py check --workers 4
