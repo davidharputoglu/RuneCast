@@ -49,7 +49,7 @@ from runecast.core.protect import protect, restore
 from runecast.engines.online import OnlineError, create_engine
 
 SENTENCES = ["Hello, how are you today?", "{b}Welcome{/b}, [player]! You have %d coins."]
-TARGETS = ("fr", "tr", "kk", "ar")
+TARGETS = ("fr", "tr", "kk", "ar", "ru")
 
 
 def main() -> int:
@@ -69,6 +69,7 @@ def main() -> int:
                 results[target] = {"error": f"{error.reason}: {error}"}
             except Exception as error:  # noqa: BLE001 (on note toute erreur / record any error)
                 results[target] = {"error": f"{type(error).__name__}: {error}"[:200]}
+        results["method"] = getattr(engine, "method", "")
         try:
             results["languages"] = len(engine.fetch_languages())
         except Exception as error:  # noqa: BLE001

@@ -40,6 +40,7 @@ EN : Here, a fake server answers instead of Yandex, Google, DeepL…: each
 
 import json
 import os
+import re
 from pathlib import Path
 
 import httpx
@@ -52,6 +53,7 @@ from runecast.engines.online import (
     DEFAULT_ORDER,
     ENGINE_CLASSES,
     REASON_KEY,
+    REASON_LANGUAGE,
     REASON_LIMIT,
     REASON_OFFLINE,
     REASON_SERVICE,
@@ -84,42 +86,71 @@ def test_default_order_and_enabled() -> None:
     assert all(ENGINE_CLASSES[e].info.unofficial for e in DEFAULT_ENABLED)
 
 
-def test_yandex_free() -> None:
-    """FR : Yandex gratuit : identifiant lu dans le widget, textes échappés en HTML.
-
-    EN : Yandex free: id read from the widget, texts HTML-escaped.
+def test_yandex_free_browser_service() -> None:
+    """FR : Yandex gratuit : service du navigateur Yandex, en GET, textes échappés en HTML,
+         sans aller chercher de session.
+    EN : Yandex free: Yandex Browser's service, as GET, texts HTML-escaped, without
+         fetching any session.
     """
 
     def handler(request: httpx.Request) -> httpx.Response:
-        if "widget.js" in str(request.url):
-            return httpx.Response(200, text="var x={sid: 'abc123.def456', other: 1}")
-        body = request.content.decode()
-        assert request.url.params["id"] == "abc123.def456-0-0"
-        assert request.url.params["lang"] == "en-fr"
-        if "Tom" not in body:
-            return httpx.Response(200, json={"code": 200, "text": ["Salut"]})
-        assert "text=Tom+%26amp%3B+Jerry" in body and "text=Hi" in body
-        return httpx.Response(200, json={"code": 200, "text": ["Tom &amp; Jerry FR", "Salut"]})
+        assert request.method == "GET"
+        assert request.url.host == "browser.translate.yandex.net"
+        params = request.url.params
+        assert params["srv"] == "yabrowser" and params["format"] == "html"
+        assert params["lang"] == "en-fr"
+        assert re.fullmatch(r"[0-9a-f]{32}-0-0", params["id"])
+        assert params.get_list("text") == ["Tom &amp; Jerry &lt;3", "Hi"]
+        return httpx.Response(
+            200, json={"code": 200, "lang": "en-fr", "text": ["Tom &amp; Jerry FR", "Salut"]}
+        )
 
     factory, requests = fake(handler)
     engine = create_engine("yandex_free", client_factory=factory)
-    assert engine.translate(["Tom & Jerry", "Hi", ""], "en", "fr") == [
+    assert engine.translate(["Tom & Jerry <3", "Hi", ""], "en", "fr") == [
         "Tom & Jerry FR",
         "Salut",
         "",
     ]
-    engine.translate(["Hi"], "en", "fr")
-    assert sum("widget.js" in str(r.url) for r in requests) == 1  # FR : identifiant gardé
+    assert engine.method == "browser" and len(requests) == 1
 
 
-def test_yandex_free_refreshes_expired_id() -> None:
-    """FR : identifiant périmé (403) : on en redemande un, une seule fois.
+def test_yandex_free_falls_back_to_widget() -> None:
+    """FR : service du navigateur refusé (429) : le widget prend le relais, puis il est retenu.
 
-    EN : expired id (403): a new one is asked for, only once.
+    EN : browser service refused (429): the widget takes over, then it is kept.
+    """
+    calls = {"browser": 0, "widget": 0, "translate": 0}
+
+    def handler(request):
+        if request.url.host == "browser.translate.yandex.net":
+            calls["browser"] += 1
+            return httpx.Response(429, text="limited")
+        if "widget.js" in str(request.url):
+            calls["widget"] += 1
+            return httpx.Response(200, text="var x={sid: 'abc123.def456', other: 1}")
+        calls["translate"] += 1
+        assert request.url.params["id"] == "abc123.def456-0-0"
+        return httpx.Response(200, json={"code": 200, "text": ["Salut"]})
+
+    factory, _requests = fake(handler)
+    engine = create_engine("yandex_free", client_factory=factory)
+    assert engine.translate(["Hi"], "en", "fr") == ["Salut"]
+    assert engine.translate(["Hi"], "en", "fr") == ["Salut"]
+    assert engine.method == "widget"
+    assert calls == {"browser": 1, "widget": 1, "translate": 2}
+
+
+def test_yandex_free_refreshes_expired_widget_id() -> None:
+    """FR : widget : identifiant périmé (403) : on en redemande un, une seule fois.
+
+    EN : widget: expired id (403): a new one is asked for, only once.
     """
     calls = {"translate": 0, "widget": 0}
 
     def handler(request):
+        if request.url.host == "browser.translate.yandex.net":
+            return httpx.Response(429)
         if "widget.js" in str(request.url):
             calls["widget"] += 1
             return httpx.Response(200, text=f"sid: '{calls['widget']}aa'")
@@ -134,12 +165,46 @@ def test_yandex_free_refreshes_expired_id() -> None:
     assert calls == {"translate": 2, "widget": 2}
 
 
-def test_yandex_widget_changed() -> None:
-    """FR : widget modifié par Yandex : raison claire. EN : widget changed: clear reason."""
-    factory, _r = fake(lambda request: httpx.Response(200, text="nothing here"))
+def test_yandex_free_both_doors_closed() -> None:
+    """FR : les deux portes refusent : raison claire, le repli prend le relais.
+
+    EN : both entrances refuse: clear reason, the fallback takes over.
+    """
+
+    def handler(request):
+        if request.url.host == "browser.translate.yandex.net":
+            return httpx.Response(429)
+        return httpx.Response(200, text="nothing here")
+
+    factory, _r = fake(handler)
     with pytest.raises(OnlineError) as caught:
         create_engine("yandex_free", client_factory=factory).translate(["Hi"], "en", "fr")
     assert caught.value.reason == REASON_SERVICE
+
+
+def test_yandex_free_offline_does_not_try_twice() -> None:
+    """FR : pas d'internet : pas d'autre essai inutile. EN : no internet: no useless retry."""
+    factory, requests = fake(
+        lambda request: (_ for _ in ()).throw(httpx.ConnectError("x", request=request))
+    )
+    with pytest.raises(OnlineError) as caught:
+        create_engine("yandex_free", client_factory=factory).translate(["Hi"], "en", "fr")
+    assert caught.value.reason == REASON_OFFLINE and len(requests) == 1
+
+
+def test_yandex_free_languages() -> None:
+    """FR : direction non prise en charge (501) ; chinois traditionnel refusé d'avance.
+
+    EN : unsupported direction (501); Traditional Chinese refused beforehand.
+    """
+    factory, _r = fake(lambda request: httpx.Response(200, json={"code": 501, "message": "x"}))
+    engine = create_engine("yandex_free", client_factory=factory)
+    engine.method = "browser"
+    with pytest.raises(OnlineError) as caught:
+        engine.translate(["Hi"], "en", "xx")
+    assert caught.value.reason == REASON_LANGUAGE
+    assert not engine.supports("en", "zh-Hant") and engine.supports("en", "zh")
+    assert engine.code("pt-BR") == "pt"
 
 
 def test_yandex_cloud() -> None:

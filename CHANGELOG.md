@@ -12,6 +12,13 @@ Décidée le 18 octobre 2026 / Decided on 18 October 2026:
 > **Correction du 18 octobre 2026** : les étapes 5 à 8 avaient été numérotées 0.2.0 à 0.2.3 par erreur (Claude avait changé lui-même le chiffre du milieu). Elles sont renumérotées 0.1.2 à 0.1.5 ci-dessous. Les messages de commit de ces étapes gardent l'ancien numéro.
 > *Correction of 18 October 2026: steps 5 to 8 had been numbered 0.2.0 to 0.2.3 by mistake (Claude had changed the middle number on its own). They are renumbered 0.1.2 to 0.1.5 below. The commit messages of these steps keep the old number.*
 
+## 0.1.16 (correctif / fix)
+
+- Yandex gratuit : nouvelle porte d'entrée, le service de traduction du navigateur Yandex (celui de Yandex Browser) : pas de clé, pas de session, plusieurs phrases par demande. Méthode documentée par le projet libre OverTranslate (licence MIT), mesurée le 30 octobre 2026. L'ancienne méthode du widget (LocoAI), qui répondait « 429 limited », reste essayée en second ; la première qui répond est retenue.
+  *Yandex free: new entrance, Yandex Browser's translation service: no key, no session, several sentences per request. Method documented by the free project OverTranslate (MIT license), measured on 30 October 2026. The old widget method (LocoAI), which answered "429 limited", is still tried second; the first one answering is kept.*
+- Yandex n'écrit que le chinois simplifié : le chinois traditionnel est laissé au moteur suivant.
+  *Yandex writes Simplified Chinese only: Traditional Chinese is left to the next engine.*
+
 ## 0.1.15 (étape 18 / step 18)
 
 - Glossaires par jeu (`core/glossary.py`), un fichier par glossaire dans le dossier des réglages (`glossaires`), avec numéro de format. Ils seront reliés aux profils de jeux aux étapes 21 et 28.

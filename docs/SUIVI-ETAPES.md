@@ -25,7 +25,8 @@ Depuis le 31 octobre 2026, à ta demande, j'enchaîne les étapes sans attendre 
 | 15 | Modèle étendu NLLB-200 (kazakh, ouzbek, turkmène, tatar, ouïghour en local), après acceptation de sa licence | 0.1.12 | ✅ | ⏳ | ⏳ | `7c53000`, `d1388fe` |
 | 16 | Moteurs en ligne (Yandex gratuit et à clé, Google gratuit, DeepL, Google Cloud, Microsoft, LibreTranslate), ordre réglable, clés dans le trousseau, bouton « Tester », prix indicatifs | 0.1.13 | ✅ | ⏳ | ⏳ | `766a4b3`, `ae0af92` |
 | 17 | Repli automatique (moteur suivant, puis local, par paquets) et mode 100 % local verrouillé ; page « Traduction » avec essai | 0.1.14 | ✅ | ⏳ | ⏳ | `84713a6` |
-| 18 | Glossaires par jeu : tableau modifiable, import/export CSV, application forcée, rapport de contrôle ; menu Outils | 0.1.15 | 🔄 | ⏳ | ⏳ | — |
+| 18 | Glossaires par jeu : tableau modifiable, import/export CSV, application forcée, rapport de contrôle ; menu Outils | 0.1.15 | ✅ | ⏳ | ⏳ | `eb0ebcb` |
+| Correctif | Yandex gratuit : nouvelle méthode (service de traduction du navigateur Yandex), le widget gardé en second | 0.1.16 | 🔄 | ⏳ | ⏳ | — |
 
 Numéros de version : les deux premiers chiffres (« 0.1 ») sont décidés par David ; le dernier augmente à chaque étape validée ou correctif. Les étapes 5 à 8 avaient été numérotées 0.2.x par erreur et ont été corrigées (voir CHANGELOG.md).
 

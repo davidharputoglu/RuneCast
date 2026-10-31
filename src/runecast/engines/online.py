@@ -63,6 +63,7 @@ import html
 import logging
 import re
 import threading
+import uuid
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -331,7 +332,30 @@ COMMON_LANGUAGES = frozenset(
 # FR : Yandex gratuit (widget) / EN : Yandex free (widget)
 # ----------------------------------------------------------------------
 class YandexFreeEngine(OnlineEngine):
-    """Yandex gratuit, méthode du widget (non officielle) / Yandex free, widget method."""
+    """Yandex gratuit (non officiel) / Yandex free (unofficial).
+
+    FR : Deux portes d'entrée gratuites, essayées dans cet ordre ; la première
+         qui répond est retenue :
+           1. le service de traduction du NAVIGATEUR Yandex (celui qui traduit
+              les pages dans Yandex Browser) : pas de clé, pas de session, un
+              simple identifiant au hasard. Méthode documentée par le projet
+              libre OverTranslate (licence MIT), mesurée le 30 octobre 2026 ;
+              règles à respecter : demande GET (un POST est refusé), texte
+              envoyé en HTML (le mode texte est refusé), environ 2 000
+              caractères au plus par demande ;
+           2. le WIDGET de traduction de page (méthode de LocoAI) : en octobre
+              2026, il répond souvent « 429 limited ».
+         Le site translate.yandex.com, lui, affiche un captcha aux programmes.
+    EN : Two free entrances, tried in this order; the first that answers is
+         kept: 1. Yandex BROWSER's translation service (the one translating
+         pages in Yandex Browser): no key, no session, just a random id.
+         Method documented by the free project OverTranslate (MIT license),
+         measured on 30 October 2026; rules: GET request (a POST is refused),
+         text sent as HTML (text mode is refused), about 2,000 characters at
+         most per request. 2. The page-translation WIDGET (LocoAI's method):
+         in October 2026 it often answers "429 limited". The
+         translate.yandex.com site shows a captcha to programs.
+    """
 
     info = EngineInfo(
         "yandex_free",
@@ -340,22 +364,80 @@ class YandexFreeEngine(OnlineEngine):
         unofficial=True,
         signup_url="https://translate.yandex.com/",
     )
-    max_texts = 40
-    max_chars = 3000
+    max_texts = 50
+    max_chars = 1000
+    BROWSER_URL = "https://browser.translate.yandex.net/api/v1/tr.json"
     WIDGET_URL = (
         "https://translate.yandex.net/website-widget/v1/widget.js"
         "?widgetId=ytWidget&pageLang=en&widgetTheme=light&autoMode=false"
     )
     API_URL = "https://translate.yandex.net/api/v1/tr.json"
     SID = re.compile(r"""sid\s*:\s*['"]([0-9a-fA-F.]+)['"]""")
+    METHODS = ("browser", "widget")
     default_languages = COMMON_LANGUAGES | {"tk", "ba", "cv", "sah", "ug"}
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        # FR : identifiant au hasard (32 chiffres hexadécimaux), propre à cette session.
+        # EN : random identifier (32 hex digits), specific to this session.
+        self.browser_id = f"{uuid.uuid4().hex}-0-0"
         self.sid = ""
+        self.method = ""
 
     def code(self, language: str) -> str:
-        return {"pt-BR": "pt-BR", "zh-Hant": "zh"}.get(language, language)
+        return {"pt-BR": "pt", "zh-Hant": "zh"}.get(language, language)
+
+    def supports(self, source_lang: str, target_lang: str) -> bool:
+        # FR : Yandex n'écrit qu'un chinois (simplifié). EN : Yandex writes simplified Chinese only.
+        return target_lang != "zh-Hant" and super().supports(source_lang, target_lang)
+
+    def translate_batch(self, texts, source_lang, target_lang):
+        lang = f"{self.code(source_lang)}-{self.code(target_lang)}"
+        escaped = [html.escape(text, quote=False) for text in texts]
+        methods = [self.method] if self.method else list(self.METHODS)
+        failure: OnlineError | None = None
+        for method in methods:
+            try:
+                data = (
+                    self._browser(escaped, lang)
+                    if method == "browser"
+                    else self._widget(escaped, lang)
+                )
+            except OnlineError as error:
+                if error.reason == REASON_OFFLINE:
+                    raise
+                failure = error
+                continue
+            if self.method != method:
+                logger.info("Yandex gratuit : méthode / Yandex free: method %s", method)
+            self.method = method
+            return [html.unescape(text) for text in data["text"]]
+        raise failure or OnlineError(REASON_SERVICE, "Yandex")
+
+    @staticmethod
+    def _check(data: dict) -> dict:
+        """FR : vérifie la réponse JSON de Yandex. EN : check Yandex's JSON answer."""
+        code = data.get("code", 200)
+        if code == 501:
+            raise OnlineError(
+                REASON_LANGUAGE, "Yandex : langues non prises en charge / unsupported"
+            )
+        if code != 200 or not isinstance(data.get("text"), list):
+            raise OnlineError(REASON_SERVICE, f"Yandex : {data.get('message', code)}")
+        return data
+
+    def _browser(self, texts: list[str], lang: str) -> dict:
+        """FR : porte n° 1 : le service du navigateur Yandex. EN : entrance 1: Yandex Browser."""
+        params = [
+            ("id", self.browser_id),
+            ("srv", "yabrowser"),
+            ("format", "html"),
+            ("lang", lang),
+            *(("text", text) for text in texts),
+        ]
+        return self._check(
+            self.request("GET", f"{self.BROWSER_URL}/translate", params=params).json()
+        )
 
     def session_id(self, refresh: bool = False) -> str:
         """FR : identifiant de session lu dans le widget. EN : session id read from the widget."""
@@ -367,7 +449,8 @@ class YandexFreeEngine(OnlineEngine):
             self.sid = match.group(1)
         return self.sid
 
-    def translate_batch(self, texts, source_lang, target_lang):
+    def _widget(self, texts: list[str], lang: str) -> dict:
+        """FR : porte n° 2 : le widget de page (LocoAI). EN : entrance 2: page widget (LocoAI)."""
         for attempt in (1, 2):
             sid = self.session_id(refresh=attempt == 2)
             try:
@@ -378,26 +461,21 @@ class YandexFreeEngine(OnlineEngine):
                         "srv": "tr-url-widget",
                         "id": f"{sid}-0-0",
                         "format": "html",
-                        "lang": f"{self.code(source_lang)}-{self.code(target_lang)}",
+                        "lang": lang,
                     },
-                    data={"text": [html.escape(text, quote=False) for text in texts]},
+                    data={"text": texts},
                 )
-                break
+                return self._check(response.json())
             except OnlineError as error:
                 # FR : identifiant périmé : on en redemande un, une fois.
                 # EN : expired id: ask for a new one, once.
                 if attempt == 2 or error.reason != REASON_KEY:
                     raise
-        data = response.json()
-        if data.get("code", 200) != 200 or "text" not in data:
-            raise OnlineError(REASON_SERVICE, f"Yandex : {data.get('message', data)}")
-        return [html.unescape(text) for text in data["text"]]
+        raise OnlineError(REASON_SERVICE, "Yandex")  # pragma: no cover
 
     def fetch_languages(self):
         response = self.request(
-            "GET",
-            f"{self.API_URL}/getLangs",
-            params={"srv": "tr-url-widget", "id": f"{self.session_id()}-0-0", "ui": "en"},
+            "GET", f"{self.BROWSER_URL}/getLangs", params={"srv": "yabrowser", "ui": "en"}
         )
         return frozenset(response.json().get("langs", {}))
 
